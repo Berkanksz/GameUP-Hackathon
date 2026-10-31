@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://features/mechanics/ice_boulder.gd" id="1_boulder"]
+
+[sub_resource type="BoxShape3D" id="Shape_trigger"]
+size = Vector3(2.4, 2.4, 2.4)
+
+[sub_resource type="SphereShape3D" id="Shape_boulder"]
+radius = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_snowball"]
+albedo_color = Color(0.92, 0.97, 1, 1)
+roughness = 0.65
+
+[sub_resource type="BoxShape3D" id="Shape_barrier"]
+size = Vector3(0.8, 3.6, 3.0)
+
+[sub_resource type="StandardMaterial3D" id="Mat_barrier"]
+transparency = 1
+albedo_color = Color(0.55, 0.88, 1, 0.78)
+roughness = 0.15
+
+[node name="IceBoulder" type="Node3D"]
+script = ExtResource("1_boulder")
+
+[node name="TriggerArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8, 0.9, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TriggerArea"]
+shape = SubResource("Shape_trigger")
+
+[node name="BoulderBody" type="AnimatableBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.95, 0)
+sync_to_physics = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="BoulderBody"]
+shape = SubResource("Shape_boulder")
+
+[node name="BoulderMesh" type="CSGSphere3D" parent="BoulderBody"]
+radius = 0.95
+radial_segments = 14
+rings = 10
+material = SubResource("Mat_snowball")
+
+[node name="IceBarrier" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, 1.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="IceBarrier"]
+shape = SubResource("Shape_barrier")
+
+[node name="BarrierMesh" type="CSGBox3D" parent="IceBarrier"]
+size = Vector3(0.8, 3.6, 3.0)
+material = SubResource("Mat_barrier")

@@ -29,16 +29,16 @@ def clamp(val, min_val=-1.0, max_val=1.0):
     return max(min_val, min(max_val, val))
 
 
-def write_wav(path: str, samples: list, channels: int = 1, sample_rate: int = SAMPLE_RATE):
+def write_wav(path: str, samples: list, channels: int = 1, sample_rate: int = SAMPLE_RATE, target_peak: float = 0.16):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with wave.open(path, "wb") as wf:
         wf.setnchannels(channels)
         wf.setsampwidth(2)  # 16-bit
         wf.setframerate(sample_rate)
         
-        # Normalize to avoid clipping and optimize dynamic range
+        # Normalize to gentle target peak so audio is never harsh
         peak = max(abs(s) for s in samples) if samples else 0.0
-        gain = 0.90 / peak if peak > 0.001 else 1.0
+        gain = target_peak / peak if peak > 0.001 else 1.0
         
         packed = bytearray()
         for s in samples:
@@ -406,16 +406,16 @@ def main():
     target_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "audio")
     os.makedirs(target_dir, exist_ok=True)
     
-    write_wav(os.path.join(target_dir, "wind_ambience.wav"), gen_wind_ambience(6.0), channels=2)
-    write_wav(os.path.join(target_dir, "snow_step.wav"), gen_snow_step(0.16), channels=1)
-    write_wav(os.path.join(target_dir, "jump.wav"), gen_jump(0.22), channels=1)
-    write_wav(os.path.join(target_dir, "land.wav"), gen_land(0.18), channels=1)
-    write_wav(os.path.join(target_dir, "ice_crack.wav"), gen_ice_crack(0.32), channels=1)
-    write_wav(os.path.join(target_dir, "pickup.wav"), gen_pickup(0.30), channels=1)
-    write_wav(os.path.join(target_dir, "sort_ok.wav"), gen_sort_ok(0.35), channels=1)
-    write_wav(os.path.join(target_dir, "sort_bad.wav"), gen_sort_bad(0.35), channels=1)
-    write_wav(os.path.join(target_dir, "ui_click.wav"), gen_ui_click(0.04), channels=1)
-    write_wav(os.path.join(target_dir, "calm_music.wav"), gen_calm_music(12.0), channels=2)
+    write_wav(os.path.join(target_dir, "wind_ambience.wav"), gen_wind_ambience(6.0), channels=2, target_peak=0.07)
+    write_wav(os.path.join(target_dir, "snow_step.wav"), gen_snow_step(0.16), channels=1, target_peak=0.12)
+    write_wav(os.path.join(target_dir, "jump.wav"), gen_jump(0.22), channels=1, target_peak=0.15)
+    write_wav(os.path.join(target_dir, "land.wav"), gen_land(0.18), channels=1, target_peak=0.14)
+    write_wav(os.path.join(target_dir, "ice_crack.wav"), gen_ice_crack(0.32), channels=1, target_peak=0.16)
+    write_wav(os.path.join(target_dir, "pickup.wav"), gen_pickup(0.30), channels=1, target_peak=0.15)
+    write_wav(os.path.join(target_dir, "sort_ok.wav"), gen_sort_ok(0.35), channels=1, target_peak=0.15)
+    write_wav(os.path.join(target_dir, "sort_bad.wav"), gen_sort_bad(0.35), channels=1, target_peak=0.14)
+    write_wav(os.path.join(target_dir, "ui_click.wav"), gen_ui_click(0.04), channels=1, target_peak=0.12)
+    write_wav(os.path.join(target_dir, "calm_music.wav"), gen_calm_music(12.0), channels=2, target_peak=0.10)
     print("All audio assets successfully synthesized.")
 
 

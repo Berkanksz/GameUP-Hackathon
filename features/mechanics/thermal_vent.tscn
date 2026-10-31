@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://features/mechanics/thermal_vent.gd" id="1_vent"]
+
+[sub_resource type="CylinderShape3D" id="Shape_vent"]
+height = 4.2
+radius = 0.95
+
+[sub_resource type="StandardMaterial3D" id="Mat_vent_rock"]
+albedo_color = Color(0.32, 0.42, 0.52, 1)
+roughness = 0.85
+
+[sub_resource type="StandardMaterial3D" id="Mat_vent_glow"]
+albedo_color = Color(0.38, 0.94, 1, 1)
+emission_enabled = true
+emission = Color(0.28, 0.88, 1, 1)
+emission_energy_multiplier = 0.9
+
+[sub_resource type="SphereMesh" id="Mesh_steam"]
+radius = 0.14
+height = 0.28
+
+[node name="ThermalVent" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_vent")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.1, 0)
+shape = SubResource("Shape_vent")
+
+[node name="RimOuter" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.18, 0)
+radius = 0.85
+height = 0.36
+cone = true
+material = SubResource("Mat_vent_rock")
+
+[node name="CoreGlow" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.34, 0)
+radius = 0.48
+height = 0.12
+material = SubResource("Mat_vent_glow")
+
+[node name="SteamParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+amount = 18
+lifetime = 1.1
+mesh = SubResource("Mesh_steam")
+emission_shape = 1
+emission_sphere_radius = 0.35
+direction = Vector3(0, 1, 0)
+spread = 10.0
+gravity = Vector3(0, 2.2, 0)
+initial_velocity_min = 2.6
+initial_velocity_max = 3.8
+
+[node name="VentLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+light_color = Color(0.35, 0.92, 1, 1)
+light_energy = 1.6
+omni_range = 3.8

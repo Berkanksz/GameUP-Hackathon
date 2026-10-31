@@ -1,25 +1,10 @@
 [gd_scene format=3 uid="uid://fact_card_001"]
 
 [ext_resource type="Script" path="res://features/narrative/fact_card.gd" id="1_fact_card"]
+[ext_resource type="PackedScene" path="res://assets/models/props/fact_holo_globe.glb" id="2_holo_globe"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_card"]
-radius = 1.1
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_card"]
-albedo_color = Color(0.92, 0.96, 1, 1)
-metallic = 0.2
-roughness = 0.3
-emission_enabled = true
-emission = Color(0.2, 0.6, 0.85, 1)
-emission_energy_multiplier = 0.6
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gold"]
-albedo_color = Color(0.95, 0.82, 0.28, 1)
-metallic = 0.5
-roughness = 0.2
-emission_enabled = true
-emission = Color(0.9, 0.75, 0.2, 1)
-emission_energy_multiplier = 0.4
+radius = 1.25
 
 [node name="FactCard" type="Area3D"]
 collision_layer = 0
@@ -32,10 +17,11 @@ shape = SubResource("SphereShape3D_card")
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="CardOuter" type="CSGBox3D" parent="VisualRoot"]
-size = Vector3(0.55, 0.75, 0.08)
-material = SubResource("StandardMaterial3D_card")
+[node name="HoloGlobe" parent="VisualRoot" instance=ExtResource("2_holo_globe")]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, 0, 0)
 
-[node name="CardInner" type="CSGBox3D" parent="VisualRoot"]
-size = Vector3(0.42, 0.6, 0.1)
-material = SubResource("StandardMaterial3D_gold")
+[node name="BeaconLight" type="OmniLight3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0.35)
+light_color = Color(0.35, 0.9, 1, 1)
+light_energy = 1.4
+omni_range = 3.2

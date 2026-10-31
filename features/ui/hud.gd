@@ -1,29 +1,42 @@
 class_name Hud
 extends CanvasLayer
-## Heads up display with heat meter, hope score bar, carried item indicator, fact popup, and chapter completion.
+## Heads up display with level intro transition, heat meter, hope score bar, carried item indicator, fact popup, and chapter completion.
 
 const DEFAULT_TUNING_PATH: String = "res://data/tuning.tres"
 const MAIN_MENU_PATH: String = "res://features/ui/main_menu.tscn"
 const CHAPTER_2_PATH: String = "res://features/chapters/chapter_2_slope.tscn"
-const CHAPTER_3_PATH: String = "res://features/chapters/chapter_3_summit.tscn"
+const CHAPTER_3_PATH: String = "res://features/chapters/chapter_3_crevasse.tscn"
+const CHAPTER_4_PATH: String = "res://features/chapters/chapter_4_ridge.tscn"
+const CHAPTER_5_PATH: String = "res://features/chapters/chapter_3_summit.tscn"
 const ENDING_PATH: String = "res://features/ending/ending.tscn"
 const NEXT_SCENES: Dictionary = {
 	&"chapter_1": CHAPTER_2_PATH,
 	&"chapter_2": CHAPTER_3_PATH,
+	&"chapter_3": CHAPTER_4_PATH,
+	&"chapter_4": CHAPTER_5_PATH,
 }
 const CHAPTER_TITLE_KEYS: Dictionary = {
 	&"chapter_1": "UI_CHAPTER_1",
 	&"chapter_2": "UI_CHAPTER_2",
 	&"chapter_3": "UI_CHAPTER_3",
+	&"chapter_4": "UI_CHAPTER_4",
+	&"chapter_5": "UI_CHAPTER_5",
 }
-const FINAL_CHAPTER_ID: StringName = &"chapter_3"
+const CHAPTER_LEVEL_NUMBERS: Dictionary = {
+	&"chapter_1": 1,
+	&"chapter_2": 2,
+	&"chapter_3": 3,
+	&"chapter_4": 4,
+	&"chapter_5": 5,
+}
+const FINAL_CHAPTER_ID: StringName = &"chapter_5"
 const FactCardScript = preload("res://features/narrative/fact_card.gd")
-const NORMAL_FILL_COLOR: Color = Color(0.28, 0.72, 0.92, 1.0)
-const HOT_FILL_COLOR: Color = Color(0.95, 0.42, 0.18, 1.0)
-const HOPE_FILL_COLOR: Color = Color(0.24, 0.78, 0.54, 1.0)
-const COLOR_PAPER: Color = Color(0.18, 0.52, 0.88, 1.0)
-const COLOR_PLASTIC: Color = Color(0.95, 0.78, 0.15, 1.0)
-const COLOR_GLASS: Color = Color(0.20, 0.75, 0.38, 1.0)
+const NORMAL_FILL_COLOR: Color = Color(0.28, 0.78, 0.96, 1.0)
+const HOT_FILL_COLOR: Color = Color(0.96, 0.44, 0.18, 1.0)
+const HOPE_FILL_COLOR: Color = Color(0.22, 0.84, 0.56, 1.0)
+const COLOR_PAPER: Color = Color(0.32, 0.72, 0.98, 1.0)
+const COLOR_PLASTIC: Color = Color(0.98, 0.84, 0.24, 1.0)
+const COLOR_GLASS: Color = Color(0.28, 0.88, 0.48, 1.0)
 
 @export var tuning: TuningData
 ## Pause after the final chapter so the last monologue can be read before the ending.
@@ -39,6 +52,7 @@ var _fact_showing: bool = false
 var _current_fact_key: StringName = &""
 var _carried_type: StringName = &""
 var _completed_chapter_id: StringName = &""
+var _active_chapter_id: StringName = &""
 
 @onready var _heat_label: Label = %HeatLabel
 @onready var _heat_bar: ProgressBar = %HeatBar
@@ -48,6 +62,9 @@ var _completed_chapter_id: StringName = &""
 @onready var _carry_panel: PanelContainer = get_node_or_null("%CarryPanel")
 @onready var _carry_label: Label = get_node_or_null("%CarryLabel")
 @onready var _shimmer_overlay: ColorRect = %ShimmerOverlay
+@onready var _level_intro_dark: ColorRect = get_node_or_null("%LevelIntroDark")
+@onready var _level_badge_panel: PanelContainer = get_node_or_null("%LevelBadgePanel")
+@onready var _level_badge_label: Label = get_node_or_null("%LevelBadgeLabel")
 @onready var _fact_popup: PanelContainer = %FactPopup
 @onready var _fact_text_label: Label = %FactTextLabel
 @onready var _fact_source_label: Label = %FactSourceLabel
@@ -104,9 +121,58 @@ func _ready() -> void:
 		_pause_restart_button.pressed.connect(_on_complete_restart_pressed)
 	if _pause_menu_button != null:
 		_pause_menu_button.pressed.connect(_on_complete_menu_pressed)
+	_detect_and_play_level_intro()
 	_refresh_text()
 	_apply_heat(0.0)
 	_apply_hope(GameState.hope)
+
+
+func _detect_and_play_level_intro() -> void:
+	var root: Node = get_tree().current_scene
+	if root != null:
+		for child: Node in root.find_children("*", "ChapterGoal", true, false):
+			if "chapter_id" in child:
+				_active_chapter_id = child.get("chapter_id") as StringName
+				break
+	if _active_chapter_id.is_empty():
+		if _level_intro_dark != null:
+			_level_intro_dark.visible = false
+		if _level_badge_panel != null:
+			_level_badge_panel.visible = false
+		return
+
+	GameState.current_chapter = _active_chapter_id
+	EventBus.chapter_started.emit(_active_chapter_id)
+	_refresh_level_badge_text()
+
+	if _level_intro_dark != null:
+		_level_intro_dark.visible = true
+		_level_intro_dark.modulate.a = 1.0
+		var dark_tween: Tween = create_tween()
+		dark_tween.tween_interval(0.35)
+		dark_tween.tween_property(_level_intro_dark, "modulate:a", 0.0, 1.55).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		dark_tween.tween_callback(func() -> void: _level_intro_dark.visible = false)
+
+	if _level_badge_panel != null:
+		_level_badge_panel.visible = true
+		_level_badge_panel.pivot_offset = Vector2(150.0, 23.0)
+		_level_badge_panel.position = Vector2(810.0, 516.0)
+		_level_badge_panel.scale = Vector2(2.05, 2.05)
+		_level_badge_panel.modulate.a = 0.0
+		var badge_tween: Tween = create_tween()
+		badge_tween.tween_property(_level_badge_panel, "modulate:a", 1.0, 0.28)
+		badge_tween.tween_interval(0.75)
+		badge_tween.set_parallel(true)
+		badge_tween.tween_property(_level_badge_panel, "position", Vector2(810.0, 20.0), 0.95).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+		badge_tween.tween_property(_level_badge_panel, "scale", Vector2.ONE, 0.95).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+
+
+func _refresh_level_badge_text() -> void:
+	if _level_badge_label == null or _active_chapter_id.is_empty():
+		return
+	var num: int = int(CHAPTER_LEVEL_NUMBERS.get(_active_chapter_id, 1))
+	var title_key: String = CHAPTER_TITLE_KEYS.get(_active_chapter_id, "UI_CHAPTER_1")
+	_level_badge_label.text = "LEVEL %d : %s" % [num, tr(title_key).to_upper()]
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -164,6 +230,7 @@ func _setup_bar_styles() -> void:
 func _refresh_text() -> void:
 	_heat_label.text = tr("UI_HEAT")
 	_hope_label.text = tr("UI_HOPE")
+	_refresh_level_badge_text()
 	if _fact_showing and not _current_fact_key.is_empty():
 		_display_fact(_current_fact_key)
 	_refresh_carry_text()
@@ -212,13 +279,13 @@ func _refresh_carry_text() -> void:
 		return
 	if _carried_type == &"paper":
 		_carry_label.text = "◼ %s" % tr("UI_BIN_PAPER")
-		_carry_label.modulate = COLOR_PAPER.lightened(0.25)
+		_carry_label.modulate = COLOR_PAPER.lightened(0.2)
 	elif _carried_type == &"plastic":
 		_carry_label.text = "▲ %s" % tr("UI_BIN_PLASTIC")
-		_carry_label.modulate = COLOR_PLASTIC.lightened(0.2)
+		_carry_label.modulate = COLOR_PLASTIC.lightened(0.15)
 	else:
 		_carry_label.text = "● %s" % tr("UI_BIN_GLASS")
-		_carry_label.modulate = COLOR_GLASS.lightened(0.25)
+		_carry_label.modulate = COLOR_GLASS.lightened(0.2)
 
 
 func _refresh_complete_text() -> void:

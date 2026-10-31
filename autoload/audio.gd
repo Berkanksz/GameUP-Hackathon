@@ -58,17 +58,20 @@ func _init_players() -> void:
 		var p: AudioStreamPlayer = AudioStreamPlayer.new()
 		p.name = "SfxPlayer_%d" % i
 		p.bus = sfx_bus
+		p.volume_db = -8.0
 		add_child(p)
 		_sfx_players.append(p)
 
 	_music_player = AudioStreamPlayer.new()
 	_music_player.name = "MusicPlayer"
 	_music_player.bus = music_bus
+	_music_player.volume_db = -10.0
 	add_child(_music_player)
 
 	_ambience_player = AudioStreamPlayer.new()
 	_ambience_player.name = "AmbiencePlayer"
 	_ambience_player.bus = amb_bus
+	_ambience_player.volume_db = -12.0
 	add_child(_ambience_player)
 
 

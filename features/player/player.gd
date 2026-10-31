@@ -28,6 +28,7 @@ var state: State = State.IDLE
 var facing_direction: float = 1.0
 var is_carrying: bool = false
 var carried_item_type: StringName = &""
+var is_cinematic_locked: bool = false
 
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
@@ -67,6 +68,16 @@ func _physics_process(delta: float) -> void:
 	if global_position.y < fall_death_y:
 		die(&"fall")
 		return
+	if is_cinematic_locked:
+		_is_sliding_active = false
+		velocity.x = move_toward(velocity.x, 0.0, 30.0 * delta)
+		_apply_gravity(delta)
+		move_and_slide()
+		global_position.z = 0.0
+		velocity.z = 0.0
+		state = State.IDLE
+		_update_walk_anim()
+		return
 	_update_timers(delta)
 	_apply_gravity(delta)
 	_handle_jump()
@@ -99,6 +110,35 @@ func set_push(source_id: StringName, speed_x: float) -> void:
 ## Removes an external push source.
 func clear_push(source_id: StringName) -> void:
 	_push_sources.erase(source_id)
+
+
+## Locks or unlocks player movement and input during interactive cinematics.
+func set_cinematic_lock(locked: bool) -> void:
+	is_cinematic_locked = locked
+	if locked:
+		_is_sliding_active = false
+		velocity.x = 0.0
+		state = State.IDLE
+		_update_walk_anim()
+
+
+## Returns true if the player is currently belly-sliding.
+func is_sliding() -> bool:
+	return _is_sliding_active or state == State.SLIDE
+
+
+## Applies an immediate launch velocity for ski-jump ramps or thermal updrafts.
+func apply_launch_boost(vel_x: float, vel_y: float) -> void:
+	velocity.x = vel_x
+	velocity.y = vel_y
+	_coyote_timer = 0.0
+	_jump_buffer_timer = 0.0
+	if not is_zero_approx(vel_x):
+		facing_direction = signf(vel_x)
+		if _visual_root != null:
+			_visual_root.scale.x = facing_direction
+	_animate_squash(Vector3(0.84, 1.22, 0.84))
+	Audio.play_sfx(&"jump")
 
 
 ## Resets the player state and moves to the target world position on the z plane.
@@ -254,7 +294,10 @@ func _update_state() -> void:
 func _get_push_x() -> float:
 	var total: float = 0.0
 	for speed: float in _push_sources.values():
-		total += speed
+		if _is_sliding_active and speed < 0.0:
+			total += speed * 0.45
+		else:
+			total += speed
 	return total
 
 

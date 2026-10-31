@@ -1,43 +1,112 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://features/narrative/choice_point.gd" id="1_choice"]
 [ext_resource type="PackedScene" path="res://assets/models/penguin/chick.glb" id="2_chick_glb"]
 [ext_resource type="PackedScene" path="res://assets/models/ice/ice_tile.glb" id="3_floe_glb"]
+[ext_resource type="PackedScene" path="res://assets/models/props/seed_patch.glb" id="4_seed_glb"]
+[ext_resource type="PackedScene" path="res://assets/models/props/ocean_buoy.glb" id="5_buoy_glb"]
+[ext_resource type="PackedScene" path="res://assets/models/props/weather_tower.glb" id="6_tower_glb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_choice"]
-radius = 2.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floe"]
-albedo_color = Color(0.72, 0.88, 0.94, 1)
-roughness = 0.2
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chick_body"]
-albedo_color = Color(0.82, 0.85, 0.88, 1)
-roughness = 0.8
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_chick_head"]
-albedo_color = Color(0.2, 0.22, 0.25, 1)
-roughness = 0.6
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beak"]
-albedo_color = Color(0.96, 0.58, 0.16, 1)
-roughness = 0.4
+radius = 2.3
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprout"]
-albedo_color = Color(0.24, 0.78, 0.36, 1)
-roughness = 0.5
+albedo_color = Color(0.2, 0.82, 0.42, 1)
+roughness = 0.4
+emission_enabled = true
+emission = Color(0.1, 0.45, 0.2, 1)
+emission_energy_multiplier = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_flower"]
+albedo_color = Color(1, 0.86, 0.28, 1)
+roughness = 0.25
+emission_enabled = true
+emission = Color(1, 0.78, 0.2, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="SystemFont" id="SystemFont_choice"]
+font_names = PackedStringArray("Avenir Next", "Trebuchet MS", "Segoe UI", "Verdana", "Arial")
+font_weight = 700
+subpixel_positioning = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.09, 0.12, 0.16, 0.92)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.3, 0.5, 0.65, 0.8)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+bg_color = Color(0.08, 0.34, 0.56, 0.96)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.48, 0.92, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+shadow_color = Color(0.01, 0.08, 0.18, 0.6)
+shadow_size = 16
+shadow_offset = Vector2(0, 6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_a"]
+bg_color = Color(0.12, 0.72, 0.46, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.85, 1, 0.68, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_a_hover"]
+bg_color = Color(0.18, 0.84, 0.54, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 0.82, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_b"]
+bg_color = Color(0.82, 0.44, 0.2, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.84, 0.55, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_b_hover"]
+bg_color = Color(0.92, 0.54, 0.26, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.92, 0.72, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
 
 [node name="ChoicePoint" type="Area3D"]
 collision_layer = 0
@@ -48,87 +117,140 @@ script = ExtResource("1_choice")
 shape = SubResource("SphereShape3D_choice")
 
 [node name="FloeBase" parent="." instance=ExtResource("3_floe_glb")]
-transform = Transform3D(1.2, 0, 0, 0, 0.8, 0, 0, 0, 1.2, 0, -0.2, 0)
+transform = Transform3D(1.35, 0, 0, 0, 0.45, 0, 0, 0, 1.35, 0, -0.18, 0)
 
 [node name="ChickModel" type="Node3D" parent="."]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
 
 [node name="ChickGlb" parent="ChickModel" instance=ExtResource("2_chick_glb")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
+transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 0, 0, 0)
+
+[node name="AlertLabel" type="Label3D" parent="ChickModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
+pixel_size = 0.009
+text = "!"
+font_size = 64
+outline_size = 14
+modulate = Color(1, 0.88, 0.22, 1)
+
+[node name="SeedPatchModel" parent="." instance=ExtResource("4_seed_glb")]
+unique_name_in_owner = true
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 0, 0)
+visible = false
+
+[node name="BuoyModel" parent="." instance=ExtResource("5_buoy_glb")]
+unique_name_in_owner = true
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
+visible = false
+
+[node name="TowerModel" parent="." instance=ExtResource("6_tower_glb")]
+unique_name_in_owner = true
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, 0, 0)
+visible = false
 
 [node name="SproutModel" type="Node3D" parent="."]
 unique_name_in_owner = true
 visible = false
 
 [node name="Stem" type="CSGCylinder3D" parent="SproutModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
-radius = 0.05
-height = 0.5
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+radius = 0.06
+height = 0.75
 material = SubResource("StandardMaterial3D_sprout")
 
 [node name="LeafLeft" type="CSGSphere3D" parent="SproutModel"]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 0.6, -0.14, 0.46, 0)
-radius = 0.16
+transform = Transform3D(1.2, 0, 0, 0, 0.5, 0, 0, 0, 0.7, -0.18, 0.48, 0)
+radius = 0.18
 material = SubResource("StandardMaterial3D_sprout")
 
 [node name="LeafRight" type="CSGSphere3D" parent="SproutModel"]
-transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 0.6, 0.14, 0.5, 0)
-radius = 0.16
+transform = Transform3D(1.2, 0, 0, 0, 0.5, 0, 0, 0, 0.7, 0.18, 0.56, 0)
+radius = 0.18
 material = SubResource("StandardMaterial3D_sprout")
+
+[node name="FlowerBud" type="CSGSphere3D" parent="SproutModel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
+radius = 0.16
+material = SubResource("StandardMaterial3D_flower")
 
 [node name="ChoiceLayer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 layer = 12
 visible = false
 
-[node name="CenterContainer" type="CenterContainer" parent="ChoiceLayer"]
-anchors_preset = 15
+[node name="BottomDock" type="MarginContainer" parent="ChoiceLayer"]
+anchors_preset = 12
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -250.0
+offset_bottom = -32.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
-[node name="PanelContainer" type="PanelContainer" parent="ChoiceLayer/CenterContainer"]
+[node name="CenterContainer" type="CenterContainer" parent="ChoiceLayer/BottomDock"]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="ChoiceLayer/BottomDock/CenterContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="MarginContainer" type="MarginContainer" parent="ChoiceLayer/CenterContainer/PanelContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer"]
 layout_mode = 2
-theme_override_constants/margin_left = 28
+theme_override_constants/margin_left = 36
 theme_override_constants/margin_top = 22
-theme_override_constants/margin_right = 28
+theme_override_constants/margin_right = 36
 theme_override_constants/margin_bottom = 22
 
-[node name="VBoxContainer" type="VBoxContainer" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 18
 
-[node name="PromptLabel" type="Label" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="PromptLabel" type="Label" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(440, 0)
+custom_minimum_size = Vector2(620, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.99, 0.92, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 7
+theme_override_fonts/font = SubResource("SystemFont_choice")
+theme_override_font_sizes/font_size = 26
 text = "CHOICE_CHICK_PROMPT"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="HSeparator" type="HSeparator" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 32
 alignment = 1
 
-[node name="OptionAButton" type="Button" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="OptionAButton" type="Button" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(140, 42)
+custom_minimum_size = Vector2(220, 54)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 0.96, 1)
+theme_override_colors/font_outline_color = Color(0.03, 0.18, 0.1, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = SubResource("SystemFont_choice")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_a")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_a_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_a_hover")
 text = "CHOICE_CHICK_HELP"
 
-[node name="OptionBButton" type="Button" parent="ChoiceLayer/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+[node name="OptionBButton" type="Button" parent="ChoiceLayer/BottomDock/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(140, 42)
+custom_minimum_size = Vector2(220, 54)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.98, 0.94, 1)
+theme_override_colors/font_outline_color = Color(0.22, 0.08, 0.02, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = SubResource("SystemFont_choice")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_b")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_b_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_b_hover")
 text = "CHOICE_CHICK_SKIP"

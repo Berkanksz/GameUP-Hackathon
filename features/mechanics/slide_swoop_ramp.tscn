@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://features/mechanics/slide_swoop_ramp.gd" id="1_ramp"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_ice_ramp"]
+albedo_color = Color(0.68, 0.9, 1, 1)
+metallic = 0.15
+roughness = 0.15
+emission_enabled = true
+emission = Color(0.18, 0.58, 0.85, 1)
+emission_energy_multiplier = 0.25
+
+[sub_resource type="StandardMaterial3D" id="Mat_ramp_rail"]
+albedo_color = Color(1, 0.82, 0.28, 1)
+roughness = 0.35
+emission_enabled = true
+emission = Color(1, 0.72, 0.18, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="BoxShape3D" id="Shape_entry"]
+size = Vector3(2.4, 2.6, 2.0)
+
+[sub_resource type="BoxShape3D" id="Shape_launch"]
+size = Vector3(2.2, 2.4, 2.0)
+
+[node name="SlideSwoopRamp" type="Node3D"]
+script = ExtResource("1_ramp")
+
+[node name="StartDeck" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6, 0.7, 0)
+use_collision = true
+size = Vector3(2.6, 2.4, 3.2)
+material = SubResource("Mat_ice_ramp")
+
+[node name="DownSlope1" type="CSGBox3D" parent="."]
+transform = Transform3D(0.882948, 0.469472, 0, -0.469472, 0.882948, 0, 0, 0, 1, -1.35, 1.0, 0)
+use_collision = true
+size = Vector3(2.8, 0.65, 3.2)
+material = SubResource("Mat_ice_ramp")
+
+[node name="ValleyTrough" type="CSGBox3D" parent="."]
+transform = Transform3D(0.990268, 0.139173, 0, -0.139173, 0.990268, 0, 0, 0, 1, 0.8, 0.22, 0)
+use_collision = true
+size = Vector3(2.4, 0.65, 3.2)
+material = SubResource("Mat_ice_ramp")
+
+[node name="UpSwoopLip" type="CSGBox3D" parent="."]
+transform = Transform3D(0.898794, -0.438371, 0, 0.438371, 0.898794, 0, 0, 0, 1, 2.85, 0.52, 0)
+use_collision = true
+size = Vector3(2.4, 0.65, 3.2)
+material = SubResource("Mat_ice_ramp")
+
+[node name="SupportBase" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -1.2, -0.3)
+size = Vector3(8.6, 2.4, 2.4)
+material = SubResource("Mat_ice_ramp")
+
+[node name="LaunchArrow1" type="CSGBox3D" parent="."]
+transform = Transform3D(0.898794, -0.438371, 0, 0.438371, 0.898794, 0, 0, 0, 1, 2.85, 0.92, -1.35)
+size = Vector3(2.1, 0.18, 0.22)
+material = SubResource("Mat_ramp_rail")
+
+[node name="EntryZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2, 2.6, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntryZone"]
+shape = SubResource("Shape_entry")
+
+[node name="LaunchZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.95, 1.55, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LaunchZone"]
+shape = SubResource("Shape_launch")

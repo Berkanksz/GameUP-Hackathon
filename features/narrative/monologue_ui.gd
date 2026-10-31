@@ -10,10 +10,13 @@ const BOTTOM_CINEMATIC_KEYS: Array[StringName] = [
 	&"MONO_C3_START",
 	&"MONO_C3_VIEW",
 	&"MONO_C3_TOP",
+	&"MONO_C4_START",
+	&"MONO_C4_END",
+	&"MONO_C5_START",
 ]
 
-@export var display_duration: float = 4.8
-@export var fade_duration: float = 0.28
+@export var display_duration: float = 4.5
+@export var fade_duration: float = 0.26
 
 var _current_key: StringName = &""
 var _fade_tween: Tween
@@ -28,6 +31,7 @@ var _use_penguin_callout: bool = false
 
 
 func _ready() -> void:
+	add_to_group(&"monologue_ui")
 	EventBus.monologue_requested.connect(_on_monologue_requested)
 	EventBus.language_changed.connect(_on_language_changed)
 	_panel.modulate.a = 0.0
@@ -35,6 +39,18 @@ func _ready() -> void:
 	if _callout_panel != null:
 		_callout_panel.modulate.a = 0.0
 		_callout_panel.visible = false
+
+
+## Immediately hides any active monologue banner or callout bubble.
+func hide_immediately() -> void:
+	_is_displaying = false
+	if _fade_tween != null and _fade_tween.is_valid():
+		_fade_tween.kill()
+	_panel.visible = false
+	_panel.modulate.a = 0.0
+	if _callout_panel != null:
+		_callout_panel.visible = false
+		_callout_panel.modulate.a = 0.0
 
 
 func _process(delta: float) -> void:
@@ -94,12 +110,12 @@ func _update_callout_position() -> void:
 	var facing: float = float(player.get("facing_direction"))
 	if is_zero_approx(facing):
 		facing = 1.0
-	var world_anchor: Vector3 = player.global_position + Vector3(facing * 2.1, 2.25, 0.0)
+	var world_anchor: Vector3 = player.global_position + Vector3(facing * 1.8, 2.45, 0.0)
 	var screen_pos: Vector2 = cam.unproject_position(world_anchor)
 	var vp_size: Vector2 = get_viewport().get_visible_rect().size
 	var box_size: Vector2 = _callout_panel.size
-	var target_x: float = clampf(screen_pos.x - box_size.x * 0.5, 32.0, maxf(32.0, vp_size.x - box_size.x - 32.0))
-	var target_y: float = clampf(screen_pos.y - box_size.y, 120.0, maxf(120.0, vp_size.y - box_size.y - 160.0))
+	var target_x: float = clampf(screen_pos.x - box_size.x * 0.5, 40.0, maxf(40.0, vp_size.x - box_size.x - 40.0))
+	var target_y: float = clampf(screen_pos.y - box_size.y, 110.0, maxf(110.0, vp_size.y - box_size.y - 260.0))
 	_callout_panel.position = Vector2(target_x, target_y)
 
 

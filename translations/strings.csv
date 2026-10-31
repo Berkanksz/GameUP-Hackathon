@@ -20,7 +20,14 @@ UI_HINT_INTERACT,Interact,Etkileşim
 UI_FACT_SOURCE,Source,Kaynak
 UI_CHAPTER_1,Shore,Kıyı
 UI_CHAPTER_2,Slope,Yamaç
-UI_CHAPTER_3,Summit,Zirve
+UI_CHAPTER_3,Crevasse,Buzul Çatlağı
+UI_CHAPTER_4,Storm Ridge,Fırtına Sırtı
+UI_CHAPTER_5,Summit,Zirve
+TUT_MOVE,Use A and D or Arrow Keys to walk across the ice.,Buzda yürümek için A ve D veya Yön Tuşlarını kullan.
+TUT_JUMP,Press SPACE to jump. Hold SPACE longer for a higher jump!,Zıplamak için SPACE tuşuna bas. Daha yükseğe zıplamak için basılı tut!
+TUT_SLIDE,Hold SHIFT down the curved ramp to belly slide and launch across!,Kıvrımlı rampadan aşağı SHIFT tuşuna basılı tutarak kay ve karşıya uç!
+TUT_VENT,Step into the thermal updraft geyser to soar up to high ledges!,Yüksek çıkıntılara uçmak için sıcak hava gayzerinin içine gir!
+TUT_BOULDER,Slide or walk into the giant snowball to smash the ice barrier!,Buz bariyerini kırmak için dev kartopuna çarparak yuvarla!
 UI_BIN_PAPER,Paper,Kağıt
 UI_BIN_PLASTIC,Plastic,Plastik
 UI_BIN_GLASS,Glass,Cam
@@ -79,3 +86,18 @@ UI_CREDITS_ART,Original 3D Art and Shaders,Özgün 3B Model ve Gölgelendiricile
 UI_CREDITS_FACTS,"Data sources: UN, UNEP, IEA, EEA","Veri kaynakları: BM, UNEP, IEA, EEA"
 MONO_C3_WIND,The wind wants me back down. Not yet.,Rüzgâr geri inmemi istiyor. Henüz değil.
 MONO_C3_LAMP,A small light in the cold. It changes something.,Soğukta küçük bir ışık. Bir şeyleri değiştiriyor.
+MONO_C3_CREVASSE,Deep cracks in the ancient glacier. Even the mountain is splitting.,Kadim buzulda derin çatlaklar. Dağ bile ikiye ayrılıyor.
+MONO_C3_END,Through the canyon. The summit ridge is just ahead.,Kanyondan geçtim. Zirve sırtı hemen ileride.
+MONO_C4_START,Storm clouds at eye level. Better keep low when the gusts hit.,Fırtına bulutları göz hizasında. Rüzgâr vurduğunda eğilip kaymak en iyisi.
+MONO_C4_END,One last climb to the research station.,Araştırma istasyonuna son bir tırmanış kaldı.
+MONO_C5_START,There is the summit station. Almost at the top of the world.,İşte zirve istasyonu. Neredeyse dünyanın tepesindeyim.
+CHOICE_BUOY_PROMPT,An ocean research buoy is tangled in ghost netting inside the crevasse.,Buzul çatlağında bir okyanus araştırma şamandırası hayalet ağlara dolanmış.
+CHOICE_BUOY_FREE,Free the buoy,Ağı çöz
+CHOICE_BUOY_SKIP,Pass by,Geçip git
+CHOICE_BUOY_SAVED,The buoy beacon blinked green and resumed transmitting data.,Şamandıra ışığı yeşile döndü ve veri göndermeye devam etti.
+CHOICE_TOWER_PROMPT,Heavy ice has tilted the automated weather relay dish off course.,Ağır buz kütlesi otomatik hava durumu antenini yerinden oynatmış.
+CHOICE_TOWER_ALIGN,Align the dish,Anteni düzelt
+CHOICE_TOWER_SKIP,Keep climbing,Tırmanmaya devam et
+CHOICE_TOWER_SAVED,The relay dish locked onto the satellite with a steady chime.,Röle anteni sabit bir sinyal sesiyle uyduya kilitlendi.
+FACT_GLACIER,"Mountain glaciers worldwide lost more ice between 2021 and 2024 than in any other four year period on record.","Dünya genelindeki dağ buzulları, 2021 ile 2024 arasında kayıtlardaki diğer tüm dört yıllık dönemlerden daha fazla buz kaybetti."
+FACT_PERMAFROST,"Early warning weather stations help polar researchers track ice sheet stability and extreme storms in real time.","Erken uyarı hava istasyonları, kutup araştırmacılarının buz tabakası dengesini ve aşırı fırtınaları anlık izlemesini sağlar."

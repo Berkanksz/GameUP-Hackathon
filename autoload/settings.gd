@@ -8,6 +8,7 @@ const KEY_LANGUAGE: String = "language"
 const DEFAULT_LANGUAGE: String = "en"
 const SUPPORTED_LANGUAGES: PackedStringArray = ["en", "tr"]
 const SILENT_DB: float = -80.0
+const MASTER_BASE_ATTENUATION_DB: float = -18.0
 
 var _language: String = DEFAULT_LANGUAGE
 var _volumes: Dictionary = {
@@ -79,5 +80,10 @@ func _apply_bus_volume(bus: StringName, linear_value: float) -> void:
 	var idx: int = AudioServer.get_bus_index(bus)
 	if idx < 0:
 		return
-	var db: float = linear_to_db(linear_value) if linear_value > 0.0 else SILENT_DB
+	if linear_value <= 0.001:
+		AudioServer.set_bus_volume_db(idx, SILENT_DB)
+		return
+	var curved: float = pow(clampf(linear_value, 0.0, 1.0), 2.0)
+	var offset_db: float = MASTER_BASE_ATTENUATION_DB if bus == &"Master" else 0.0
+	var db: float = linear_to_db(curved) + offset_db
 	AudioServer.set_bus_volume_db(idx, db)

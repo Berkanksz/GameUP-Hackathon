@@ -10,11 +10,15 @@ const DEFAULT_TUNING_PATH: String = "res://data/tuning.tres"
 @export var tuning: TuningData
 
 var _lookahead: float = 0.0
+var _cinematic_focus_active: bool = false
+var _cinematic_focus_pos: Vector3 = Vector3.ZERO
+var _fov_tween: Tween
 
 @onready var _camera: Camera3D = $Camera3D
 
 
 func _ready() -> void:
+	add_to_group(&"camera_rig")
 	if tuning == null:
 		tuning = load(DEFAULT_TUNING_PATH) as TuningData
 	if _camera != null and tuning != null:
@@ -26,6 +30,14 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _cinematic_focus_active:
+		var focus_desired: Vector3 = Vector3(
+			_cinematic_focus_pos.x,
+			_cinematic_focus_pos.y + 1.15,
+			tuning.camera_offset.z if tuning != null else 22.0
+		)
+		global_position = global_position.lerp(focus_desired, clampf(7.5 * delta, 0.0, 1.0))
+		return
 	if target == null:
 		_acquire_target()
 		if target == null:
@@ -35,6 +47,29 @@ func _physics_process(delta: float) -> void:
 	_lookahead = move_toward(_lookahead, desired_look, tuning.camera_lookahead_speed * delta)
 	var desired_pos: Vector3 = _compute_desired_position(target.global_position.x + _lookahead, target.global_position.y)
 	global_position = global_position.lerp(desired_pos, clampf(tuning.camera_follow_speed * delta, 0.0, 1.0))
+
+
+## Smoothly zooms and centers the camera onto a world point for an interactive cinematic.
+func focus_on(world_pos: Vector3, target_fov: float = 15.0, duration: float = 0.65) -> void:
+	_cinematic_focus_active = true
+	_cinematic_focus_pos = world_pos
+	if _camera == null:
+		return
+	if _fov_tween != null and _fov_tween.is_valid():
+		_fov_tween.kill()
+	_fov_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	_fov_tween.tween_property(_camera, "fov", target_fov, duration)
+
+
+## Releases cinematic focus and restores normal camera FOV and player tracking.
+func release_focus(duration: float = 0.55) -> void:
+	_cinematic_focus_active = false
+	if _camera == null or tuning == null:
+		return
+	if _fov_tween != null and _fov_tween.is_valid():
+		_fov_tween.kill()
+	_fov_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	_fov_tween.tween_property(_camera, "fov", tuning.camera_fov, duration)
 
 
 ## Replaces the camera bounds rectangle and enables clamping.

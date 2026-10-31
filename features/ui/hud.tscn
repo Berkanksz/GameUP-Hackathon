@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://features/ui/hud.gd" id="1_hud"]
 
@@ -7,35 +7,69 @@ font_names = PackedStringArray("Avenir Next", "Trebuchet MS", "Segoe UI", "Verda
 font_weight = 700
 subpixel_positioning = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fact"]
-bg_color = Color(0.04, 0.09, 0.17, 0.95)
-border_width_left = 4
-border_width_top = 3
-border_width_right = 4
-border_width_bottom = 3
-border_color = Color(0.96, 0.8, 0.28, 0.95)
-corner_radius_top_left = 14
-corner_radius_top_right = 14
-corner_radius_bottom_right = 14
-corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.55)
-shadow_size = 10
-shadow_offset = Vector2(0, 4)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_complete"]
-bg_color = Color(0.05, 0.1, 0.18, 0.96)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud_card"]
+bg_color = Color(0.08, 0.32, 0.52, 0.92)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.38, 0.78, 0.96, 0.92)
+border_color = Color(0.48, 0.9, 1, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0.01, 0.08, 0.16, 0.45)
+shadow_size = 8
+shadow_offset = Vector2(0, 3)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_level_badge"]
+bg_color = Color(0.09, 0.36, 0.58, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.86, 0.36, 1)
 corner_radius_top_left = 14
 corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
-shadow_color = Color(0, 0, 0, 0.6)
+content_margin_left = 20.0
+content_margin_top = 8.0
+content_margin_right = 20.0
+content_margin_bottom = 8.0
+shadow_color = Color(0.01, 0.08, 0.16, 0.55)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fact"]
+bg_color = Color(0.07, 0.38, 0.52, 0.96)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.86, 0.32, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+shadow_color = Color(0.01, 0.08, 0.18, 0.55)
 shadow_size = 12
 shadow_offset = Vector2(0, 4)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_complete"]
+bg_color = Color(0.08, 0.34, 0.56, 0.96)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.52, 0.94, 1, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+shadow_color = Color(0.01, 0.08, 0.18, 0.6)
+shadow_size = 14
+shadow_offset = Vector2(0, 5)
 
 [node name="Hud" type="CanvasLayer"]
 process_mode = 3
@@ -52,14 +86,50 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(1, 0.48, 0.15, 0)
 
+[node name="LevelIntroDark" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.06, 0.13, 0.92)
+
+[node name="LevelBadgePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(300, 46)
+offset_left = 810.0
+offset_top = 20.0
+offset_right = 1110.0
+offset_bottom = 66.0
+pivot_offset = Vector2(150, 23)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_level_badge")
+
+[node name="LevelBadgeLabel" type="Label" parent="LevelBadgePanel"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.98, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 21
+text = "LEVEL 1 : SHORE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="MarginContainer" type="MarginContainer" parent="."]
 offset_left = 24.0
-offset_top = 24.0
+offset_top = 20.0
 offset_right = 290.0
-offset_bottom = 102.0
+offset_bottom = 98.0
 
 [node name="HeatPanel" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_card")
 
 [node name="InnerMargin" type="MarginContainer" parent="MarginContainer/HeatPanel"]
 layout_mode = 2
@@ -75,7 +145,9 @@ theme_override_constants/separation = 6
 [node name="HeatLabel" type="Label" parent="MarginContainer/HeatPanel/InnerMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/outline_size = 4
+theme_override_colors/font_color = Color(0.96, 0.99, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 18
 text = "UI_HEAT"
@@ -93,9 +165,9 @@ anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -290.0
-offset_top = 24.0
+offset_top = 20.0
 offset_right = -24.0
-offset_bottom = 148.0
+offset_bottom = 144.0
 grow_horizontal = 0
 
 [node name="RightVBox" type="VBoxContainer" parent="HopeMarginContainer"]
@@ -104,6 +176,7 @@ theme_override_constants/separation = 8
 
 [node name="HopePanel" type="PanelContainer" parent="HopeMarginContainer/RightVBox"]
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_card")
 
 [node name="InnerMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/HopePanel"]
 layout_mode = 2
@@ -123,7 +196,9 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/outline_size = 4
+theme_override_colors/font_color = Color(0.96, 0.99, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 18
 text = "UI_HOPE"
@@ -131,7 +206,9 @@ text = "UI_HOPE"
 [node name="HopeValueLabel" type="Label" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_constants/outline_size = 4
+theme_override_colors/font_color = Color(1, 0.94, 0.55, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 18
 text = "10"
@@ -150,6 +227,7 @@ show_percentage = false
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud_card")
 
 [node name="CarryMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/CarryPanel"]
 layout_mode = 2
@@ -173,18 +251,18 @@ visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -360.0
-offset_top = 86.0
-offset_right = 360.0
-offset_bottom = 210.0
+offset_left = -370.0
+offset_top = 82.0
+offset_right = 370.0
+offset_bottom = 208.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fact")
 
 [node name="MarginContainer" type="MarginContainer" parent="FactPopup"]
 layout_mode = 2
-theme_override_constants/margin_left = 24
+theme_override_constants/margin_left = 26
 theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 24
+theme_override_constants/margin_right = 26
 theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FactPopup/MarginContainer"]
@@ -193,10 +271,10 @@ theme_override_constants/separation = 8
 
 [node name="FactTextLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(660, 0)
+custom_minimum_size = Vector2(680, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(0.97, 0.99, 1, 1)
-theme_override_colors/font_outline_color = Color(0.02, 0.05, 0.1, 1)
+theme_override_colors/font_color = Color(1, 0.99, 0.94, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
 theme_override_constants/outline_size = 6
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 24
@@ -207,8 +285,8 @@ autowrap_mode = 3
 [node name="FactSourceLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.86, 0.38, 1)
-theme_override_colors/font_outline_color = Color(0.02, 0.05, 0.1, 1)
+theme_override_colors/font_color = Color(1, 0.9, 0.42, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
 theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 18
@@ -245,17 +323,22 @@ theme_override_constants/separation = 14
 [node name="CompleteTitle" type="Label" parent="CompletePanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.96, 0.65, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 6
 theme_override_fonts/font = SubResource("SystemFont_hud")
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 28
 text = "UI_CHAPTER_COMPLETE"
 horizontal_alignment = 1
 
 [node name="CompleteSummary" type="Label" parent="CompletePanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 1)
+theme_override_colors/font_color = Color(0.94, 0.99, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 5
 theme_override_fonts/font = SubResource("SystemFont_hud")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 21
 text = "Shore, Hope: 25"
 horizontal_alignment = 1
 
@@ -320,6 +403,9 @@ alignment = 1
 [node name="PauseTitle" type="Label" parent="PausePanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.96, 0.65, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)
+theme_override_constants/outline_size = 6
 theme_override_fonts/font = SubResource("SystemFont_hud")
 theme_override_font_sizes/font_size = 30
 text = "UI_PAUSED"

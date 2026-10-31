@@ -440,6 +440,253 @@ def build_iceberg_bg():
     finalize_and_export("iceberg_bg", "iceberg_bg.blend", "environment/iceberg_bg.glb")
 
 
+def build_baby_chick():
+    """Adorable, high-visibility 3D baby penguin model (chick.glb) with feet at z=0.0."""
+    clear_scene()
+    mat_down = make_mat("mat_chick_down", "7F9EB2", 0.75)       # Soft blue-grey fluffy back
+    mat_head = make_mat("mat_chick_head", "2C3E50", 0.7)        # Dark slate cap
+    mat_belly = make_mat("mat_chick_belly", "FFFDF9", 0.8)      # Bright snow-white tummy/cheeks
+    mat_beak = make_mat("mat_chick_beak", "FF9F1C", 0.4)        # Bright orange-gold beak & feet
+    mat_eye = make_mat("mat_chick_eye", "11161B", 0.15)         # Glossy dark eyes
+    mat_sparkle = make_mat("mat_chick_sparkle", "FFFFFF", 0.05) # Eye highlight
+    mat_scarf = make_mat("mat_chick_scarf", "FF5964", 0.6)      # Bright coral-red winter band
+
+    # Webbed orange feet sitting right on z=0.0..0.08
+    for side in (-1.0, 1.0):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.11, location=(side * 0.04, -0.11 * side, 0.045))
+        foot = bpy.context.active_object
+        foot.scale = (1.35, 0.85, 0.42)
+        foot.data.materials.append(mat_beak)
+
+    # Plump fluffy body (z=0.06 to z=0.52)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.25, location=(0.0, 0.0, 0.29))
+    body = bpy.context.active_object
+    body.scale = (0.95, 0.92, 1.08)
+    body.data.materials.append(mat_down)
+
+    # Bright white tummy & chest patch facing camera (-Y in Blender = +Z in Godot) and -X (player side)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.22, location=(-0.05, -0.06, 0.28))
+    belly = bpy.context.active_object
+    belly.scale = (0.88, 0.85, 0.98)
+    belly.data.materials.append(mat_belly)
+
+    # Warm coral-red neck scarf so the chick stands out vividly against ice
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.19, minor_radius=0.048, location=(0.0, 0.0, 0.47))
+    scarf = bpy.context.active_object
+    scarf.scale = (1.0, 1.0, 0.85)
+    scarf.data.materials.append(mat_scarf)
+
+    # Cute big round head (z=0.46 to z=0.82)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.22, location=(0.0, 0.0, 0.64))
+    head = bpy.context.active_object
+    head.scale = (1.0, 0.98, 0.96)
+    head.data.materials.append(mat_head)
+
+    # White face cheeks facing front-left (-X, -Y)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.185, location=(-0.05, -0.06, 0.62))
+    face = bpy.context.active_object
+    face.scale = (0.92, 0.88, 0.86)
+    face.data.materials.append(mat_belly)
+
+    # Expressive big eyes + white sparkles on front/camera side
+    for ex, ey in ((-0.14, -0.15), (0.04, -0.20)):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.048, location=(ex, ey, 0.66))
+        eye = bpy.context.active_object
+        eye.data.materials.append(mat_eye)
+
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=6, radius=0.018, location=(ex - 0.015, ey - 0.038, 0.678))
+        sp = bpy.context.active_object
+        sp.data.materials.append(mat_sparkle)
+
+    # Bright orange beak pointing toward front-left (-X, -Y)
+    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.065, radius2=0.01, depth=0.15, location=(-0.12, -0.22, 0.61))
+    beak = bpy.context.active_object
+    beak.rotation_euler = (math.radians(72), 0.0, math.radians(-28))
+    beak.data.materials.append(mat_beak)
+
+    # Little flippers raised out to the sides as if waving for help!
+    for side in (-1.0, 1.0):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.12, location=(side * 0.25, 0.02, 0.36))
+        wing = bpy.context.active_object
+        wing.scale = (0.35, 0.65, 1.25)
+        wing.rotation_euler = (0.0, side * math.radians(-42), 0.0)
+        wing.data.materials.append(mat_head)
+
+    # Fluffy tuft on top of head
+    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.05, radius2=0.008, depth=0.12, location=(0.0, 0.0, 0.87))
+    tuft = bpy.context.active_object
+    tuft.rotation_euler = (math.radians(-12), math.radians(10), 0.0)
+    tuft.data.materials.append(mat_down)
+
+    finalize_and_export("chick", "chick.blend", "penguin/chick.glb")
+
+
+def build_fact_holo_globe():
+    """Climate Research Globe & Crystal Ring (fact_holo_globe.glb) for FactCard collectibles."""
+    clear_scene()
+    mat_gold = make_mat("mat_ring_gold", "FFB703", 0.25, 0.75)
+    mat_ocean = make_mat("mat_globe_ocean", "0096C7", 0.25, 0.1)
+    mat_land = make_mat("mat_globe_land", "2EC4B6", 0.45, 0.05)
+    mat_ice = make_mat("mat_globe_ice", "F8FDFF", 0.3, 0.0)
+    mat_crystal = make_mat("mat_globe_crystal", "48CAE4", 0.15, 0.2)
+
+    # Lower brass capsule pedestal
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.18, depth=0.08, location=(0.0, 0.0, -0.36))
+    base = bpy.context.active_object
+    base.data.materials.append(mat_gold)
+
+    # Outer golden gyroscope ring
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.38, minor_radius=0.036, major_segments=20, minor_segments=10, location=(0.0, 0.0, 0.0))
+    ring1 = bpy.context.active_object
+    ring1.rotation_euler = (math.radians(90), 0.0, math.radians(18))
+    ring1.data.materials.append(mat_gold)
+
+    # Inner tilted meridian ring
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.32, minor_radius=0.024, major_segments=18, minor_segments=8, location=(0.0, 0.0, 0.0))
+    ring2 = bpy.context.active_object
+    ring2.rotation_euler = (math.radians(65), math.radians(32), 0.0)
+    ring2.data.materials.append(mat_crystal)
+
+    # Central miniature Earth globe
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.23, location=(0.0, 0.0, 0.0))
+    globe = bpy.context.active_object
+    globe.data.materials.append(mat_ocean)
+    globe.data.materials.append(mat_land)
+    globe.data.materials.append(mat_ice)
+
+    for i, poly in enumerate(globe.data.polygons):
+        cz = poly.center.z
+        if abs(cz) > 0.155:
+            poly.material_index = 2  # Polar ice caps
+        elif (i % 4 == 0) or (i % 7 == 0):
+            poly.material_index = 1  # Green-teal continents
+
+    # Top floating climate crystal diamond
+    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.09, radius2=0.0, depth=0.14, location=(0.0, 0.0, 0.50))
+    top_c1 = bpy.context.active_object
+    top_c1.data.materials.append(mat_crystal)
+
+    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.09, radius2=0.0, depth=0.10, location=(0.0, 0.0, 0.40))
+    top_c2 = bpy.context.active_object
+    top_c2.rotation_euler = (math.radians(180), 0.0, 0.0)
+    top_c2.data.materials.append(mat_crystal)
+
+    finalize_and_export("fact_holo_globe", "fact_holo_globe.blend", "props/fact_holo_globe.glb")
+
+
+def build_seed_patch():
+    """Fertile soil mound ringed with stones and a golden seed pod (seed_patch.glb)."""
+    clear_scene()
+    mat_soil = make_mat("mat_soil", "4E342E", 0.92)
+    mat_stone = make_mat("mat_stone", "78909C", 0.85)
+    mat_seed = make_mat("mat_seed_gold", "FFD166", 0.3)
+    mat_leaf = make_mat("mat_seed_tip", "52B788", 0.5)
+
+    # Soil mound
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.52, depth=0.16, location=(0.0, 0.0, 0.08))
+    mound = bpy.context.active_object
+    mound.data.materials.append(mat_soil)
+
+    # Ring of stones around soil
+    for i in range(8):
+        ang = i * (2.0 * math.pi / 8.0)
+        sx = math.cos(ang) * 0.50
+        sy = math.sin(ang) * 0.50
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.11, location=(sx, sy, 0.09))
+        st = bpy.context.active_object
+        st.scale = (1.2, 1.0, 0.75)
+        st.data.materials.append(mat_stone)
+
+    # Glowing golden seed pod resting on soil
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.12, location=(0.0, -0.05, 0.22))
+    seed = bpy.context.active_object
+    seed.scale = (1.35, 0.9, 0.95)
+    seed.rotation_euler = (0.0, math.radians(-20), 0.0)
+    seed.data.materials.append(mat_seed)
+
+    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.05, radius2=0.01, depth=0.12, location=(0.08, -0.05, 0.30))
+    tip = bpy.context.active_object
+    tip.rotation_euler = (0.0, math.radians(35), 0.0)
+    tip.data.materials.append(mat_leaf)
+
+    finalize_and_export("seed_patch", "seed_patch.blend", "props/seed_patch.glb")
+
+
+def build_ocean_buoy():
+    """Polar ocean acoustic monitoring buoy (ocean_buoy.glb) for Level 3 ChoicePoint."""
+    clear_scene()
+    mat_red = make_mat("mat_buoy_red", "E63946", 0.4, 0.2)
+    mat_white = make_mat("mat_buoy_white", "F1FAEE", 0.5, 0.1)
+    mat_steel = make_mat("mat_buoy_steel", "457B9D", 0.35, 0.6)
+    mat_beacon = make_mat("mat_buoy_beacon", "00F5D4", 0.15, 0.1)
+
+    # Buoy base ring
+    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.45, depth=0.35, location=(0.0, 0.0, 0.175))
+    b1 = bpy.context.active_object
+    b1.data.materials.append(mat_red)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.36, depth=0.25, location=(0.0, 0.0, 0.45))
+    b2 = bpy.context.active_object
+    b2.data.materials.append(mat_white)
+
+    # Mast tower
+    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.07, depth=0.95, location=(0.0, 0.0, 0.95))
+    mast = bpy.context.active_object
+    mast.data.materials.append(mat_steel)
+
+    # Crossbars
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 1.15))
+    bar = bpy.context.active_object
+    bar.scale = (0.55, 0.08, 0.08)
+    bar.data.materials.append(mat_steel)
+
+    # Top glowing sensor dome
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.14, location=(0.0, 0.0, 1.48))
+    dome = bpy.context.active_object
+    dome.data.materials.append(mat_beacon)
+
+    finalize_and_export("ocean_buoy", "ocean_buoy.blend", "props/ocean_buoy.glb")
+
+
+def build_weather_tower():
+    """Automated mountain weather relay dish & solar station (weather_tower.glb) for Level 4 ChoicePoint."""
+    clear_scene()
+    mat_frame = make_mat("mat_tower_frame", "5C6B7A", 0.45, 0.5)
+    mat_dish = make_mat("mat_tower_dish", "F8F9FA", 0.35, 0.2)
+    mat_solar = make_mat("mat_tower_solar", "1D3557", 0.2, 0.4)
+    mat_beacon = make_mat("mat_tower_beacon", "FFD166", 0.15, 0.1)
+
+    # Heavy stone/steel base pad
+    bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.50, depth=0.22, location=(0.0, 0.0, 0.11))
+    pad = bpy.context.active_object
+    pad.data.materials.append(mat_frame)
+
+    # Central mast
+    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.09, depth=1.55, location=(0.0, 0.0, 0.92))
+    mast = bpy.context.active_object
+    mast.data.materials.append(mat_frame)
+
+    # Solar wing panel
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.38, 0.0, 0.95))
+    solar = bpy.context.active_object
+    solar.scale = (0.55, 0.38, 0.05)
+    solar.rotation_euler = (math.radians(25), 0.0, 0.0)
+    solar.data.materials.append(mat_solar)
+
+    # Radar / relay dish
+    bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=0.36, radius2=0.06, depth=0.18, location=(0.18, -0.12, 1.42))
+    dish = bpy.context.active_object
+    dish.rotation_euler = (math.radians(55), 0.0, math.radians(-25))
+    dish.data.materials.append(mat_dish)
+
+    # Top anemometer / beacon light
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.11, location=(0.0, 0.0, 1.76))
+    light = bpy.context.active_object
+    light.data.materials.append(mat_beacon)
+
+    finalize_and_export("weather_tower", "weather_tower.blend", "props/weather_tower.glb")
+
+
 if __name__ == "__main__":
     build_research_hut()
     build_green_glass_bottle()
@@ -449,4 +696,9 @@ if __name__ == "__main__":
     build_rock_formation()
     build_mountain_bg()
     build_iceberg_bg()
+    build_baby_chick()
+    build_fact_holo_globe()
+    build_seed_patch()
+    build_ocean_buoy()
+    build_weather_tower()
     print("ALL BLENDER MODELS BUILT AND EXPORTED SUCCESSFULLY.")

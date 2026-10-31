@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://features/mechanics/tilting_bridge.gd" id="1_bridge"]
+
+[sub_resource type="BoxShape3D" id="Shape_plank"]
+size = Vector3(5.2, 0.42, 3.0)
+
+[sub_resource type="StandardMaterial3D" id="Mat_plank"]
+albedo_color = Color(0.58, 0.38, 0.22, 1)
+roughness = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_fulcrum"]
+albedo_color = Color(1, 0.82, 0.28, 1)
+roughness = 0.4
+
+[sub_resource type="BoxShape3D" id="Shape_detector"]
+size = Vector3(5.2, 1.8, 2.8)
+
+[node name="TiltingBridge" type="Node3D"]
+script = ExtResource("1_bridge")
+
+[node name="FulcrumPivot" type="CSGCylinder3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, -0.35, 0)
+radius = 0.35
+height = 3.0
+sides = 6
+material = SubResource("Mat_fulcrum")
+
+[node name="PlankBody" type="AnimatableBody3D" parent="."]
+sync_to_physics = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlankBody"]
+shape = SubResource("Shape_plank")
+
+[node name="PlankVisual" type="CSGBox3D" parent="PlankBody"]
+size = Vector3(5.2, 0.42, 3.0)
+material = SubResource("Mat_plank")
+
+[node name="DetectorArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectorArea"]
+shape = SubResource("Shape_detector")

@@ -1,0 +1,231 @@
+[gd_scene load_steps=27 format=3]
+
+[ext_resource type="PackedScene" path="res://features/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" path="res://features/camera/camera_rig.tscn" id="2_camera"]
+[ext_resource type="PackedScene" path="res://features/checkpoint/checkpoint.tscn" id="3_checkpoint"]
+[ext_resource type="Script" path="res://features/checkpoint/respawn.gd" id="4_respawn"]
+[ext_resource type="PackedScene" path="res://features/ui/hud.tscn" id="5_hud"]
+[ext_resource type="Resource" path="res://data/tuning.tres" id="6_tuning"]
+[ext_resource type="PackedScene" path="res://features/narrative/monologue_ui.tscn" id="7_monologue_ui"]
+[ext_resource type="PackedScene" path="res://features/narrative/narrative_trigger.tscn" id="8_narrative_trigger"]
+[ext_resource type="PackedScene" path="res://features/narrative/fact_card.tscn" id="9_fact_card"]
+[ext_resource type="PackedScene" path="res://features/narrative/choice_point.tscn" id="10_choice_point"]
+[ext_resource type="Script" path="res://features/chapters/chapter_goal.gd" id="11_chapter_goal"]
+[ext_resource type="Script" path="res://features/look/hope_grade.gd" id="12_hope_grade"]
+[ext_resource type="PackedScene" path="res://features/vfx/snow_particles.tscn" id="13_snow_particles"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/mountain_bg.glb" id="14_mountain_bg"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/rock_formation.glb" id="15_rock_formation"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/pine_tree.glb" id="16_pine_tree"]
+[ext_resource type="PackedScene" path="res://features/wind/wind_zone.tscn" id="17_wind_zone"]
+[ext_resource type="PackedScene" path="res://features/mechanics/moving_platform.tscn" id="18_moving_platform"]
+[ext_resource type="PackedScene" path="res://features/mechanics/slide_swoop_ramp.tscn" id="19_swoop_ramp"]
+[ext_resource type="PackedScene" path="res://features/mechanics/thermal_vent.tscn" id="20_thermal_vent"]
+[ext_resource type="PackedScene" path="res://features/litter/litter_item.tscn" id="21_litter_item"]
+[ext_resource type="PackedScene" path="res://features/litter/sorting_bin.tscn" id="22_sorting_bin"]
+[ext_resource type="PackedScene" path="res://features/litter/litter_gate.tscn" id="23_litter_gate"]
+
+[sub_resource type="Environment" id="Environment_ch4_ridge"]
+background_mode = 1
+background_color = Color(0.5, 0.62, 0.78, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.76, 0.84, 0.94, 1)
+ambient_light_energy = 0.78
+
+[sub_resource type="StandardMaterial3D" id="Mat_ridge"]
+albedo_color = Color(0.54, 0.62, 0.72, 1)
+roughness = 0.82
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_goal"]
+size = Vector3(3, 6, 4)
+
+[node name="Chapter4Ridge" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ch4_ridge")
+
+[node name="HopeGrade" type="Node" parent="WorldEnvironment"]
+script = ExtResource("12_hope_grade")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." groups=["directional_light"]]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 20, 12)
+shadow_enabled = true
+
+[node name="SnowParticles" parent="." instance=ExtResource("13_snow_particles")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 12, 0)
+
+[node name="Background" type="Node3D" parent="."]
+
+[node name="MountainBg1" parent="Background" instance=ExtResource("14_mountain_bg")]
+transform = Transform3D(3.0, 0, 0, 0, 3.0, 0, 0, 0, 3.0, 4, 0.0, -22)
+
+[node name="MountainBg2" parent="Background" instance=ExtResource("14_mountain_bg")]
+transform = Transform3D(3.2, 0, 0, 0, 3.2, 0, 0, 0, 3.2, 46, 3.0, -24)
+
+[node name="RockBg1" parent="Background" instance=ExtResource("15_rock_formation")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -9, 0.0, -1.6)
+
+[node name="RockBg2" parent="Background" instance=ExtResource("15_rock_formation")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 34, 3.0, -1.6)
+
+[node name="PineBg1" parent="Background" instance=ExtResource("16_pine_tree")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -12, 0.0, -1.5)
+
+[node name="PineBg2" parent="Background" instance=ExtResource("16_pine_tree")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 58, 5.5, -1.5)
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="LeftWall" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 4, 0)
+use_collision = true
+size = Vector3(1, 14, 4)
+material = SubResource("Mat_ridge")
+
+[node name="StartRidge" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0, -3.0, 0)
+use_collision = true
+size = Vector3(22, 6, 4)
+material = SubResource("Mat_ridge")
+
+[node name="MovingPlatform1" parent="Geometry" instance=ExtResource("18_moving_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 0.2, 0)
+travel_offset = Vector3(5.2, 1.8, 0)
+cycle_duration = 3.8
+
+[node name="MidPlateau" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0, -1.5, 0)
+use_collision = true
+size = Vector3(16, 7, 4)
+material = SubResource("Mat_ridge")
+
+[node name="SlideSwoopRamp1" parent="Geometry" instance=ExtResource("19_swoop_ramp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.5, 0.5, 0)
+
+[node name="TowerPlateau" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.5, -0.5, 0)
+use_collision = true
+size = Vector3(13, 7, 4)
+material = SubResource("Mat_ridge")
+
+[node name="ThermalVent1" parent="Geometry" instance=ExtResource("20_thermal_vent")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.8, 3.0, 0)
+updraft_speed = 11.2
+horizontal_nudge = 3.2
+
+[node name="GoalRidge" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.0, 1.5, 0)
+use_collision = true
+size = Vector3(12, 8, 4)
+material = SubResource("Mat_ridge")
+
+[node name="RightWall" type="CSGBox3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.5, 10, 0)
+use_collision = true
+size = Vector3(1, 12, 4)
+material = SubResource("Mat_ridge")
+
+[node name="Wind" type="Node3D" parent="."]
+
+[node name="Wind1" parent="Wind" instance=ExtResource("17_wind_zone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 2.0, 0)
+zone_id = &"c4_wind_1"
+push_speed = -2.8
+size = Vector3(8, 5, 3)
+
+[node name="Wind2" parent="Wind" instance=ExtResource("17_wind_zone")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0, 4.0, 0)
+zone_id = &"c4_wind_2"
+push_speed = -3.0
+size = Vector3(8, 5, 3)
+
+[node name="LitterItems" type="Node3D" parent="."]
+
+[node name="Litter1" parent="LitterItems" instance=ExtResource("21_litter_item")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.55, 0)
+litter_type = &"plastic"
+
+[node name="SortingStations" type="Node3D" parent="."]
+
+[node name="BinPlastic1" parent="SortingStations" instance=ExtResource("22_sorting_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.5, 2.0, 0)
+accepts = &"plastic"
+
+[node name="Gates" type="Node3D" parent="."]
+
+[node name="Gate1" parent="Gates" instance=ExtResource("23_litter_gate")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.5, 2.0, 0)
+gate_id = &"c4_gate_1"
+required_count = 1
+
+[node name="Checkpoints" type="Node3D" parent="."]
+
+[node name="Checkpoint1" parent="Checkpoints" instance=ExtResource("3_checkpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 0.0, 0)
+checkpoint_id = &"ch4_cp_1"
+
+[node name="Checkpoint2" parent="Checkpoints" instance=ExtResource("3_checkpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.0, 2.0, 0)
+checkpoint_id = &"ch4_cp_2"
+
+[node name="Checkpoint3" parent="Checkpoints" instance=ExtResource("3_checkpoint")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.0, 3.0, 0)
+checkpoint_id = &"ch4_cp_3"
+
+[node name="Narrative" type="Node3D" parent="."]
+
+[node name="TriggerStart" parent="Narrative" instance=ExtResource("8_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.5, 1.0, 0)
+key = &"MONO_C4_START"
+
+[node name="TriggerEnd" parent="Narrative" instance=ExtResource("8_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.5, 6.5, 0)
+key = &"MONO_C4_END"
+
+[node name="FactCards" type="Node3D" parent="."]
+
+[node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.5, 4.2, 0)
+fact_key = &"FACT_PERMAFROST"
+source_label = "IPCC AR6, 2023"
+
+[node name="ChoicePoints" type="Node3D" parent="."]
+
+[node name="TowerChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5, 3.02, 0)
+choice_id = &"tower"
+hope_reward = 15.0
+prompt_key = &"CHOICE_TOWER_PROMPT"
+option_a_key = &"CHOICE_TOWER_ALIGN"
+option_b_key = &"CHOICE_TOWER_SKIP"
+option_a_id = &"align"
+option_b_id = &"skip"
+success_monologue_key = &"CHOICE_TOWER_SAVED"
+
+[node name="Goals" type="Node3D" parent="."]
+
+[node name="ChapterGoal" type="Area3D" parent="Goals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5, 6.5, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("11_chapter_goal")
+chapter_id = &"chapter_4"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Goals/ChapterGoal"]
+shape = SubResource("BoxShape3D_goal")
+
+[node name="Respawn" type="Node" parent="." node_paths=PackedStringArray("player")]
+script = ExtResource("4_respawn")
+player = NodePath("../Player")
+tuning = ExtResource("6_tuning")
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.1, 0)
+
+[node name="CameraRig" parent="." node_paths=PackedStringArray("target") instance=ExtResource("2_camera")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 2.3, 24)
+target = NodePath("../Player")
+bounds = Rect2(-16, -2, 80, 16)
+
+[node name="MonologueUI" parent="." instance=ExtResource("7_monologue_ui")]
+
+[node name="Hud" parent="." instance=ExtResource("5_hud")]
