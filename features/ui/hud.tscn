@@ -1,32 +1,45 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://features/ui/hud.gd" id="1_hud"]
 
+[sub_resource type="SystemFont" id="SystemFont_hud"]
+font_names = PackedStringArray("Avenir Next", "Trebuchet MS", "Segoe UI", "Verdana", "Arial")
+font_weight = 700
+subpixel_positioning = 1
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fact"]
-bg_color = Color(0.08, 0.12, 0.18, 0.92)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.35, 0.65, 0.85, 0.8)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+bg_color = Color(0.04, 0.09, 0.17, 0.95)
+border_width_left = 4
+border_width_top = 3
+border_width_right = 4
+border_width_bottom = 3
+border_color = Color(0.96, 0.8, 0.28, 0.95)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.55)
+shadow_size = 10
+shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_complete"]
-bg_color = Color(0.08, 0.12, 0.18, 0.94)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.3, 0.6, 0.8, 0.8)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+bg_color = Color(0.05, 0.1, 0.18, 0.96)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.38, 0.78, 0.96, 0.92)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 12
+shadow_offset = Vector2(0, 4)
 
 [node name="Hud" type="CanvasLayer"]
+process_mode = 3
+layer = 10
 script = ExtResource("1_hud")
 
 [node name="ShimmerOverlay" type="ColorRect" parent="."]
@@ -42,17 +55,17 @@ color = Color(1, 0.48, 0.15, 0)
 [node name="MarginContainer" type="MarginContainer" parent="."]
 offset_left = 24.0
 offset_top = 24.0
-offset_right = 280.0
-offset_bottom = 96.0
+offset_right = 290.0
+offset_bottom = 102.0
 
 [node name="HeatPanel" type="PanelContainer" parent="MarginContainer"]
 layout_mode = 2
 
 [node name="InnerMargin" type="MarginContainer" parent="MarginContainer/HeatPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
+theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
+theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HeatPanel/InnerMargin"]
@@ -62,11 +75,14 @@ theme_override_constants/separation = 6
 [node name="HeatLabel" type="Label" parent="MarginContainer/HeatPanel/InnerMargin/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 18
 text = "UI_HEAT"
 
 [node name="HeatBar" type="ProgressBar" parent="MarginContainer/HeatPanel/InnerMargin/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 22)
+custom_minimum_size = Vector2(230, 22)
 layout_mode = 2
 max_value = 1.0
 step = 0.001
@@ -76,10 +92,10 @@ show_percentage = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -280.0
+offset_left = -290.0
 offset_top = 24.0
 offset_right = -24.0
-offset_bottom = 140.0
+offset_bottom = 148.0
 grow_horizontal = 0
 
 [node name="RightVBox" type="VBoxContainer" parent="HopeMarginContainer"]
@@ -91,9 +107,9 @@ layout_mode = 2
 
 [node name="InnerMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/HopePanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
+theme_override_constants/margin_left = 14
 theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 12
+theme_override_constants/margin_right = 14
 theme_override_constants/margin_bottom = 10
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin"]
@@ -107,17 +123,23 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 18
 text = "UI_HOPE"
 
 [node name="HopeValueLabel" type="Label" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 18
 text = "10"
 horizontal_alignment = 2
 
 [node name="HopeBar" type="ProgressBar" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(220, 22)
+custom_minimum_size = Vector2(230, 22)
 layout_mode = 2
 max_value = 100.0
 step = 1.0
@@ -131,14 +153,17 @@ layout_mode = 2
 
 [node name="CarryMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/CarryPanel"]
 layout_mode = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 8
 
 [node name="CarryLabel" type="Label" parent="HopeMarginContainer/RightVBox/CarryPanel/CarryMargin"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 20
 text = "◼ Paper"
 horizontal_alignment = 1
 
@@ -148,37 +173,45 @@ visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -300.0
-offset_top = 110.0
-offset_right = 300.0
-offset_bottom = 200.0
+offset_left = -360.0
+offset_top = 86.0
+offset_right = 360.0
+offset_bottom = 210.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fact")
 
 [node name="MarginContainer" type="MarginContainer" parent="FactPopup"]
 layout_mode = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 12
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FactPopup/MarginContainer"]
 layout_mode = 2
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
 [node name="FactTextLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(560, 0)
+custom_minimum_size = Vector2(660, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(0.97, 0.99, 1, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.05, 0.1, 1)
+theme_override_constants/outline_size = 6
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 24
 text = "FACT_SEA_ICE"
+horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="FactSourceLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_color = Color(0.75, 0.85, 0.95, 0.85)
-theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.86, 0.38, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.05, 0.1, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 18
 text = "Source: BAS"
 horizontal_alignment = 2
 
@@ -190,10 +223,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -240.0
-offset_top = -120.0
-offset_right = 240.0
-offset_bottom = 120.0
+offset_left = -260.0
+offset_top = -130.0
+offset_right = 260.0
+offset_bottom = 130.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_complete")
@@ -212,7 +245,8 @@ theme_override_constants/separation = 14
 [node name="CompleteTitle" type="Label" parent="CompletePanel/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 26
 text = "UI_CHAPTER_COMPLETE"
 horizontal_alignment = 1
 
@@ -220,7 +254,8 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 20
 text = "Shore, Hope: 25"
 horizontal_alignment = 1
 
@@ -235,18 +270,95 @@ alignment = 1
 [node name="CompleteContinueButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(130, 44)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "UI_CONTINUE"
 
 [node name="CompleteRestartButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(130, 44)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "UI_RESTART"
 
 [node name="CompleteMenuButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(120, 40)
+custom_minimum_size = Vector2(130, 44)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "UI_MAIN_MENU"
+
+[node name="PausePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -210.0
+offset_right = 230.0
+offset_bottom = 210.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_complete")
+
+[node name="MarginContainer" type="MarginContainer" parent="PausePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 26
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 26
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PausePanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+alignment = 1
+
+[node name="PauseTitle" type="Label" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_hud")
+theme_override_font_sizes/font_size = 30
+text = "UI_PAUSED"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="PausePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PauseResumeButton" type="Button" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "UI_RESUME"
+
+[node name="PauseLanguageButton" type="Button" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "UI_LANGUAGE"
+
+[node name="PauseVolumeButton" type="Button" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "UI_VOLUME"
+
+[node name="PauseRestartButton" type="Button" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "UI_RESTART"
+
+[node name="PauseMenuButton" type="Button" parent="PausePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 44)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
 text = "UI_MAIN_MENU"

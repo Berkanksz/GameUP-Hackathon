@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" path="res://assets/models/litter/bin_glass.glb" id="4_bin_glass"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
-size = Vector3(1.5, 1.6, 1.5)
+size = Vector3(1.8, 1.8, 2.2)
 
 [node name="SortingBin" type="Area3D" groups=["bin"]]
 collision_layer = 0
@@ -16,40 +16,41 @@ monitorable = false
 script = ExtResource("1_bin")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("BoxShape3D_interact")
 
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.85)
 
 [node name="PaperModel" parent="VisualRoot" instance=ExtResource("2_bin_paper")]
 unique_name_in_owner = true
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, 0, 0)
 
 [node name="PlasticModel" parent="VisualRoot" instance=ExtResource("3_bin_plastic")]
 unique_name_in_owner = true
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, 0, 0)
 visible = false
 
 [node name="GlassModel" parent="VisualRoot" instance=ExtResource("4_bin_glass")]
 unique_name_in_owner = true
-transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
+transform = Transform3D(1.15, 0, 0, 0, 1.15, 0, 0, 0, 1.15, 0, 0, 0)
 visible = false
 
 [node name="SignLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.35)
 billboard = 1
 text = "BIN"
-font_size = 26
-outline_size = 6
+font_size = 32
+outline_size = 9
 
 [node name="PromptLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0.35)
 visible = false
 billboard = 1
-modulate = Color(1, 0.88, 0.3, 1)
+modulate = Color(1, 0.92, 0.35, 1)
 text = "[E] Sort"
-font_size = 24
-outline_size = 6
+font_size = 30
+outline_size = 9

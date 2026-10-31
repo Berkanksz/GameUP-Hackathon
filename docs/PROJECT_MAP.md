@@ -29,24 +29,24 @@ Status marks: [ ] planned, [x] built.
 3. [x] Audio: play_sfx(key: StringName) -> void, play_music(key: StringName) -> void, play_ambience(key: StringName) -> void, stop_music() -> void, stop_ambience() -> void.
 
 ### features
-1. [x] Player: respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void, set_push(source_id: StringName, speed_x: float) -> void, clear_push(source_id: StringName) -> void, is_carrying: bool, carried_item_type: StringName. Group: player.
+1. [x] Player: @export fall_death_y: float, respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void, set_push(source_id: StringName, speed_x: float) -> void, clear_push(source_id: StringName) -> void, is_carrying: bool, carried_item_type: StringName. Supports State.SLIDE belly slide on Shift. Group: player.
 2. [x] CameraRig: @export target: Node3D, @export bounds: Rect2, @export use_bounds: bool, set_bounds(new_bounds: Rect2) -> void, snap_to_target() -> void.
 3. [x] HeatComponent: set_rate(source_id: StringName, rate: float) -> void, clear_rate(source_id: StringName) -> void, heat: float.
 4. [x] HeatZone (Area3D): @export rate: float, @export zone_id: StringName, @export show_debug_visual: bool. Registers with the HeatComponent of the player body that enters.
 5. [x] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
 6. [x] Checkpoint (Area3D): @export checkpoint_id: StringName, is_active: bool. Group: checkpoint.
 7. [x] Respawn: @export player: Node3D, @export tuning: TuningData, active_checkpoint_id: StringName.
-8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed, hope_changed, fact_collected, litter_picked, litter_sorted, chapter_completed.
+8. [x] Hud (CanvasLayer): @export tuning: TuningData, toggle_pause() -> void, pause_game() -> void, resume_game() -> void. Listens to heat_changed, player_died, player_respawned, language_changed, hope_changed, fact_collected, litter_picked, litter_sorted, chapter_completed. Includes Esc pause and settings menu.
 9. [x] LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
 10. [x] SortingBin (Area3D): @export accepts: StringName, sort_from_player(player_node: Node3D) -> bool. Group: bin.
 11. [x] LitterGate (StaticBody3D): @export gate_id: StringName, @export required_count: int, is_open: bool, current_count: int, open_gate() -> void. Group: gate.
 12. [x] NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
-13. [x] MonologueUI (CanvasLayer): listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
+13. [x] MonologueUI (CanvasLayer): listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key). Displays story lines in bottom cinematic banner and reactive lines in floating penguin callout.
 14. [x] FactCard (Area3D): @export fact_key: StringName, @export source_label: String.
 15. [x] ChoicePoint (Area3D): @export choice_id: StringName, @export hope_reward: float.
 16. [ ] ChapterData (Resource): chapter_id, title_key, start_position, camera_bounds: Rect2, next_scene.
 17. [x] ChapterGoal (Area3D): @export chapter_id: StringName, @export complete_on_choice: StringName. Emits chapter_completed.
-18. [x] PenguinModel (Node3D): @export outline_width: float, @export outline_color: Color, set_walk_amount(amount: float) -> void. Separated foot meshes with procedural waddle and foot swing animation.
+18. [x] PenguinModel (Node3D): @export outline_width: float, @export outline_color: Color, set_walk_amount(amount: float) -> void, set_slide_amount(amount: float) -> void. Separated foot meshes with procedural waddle, foot swing, and belly slide animation.
 19. [x] WindZone (Area3D): @export zone_id: StringName, @export push_speed: float, @export size: Vector3, is_gusting: bool. Pushes player sideways with timed gusts and streak particles.
 20. [x] HutLamp (Node3D): @export choice_id: StringName, @export on_option_id: StringName. Lights solar lamp in cabin on lamp connect choice.
 21. [x] Ending (Node3D): hope tier ending sequence with camera pull back, character action, and tier text cards.

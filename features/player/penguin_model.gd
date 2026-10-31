@@ -25,6 +25,10 @@ const MIN_PHASE_SPEED: float = 0.5
 @export var waddle_angle: float = 0.1
 @export var body_bob: float = 0.03
 @export var walk_blend_speed: float = 8.0
+@export var slide_blend_speed: float = 11.0
+@export var slide_pitch: float = -1.35
+@export var slide_lift_y: float = 0.28
+@export var slide_offset_x: float = -0.25
 
 var _outline_mat: ShaderMaterial
 var _toon_mats: Dictionary = {}
@@ -35,6 +39,8 @@ var _foot_l_rest: Vector3 = Vector3.ZERO
 var _foot_r_rest: Vector3 = Vector3.ZERO
 var _walk_amount: float = 0.0
 var _walk_target: float = 0.0
+var _slide_amount: float = 0.0
+var _slide_target: float = 0.0
 var _step_phase: float = 0.0
 
 
@@ -55,7 +61,8 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	_walk_amount = move_toward(_walk_amount, _walk_target, walk_blend_speed * delta)
-	if _walk_amount > 0.0:
+	_slide_amount = move_toward(_slide_amount, _slide_target, slide_blend_speed * delta)
+	if _walk_amount > 0.0 and _slide_amount < 0.5:
 		_step_phase = fmod(_step_phase + delta * step_frequency * TAU * maxf(_walk_amount, MIN_PHASE_SPEED), TAU)
 	elif not is_zero_approx(_step_phase):
 		_step_phase = 0.0
@@ -67,17 +74,26 @@ func set_walk_amount(amount: float) -> void:
 	_walk_target = clampf(amount, 0.0, 1.0)
 
 
+## Sets belly slide animation strength from 0 (upright) to 1 (full belly slide).
+func set_slide_amount(amount: float) -> void:
+	_slide_target = clampf(amount, 0.0, 1.0)
+
+
 func _apply_walk_pose() -> void:
 	var wave: float = sin(_step_phase)
+	var walk_weight: float = _walk_amount * (1.0 - _slide_amount)
+	rotation.z = slide_pitch * _slide_amount
+	position.y = slide_lift_y * _slide_amount
+	position.x = slide_offset_x * _slide_amount
 	if _foot_l != null:
-		_foot_l.position = _foot_l_rest + Vector3(0.0, maxf(wave, 0.0) * foot_lift * _walk_amount, 0.0)
-		_foot_l.rotation.z = wave * foot_swing * _walk_amount
+		_foot_l.position = _foot_l_rest + Vector3(0.0, maxf(wave, 0.0) * foot_lift * walk_weight, 0.0)
+		_foot_l.rotation.z = lerpf(wave * foot_swing * walk_weight, -0.85, _slide_amount)
 	if _foot_r != null:
-		_foot_r.position = _foot_r_rest + Vector3(0.0, maxf(-wave, 0.0) * foot_lift * _walk_amount, 0.0)
-		_foot_r.rotation.z = -wave * foot_swing * _walk_amount
+		_foot_r.position = _foot_r_rest + Vector3(0.0, maxf(-wave, 0.0) * foot_lift * walk_weight, 0.0)
+		_foot_r.rotation.z = lerpf(-wave * foot_swing * walk_weight, -0.85, _slide_amount)
 	if _body != null:
-		_body.rotation.x = wave * waddle_angle * _walk_amount
-		_body.position.y = absf(wave) * body_bob * _walk_amount
+		_body.rotation.x = wave * waddle_angle * walk_weight
+		_body.position.y = absf(wave) * body_bob * walk_weight
 
 
 func _apply_materials_recursive(node: Node) -> void:

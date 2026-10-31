@@ -21,6 +21,6 @@ Log: M3, M4, M5, M6, and M7 completed, Heat, IceTile, Hope, Narrative, Litter lo
 * [x] M8 Chapter 3 short level, lamp choice, ending scene with 3 tiers, credits.
 * [x] M9 Replace greybox with models (Kenney, Quaternius, or Blender), background layers, hope color grade, particles.
 * [x] M10 Audio pass (sfx, ambience, music), settings volume.
-* [ ] M11 Bug pass, both languages, /ship_check, Windows export.
+* [x] M11 Bug pass, both languages, /ship_check, Windows export.
 * [ ] M12 Presentation from the template (docs/SUBMISSION.md), screenshots, demo video, submit the form before 23:59.
-Log: M10 completed, CC0 audio synthesized for wind ambience, calm ambient music, footsteps, jump, landing, ice crack, item pickup, sorting feedback, and UI click. Audio buses and volume settings control wired in main menu. All assets recorded in docs/ASSET_LICENSES.md.
+Log: M10 and M11 completed, CC0 audio pass, full bug and visual pass across Chapters 1 to 3, belly slide, Esc pause and settings menu, distinct 3D litter models, improved monologue and fact typography, bilingual playthrough, all three endings, /ship_check, and Windows pack export verified.

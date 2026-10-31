@@ -57,9 +57,17 @@ var _completed_chapter_id: StringName = &""
 @onready var _complete_continue_button: Button = get_node_or_null("%CompleteContinueButton")
 @onready var _complete_restart_button: Button = %CompleteRestartButton
 @onready var _complete_menu_button: Button = %CompleteMenuButton
+@onready var _pause_panel: PanelContainer = get_node_or_null("%PausePanel")
+@onready var _pause_title: Label = get_node_or_null("%PauseTitle")
+@onready var _pause_resume_button: Button = get_node_or_null("%PauseResumeButton")
+@onready var _pause_language_button: Button = get_node_or_null("%PauseLanguageButton")
+@onready var _pause_volume_button: Button = get_node_or_null("%PauseVolumeButton")
+@onready var _pause_restart_button: Button = get_node_or_null("%PauseRestartButton")
+@onready var _pause_menu_button: Button = get_node_or_null("%PauseMenuButton")
 
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	if tuning == null:
 		tuning = load(DEFAULT_TUNING_PATH) as TuningData
 	_setup_bar_styles()
@@ -78,15 +86,63 @@ func _ready() -> void:
 		_carry_panel.visible = false
 	if _complete_panel != null:
 		_complete_panel.visible = false
+	if _pause_panel != null:
+		_pause_panel.visible = false
 	if _complete_continue_button != null:
 		_complete_continue_button.pressed.connect(_on_complete_continue_pressed)
 	if _complete_restart_button != null:
 		_complete_restart_button.pressed.connect(_on_complete_restart_pressed)
 	if _complete_menu_button != null:
 		_complete_menu_button.pressed.connect(_on_complete_menu_pressed)
+	if _pause_resume_button != null:
+		_pause_resume_button.pressed.connect(resume_game)
+	if _pause_language_button != null:
+		_pause_language_button.pressed.connect(_on_pause_language_pressed)
+	if _pause_volume_button != null:
+		_pause_volume_button.pressed.connect(_on_pause_volume_pressed)
+	if _pause_restart_button != null:
+		_pause_restart_button.pressed.connect(_on_complete_restart_pressed)
+	if _pause_menu_button != null:
+		_pause_menu_button.pressed.connect(_on_complete_menu_pressed)
 	_refresh_text()
 	_apply_heat(0.0)
 	_apply_hope(GameState.hope)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"pause") or event.is_action_pressed(&"ui_cancel"):
+		if _complete_panel != null and _complete_panel.visible:
+			return
+		get_viewport().set_input_as_handled()
+		toggle_pause()
+
+
+## Toggles the in-game pause and settings overlay.
+func toggle_pause() -> void:
+	if get_tree().paused:
+		resume_game()
+	else:
+		pause_game()
+
+
+## Pauses the scene tree and opens the pause settings overlay.
+func pause_game() -> void:
+	if _complete_panel != null and _complete_panel.visible:
+		return
+	get_tree().paused = true
+	if _pause_panel != null:
+		_pause_panel.visible = true
+	_refresh_pause_text()
+	if _pause_resume_button != null:
+		_pause_resume_button.grab_focus()
+
+
+## Resumes gameplay and hides the pause settings overlay.
+func resume_game() -> void:
+	Audio.play_sfx(&"ui_click")
+	get_tree().paused = false
+	if _pause_panel != null:
+		_pause_panel.visible = false
 
 
 func _process(delta: float) -> void:
@@ -112,6 +168,43 @@ func _refresh_text() -> void:
 		_display_fact(_current_fact_key)
 	_refresh_carry_text()
 	_refresh_complete_text()
+	_refresh_pause_text()
+
+
+func _refresh_pause_text() -> void:
+	if _pause_panel == null:
+		return
+	if _pause_title != null:
+		_pause_title.text = tr("UI_PAUSED")
+	if _pause_resume_button != null:
+		_pause_resume_button.text = tr("UI_RESUME")
+	if _pause_language_button != null:
+		var current_lang: String = Settings.get_language()
+		var lang_label_key: String = "UI_LANG_TR" if current_lang == "tr" else "UI_LANG_EN"
+		_pause_language_button.text = "%s: %s" % [tr("UI_LANGUAGE"), tr(lang_label_key)]
+	if _pause_volume_button != null:
+		var current_vol: float = Settings.get_volume(&"Master")
+		_pause_volume_button.text = "%s: %d%%" % [tr("UI_VOLUME"), int(roundf(current_vol * 100.0))]
+	if _pause_restart_button != null:
+		_pause_restart_button.text = tr("UI_RESTART")
+	if _pause_menu_button != null:
+		_pause_menu_button.text = tr("UI_MAIN_MENU")
+
+
+func _on_pause_language_pressed() -> void:
+	Audio.play_sfx(&"ui_click")
+	var next_lang: String = "tr" if Settings.get_language() == "en" else "en"
+	Settings.set_language(next_lang)
+
+
+func _on_pause_volume_pressed() -> void:
+	var current_vol: float = Settings.get_volume(&"Master")
+	var next_vol: float = current_vol - 0.25
+	if next_vol < -0.01:
+		next_vol = 1.0
+	Settings.set_volume(&"Master", next_vol)
+	Audio.play_sfx(&"ui_click")
+	_refresh_pause_text()
 
 
 func _refresh_carry_text() -> void:
@@ -172,6 +265,9 @@ func _on_fact_collected(key: StringName) -> void:
 
 
 func _on_chapter_completed(chapter_id: StringName) -> void:
+	get_tree().paused = false
+	if _pause_panel != null:
+		_pause_panel.visible = false
 	_completed_chapter_id = chapter_id
 	if chapter_id == FINAL_CHAPTER_ID:
 		get_tree().create_timer(ending_delay).timeout.connect(_go_to_ending)
@@ -187,24 +283,32 @@ func _on_chapter_completed(chapter_id: StringName) -> void:
 
 func _on_complete_continue_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
+	get_tree().paused = false
 	var next_path: String = NEXT_SCENES.get(_completed_chapter_id, "")
 	if not next_path.is_empty() and ResourceLoader.exists(next_path):
 		get_tree().change_scene_to_file(next_path)
 
 
 func _go_to_ending() -> void:
+	get_tree().paused = false
 	if ResourceLoader.exists(ENDING_PATH):
 		get_tree().change_scene_to_file(ENDING_PATH)
 
 
 func _on_complete_restart_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
+	get_tree().paused = false
+	if _pause_panel != null:
+		_pause_panel.visible = false
 	GameState.reset()
 	get_tree().reload_current_scene()
 
 
 func _on_complete_menu_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
+	get_tree().paused = false
+	if _pause_panel != null:
+		_pause_panel.visible = false
 	if ResourceLoader.exists(MAIN_MENU_PATH):
 		get_tree().change_scene_to_file(MAIN_MENU_PATH)
 

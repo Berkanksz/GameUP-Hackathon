@@ -27,22 +27,22 @@ unique_name_in_owner = true
 
 [node name="PaperMesh" parent="VisualRoot" instance=ExtResource("2_box")]
 unique_name_in_owner = true
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.15, 0)
+transform = Transform3D(1.65, 0, 0, 0, 1.65, 0, 0, 0, 1.65, 0, -0.22, 0)
 
 [node name="PlasticMesh" parent="VisualRoot" instance=ExtResource("3_bottle")]
 unique_name_in_owner = true
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.2, 0)
+transform = Transform3D(1.65, 0, 0, 0, 1.65, 0, 0, 0, 1.65, 0, -0.28, 0)
 visible = false
 
 [node name="GlassMesh" parent="VisualRoot" instance=ExtResource("4_jar")]
 unique_name_in_owner = true
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.15, 0)
+transform = Transform3D(1.65, 0, 0, 0, 1.65, 0, 0, 0, 1.65, 0, -0.28, 0)
 visible = false
 
 [node name="IconLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
 billboard = 1
 text = "P"
-font_size = 28
-outline_size = 6
+font_size = 34
+outline_size = 8
