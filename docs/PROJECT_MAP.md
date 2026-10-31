@@ -51,6 +51,8 @@ Status marks: [ ] planned, [x] built.
 20. [x] HutLamp (Node3D): @export choice_id: StringName, @export on_option_id: StringName. Lights solar lamp in cabin on lamp connect choice.
 21. [x] Ending (Node3D): hope tier ending sequence with camera pull back, character action, and tier text cards.
 22. [x] Credits (CanvasLayer): rolling credits, thanks message, and return to main menu.
+23. [x] HopeGrade (Node): @export world_environment: WorldEnvironment, @export directional_light: DirectionalLight3D. Smoothly tweens environment adjustment saturation and ambient light color on EventBus.hope_changed.
+24. [x] VFX: SnowParticles (CPUParticles3D) for ambient snowfall; MeltDripParticles (CPUParticles3D) for melting IceTile droplets.
 
 ## Couplings the scanner cannot see
 (Fill as they appear. Also record in memory graph as scene_couples_to.)

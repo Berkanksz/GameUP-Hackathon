@@ -22,17 +22,21 @@ var _visual_base_pos: Vector3 = Vector3.ZERO
 var _material: StandardMaterial3D
 
 @onready var _collision_shape: CollisionShape3D = get_node_or_null("CollisionShape3D") as CollisionShape3D
-@onready var _visual_box: CSGBox3D = get_node_or_null("VisualBox") as CSGBox3D
+@onready var _visual_root: Node3D = get_node_or_null("VisualRoot") as Node3D
+@onready var _visual_box: GeometryInstance3D = get_node_or_null("VisualBox") as GeometryInstance3D
 @onready var _step_detector: Area3D = get_node_or_null("StepDetector") as Area3D
+@onready var _drip_particles: CPUParticles3D = get_node_or_null("MeltDripParticles") as CPUParticles3D
 
 
 func _ready() -> void:
-	if _visual_box != null:
+	if _visual_root != null:
+		_visual_base_pos = _visual_root.position
+	elif _visual_box != null:
 		_visual_base_pos = _visual_box.position
 		_material = StandardMaterial3D.new()
 		_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		_material.albedo_color = INTACT_COLOR
-		_visual_box.material = _material
+		_visual_box.material_override = _material
 	if _step_detector != null:
 		_step_detector.body_entered.connect(_on_step_body_entered)
 	EventBus.player_respawned.connect(_on_player_respawned)
@@ -88,15 +92,20 @@ func _start_melting() -> void:
 	state = State.MELTING
 	_timer = maxf(0.05, melt_time)
 	Audio.play_sfx(&"ice_crack")
+	if _drip_particles != null:
+		_drip_particles.emitting = true
 
 
 func _update_melting_visual() -> void:
-	if _visual_box == null or _material == null:
-		return
 	var duration: float = maxf(0.05, melt_time)
 	var ratio: float = 1.0 - clampf(_timer / duration, 0.0, 1.0)
-	_material.albedo_color = INTACT_COLOR.lerp(CRACKED_COLOR, ratio)
-	_visual_box.position = _visual_base_pos + Vector3(sin(ratio * 36.0) * 0.04, -ratio * 0.06, 0.0)
+	var wobble: Vector3 = _visual_base_pos + Vector3(sin(ratio * 36.0) * 0.04, -ratio * 0.06, 0.0)
+	if _visual_root != null:
+		_visual_root.position = wobble
+	elif _visual_box != null:
+		_visual_box.position = wobble
+		if _material != null:
+			_material.albedo_color = INTACT_COLOR.lerp(CRACKED_COLOR, ratio)
 
 
 func _break_tile() -> void:
@@ -104,7 +113,12 @@ func _break_tile() -> void:
 	_timer = maxf(0.05, respawn_time)
 	if _collision_shape != null:
 		_collision_shape.set_deferred(&"disabled", true)
-	if _visual_box != null:
+	if _drip_particles != null:
+		_drip_particles.emitting = false
+	if _visual_root != null:
+		_visual_root.visible = false
+		_visual_root.position = _visual_base_pos
+	elif _visual_box != null:
 		_visual_box.visible = false
 		_visual_box.position = _visual_base_pos
 
@@ -114,7 +128,12 @@ func _restore() -> void:
 	_timer = 0.0
 	if _collision_shape != null:
 		_collision_shape.set_deferred(&"disabled", false)
-	if _visual_box != null:
+	if _drip_particles != null:
+		_drip_particles.emitting = false
+	if _visual_root != null:
+		_visual_root.visible = true
+		_visual_root.position = _visual_base_pos
+	elif _visual_box != null:
 		_visual_box.visible = true
 		_visual_box.position = _visual_base_pos
 	if _material != null:

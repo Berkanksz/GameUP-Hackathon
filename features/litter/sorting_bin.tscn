@@ -1,78 +1,55 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://features/litter/sorting_bin.gd" id="1_bin"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/bin_paper.glb" id="2_bin_paper"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/bin_plastic.glb" id="3_bin_plastic"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/bin_glass.glb" id="4_bin_glass"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_bin"]
-size = Vector3(1.5, 2.0, 2.0)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rim"]
-albedo_color = Color(0.18, 0.2, 0.24, 1)
-roughness = 0.6
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_badge"]
-albedo_color = Color(0.96, 0.98, 1, 1)
-roughness = 0.3
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact"]
+size = Vector3(1.5, 1.6, 1.5)
 
 [node name="SortingBin" type="Area3D" groups=["bin"]]
 collision_layer = 0
 collision_mask = 2
+monitoring = true
+monitorable = false
 script = ExtResource("1_bin")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
-shape = SubResource("BoxShape3D_bin")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_interact")
 
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="BinBody" type="CSGBox3D" parent="VisualRoot"]
+[node name="PaperModel" parent="VisualRoot" instance=ExtResource("2_bin_paper")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
-size = Vector3(0.85, 1.1, 0.85)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
 
-[node name="BinRim" type="CSGBox3D" parent="VisualRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12, 0)
-size = Vector3(0.95, 0.12, 0.95)
-material = SubResource("StandardMaterial3D_rim")
-
-[node name="PaperBadge" type="CSGBox3D" parent="VisualRoot"]
+[node name="PlasticModel" parent="VisualRoot" instance=ExtResource("3_bin_plastic")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
-size = Vector3(0.32, 0.32, 0.06)
-material = SubResource("StandardMaterial3D_badge")
-
-[node name="PlasticBadge" type="CSGCylinder3D" parent="VisualRoot"]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
 visible = false
-radius = 0.16
-height = 0.36
-cone = true
-material = SubResource("StandardMaterial3D_badge")
 
-[node name="GlassBadge" type="CSGSphere3D" parent="VisualRoot"]
+[node name="GlassModel" parent="VisualRoot" instance=ExtResource("4_bin_glass")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
+transform = Transform3D(1.1, 0, 0, 0, 1.1, 0, 0, 0, 1.1, 0, 0, 0)
 visible = false
-radius = 0.18
-material = SubResource("StandardMaterial3D_badge")
 
-[node name="SignLabel" type="Label3D" parent="."]
+[node name="SignLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
-pixel_size = 0.007
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.35, 0)
 billboard = 1
-text = "◼ Paper"
-font_size = 32
-outline_size = 10
+text = "BIN"
+font_size = 26
+outline_size = 6
 
-[node name="PromptLabel" type="Label3D" parent="."]
+[node name="PromptLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.65, 0)
 visible = false
-pixel_size = 0.007
 billboard = 1
-modulate = Color(1, 0.95, 0.65, 1)
-text = "[E] Interact"
-font_size = 28
-outline_size = 8
+modulate = Color(1, 0.88, 0.3, 1)
+text = "[E] Sort"
+font_size = 24
+outline_size = 6

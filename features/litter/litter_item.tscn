@@ -1,57 +1,48 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://features/litter/litter_item.gd" id="1_litter"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/litter_box.glb" id="2_box"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/litter_bottle.glb" id="3_bottle"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/litter_jar.glb" id="4_jar"]
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_litter"]
-radius = 0.9
+[sub_resource type="SphereShape3D" id="SphereShape3D_pickup"]
+radius = 1.1
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_paper"]
-albedo_color = Color(0.18, 0.52, 0.88, 1)
-roughness = 0.6
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_plastic"]
-albedo_color = Color(0.95, 0.78, 0.15, 1)
-roughness = 0.3
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
-albedo_color = Color(0.2, 0.75, 0.38, 1)
-metallic = 0.2
-roughness = 0.2
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glow"]
+shading_mode = 0
+albedo_color = Color(1, 0.95, 0.6, 0.8)
 
 [node name="LitterItem" type="Area3D" groups=["litter"]]
 collision_layer = 0
 collision_mask = 2
+monitoring = true
+monitorable = false
 script = ExtResource("1_litter")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("SphereShape3D_litter")
+shape = SubResource("SphereShape3D_pickup")
 
 [node name="VisualRoot" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="PaperMesh" type="CSGBox3D" parent="VisualRoot"]
+[node name="PaperMesh" parent="VisualRoot" instance=ExtResource("2_box")]
 unique_name_in_owner = true
-size = Vector3(0.46, 0.34, 0.32)
-material = SubResource("StandardMaterial3D_paper")
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.15, 0)
 
-[node name="PlasticMesh" type="CSGCylinder3D" parent="VisualRoot"]
+[node name="PlasticMesh" parent="VisualRoot" instance=ExtResource("3_bottle")]
 unique_name_in_owner = true
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.2, 0)
 visible = false
-radius = 0.18
-height = 0.52
-material = SubResource("StandardMaterial3D_plastic")
 
-[node name="GlassMesh" type="CSGSphere3D" parent="VisualRoot"]
+[node name="GlassMesh" parent="VisualRoot" instance=ExtResource("4_jar")]
 unique_name_in_owner = true
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, -0.15, 0)
 visible = false
-radius = 0.24
-material = SubResource("StandardMaterial3D_glass")
 
-[node name="IconLabel" type="Label3D" parent="."]
+[node name="IconLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
-pixel_size = 0.008
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
 billboard = 1
-text = "◼"
-font_size = 38
-outline_size = 10
+text = "P"
+font_size = 28
+outline_size = 6

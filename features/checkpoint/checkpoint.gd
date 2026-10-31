@@ -9,7 +9,8 @@ const ACTIVE_COLOR: Color = Color(1.0, 0.78, 0.28, 1.0)
 
 var is_active: bool = false
 
-@onready var _top_stone: CSGBox3D = get_node_or_null("TopStone") as CSGBox3D
+@onready var _top_stone: GeometryInstance3D = get_node_or_null("TopStone") as GeometryInstance3D
+@onready var _beacon_light: OmniLight3D = get_node_or_null("BeaconLight") as OmniLight3D
 
 
 func _ready() -> void:
@@ -31,8 +32,9 @@ func _on_checkpoint_reached(reached_id: StringName) -> void:
 
 
 func _update_visual() -> void:
-	if _top_stone == null:
-		return
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = ACTIVE_COLOR if is_active else INACTIVE_COLOR
-	_top_stone.material = mat
+	if _beacon_light != null:
+		_beacon_light.visible = is_active
+	if _top_stone != null:
+		var mat := StandardMaterial3D.new()
+		mat.albedo_color = ACTIVE_COLOR if is_active else INACTIVE_COLOR
+		_top_stone.material_override = mat

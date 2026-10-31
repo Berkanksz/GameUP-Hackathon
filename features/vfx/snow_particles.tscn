@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_snow"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.92, 0.95, 0.98, 0.85)
+
+[sub_resource type="BoxMesh" id="BoxMesh_flake"]
+material = SubResource("StandardMaterial3D_snow")
+size = Vector3(0.05, 0.05, 0.05)
+
+[node name="SnowParticles" type="CPUParticles3D"]
+amount = 64
+lifetime = 4.5
+mesh = SubResource("BoxMesh_flake")
+emission_shape = 3
+emission_box_extents = Vector3(18, 10, 4)
+direction = Vector3(-0.35, -1, 0)
+spread = 15.0
+gravity = Vector3(0, -1.5, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.2

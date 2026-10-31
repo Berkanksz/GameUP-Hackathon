@@ -16,9 +16,9 @@ var _base_y: float = 0.0
 var _clock: float = 0.0
 
 @onready var _visual_root: Node3D = %VisualRoot
-@onready var _paper_mesh: CSGBox3D = %PaperMesh
-@onready var _plastic_mesh: CSGCylinder3D = %PlasticMesh
-@onready var _glass_mesh: CSGSphere3D = %GlassMesh
+@onready var _paper_mesh: Node3D = %PaperMesh
+@onready var _plastic_mesh: Node3D = %PlasticMesh
+@onready var _glass_mesh: Node3D = %GlassMesh
 @onready var _icon_label: Label3D = %IconLabel
 
 

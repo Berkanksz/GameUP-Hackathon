@@ -12,10 +12,13 @@ var _player_in_range: Node3D = null
 var _bin_material: StandardMaterial3D
 
 @onready var _visual_root: Node3D = %VisualRoot
-@onready var _bin_body: CSGBox3D = %BinBody
-@onready var _paper_badge: CSGBox3D = %PaperBadge
-@onready var _plastic_badge: CSGCylinder3D = %PlasticBadge
-@onready var _glass_badge: CSGSphere3D = %GlassBadge
+@onready var _bin_body: GeometryInstance3D = get_node_or_null("%BinBody") as GeometryInstance3D
+@onready var _paper_model: Node3D = get_node_or_null("%PaperModel") as Node3D
+@onready var _plastic_model: Node3D = get_node_or_null("%PlasticModel") as Node3D
+@onready var _glass_model: Node3D = get_node_or_null("%GlassModel") as Node3D
+@onready var _paper_badge: GeometryInstance3D = get_node_or_null("%PaperBadge") as GeometryInstance3D
+@onready var _plastic_badge: GeometryInstance3D = get_node_or_null("%PlasticBadge") as GeometryInstance3D
+@onready var _glass_badge: GeometryInstance3D = get_node_or_null("%GlassBadge") as GeometryInstance3D
 @onready var _sign_label: Label3D = %SignLabel
 @onready var _prompt_label: Label3D = %PromptLabel
 
@@ -58,6 +61,12 @@ func sort_from_player(player_node: Node3D) -> bool:
 
 
 func _apply_bin_visual() -> void:
+	if _paper_model != null:
+		_paper_model.visible = (accepts == &"paper")
+	if _plastic_model != null:
+		_plastic_model.visible = (accepts == &"plastic")
+	if _glass_model != null:
+		_glass_model.visible = (accepts == &"glass")
 	_bin_material = StandardMaterial3D.new()
 	_bin_material.roughness = 0.45
 	if accepts == &"paper":
@@ -67,7 +76,7 @@ func _apply_bin_visual() -> void:
 	else:
 		_bin_material.albedo_color = COLOR_GLASS
 	if _bin_body != null:
-		_bin_body.material = _bin_material
+		_bin_body.material_override = _bin_material
 	if _paper_badge != null:
 		_paper_badge.visible = (accepts == &"paper")
 	if _plastic_badge != null:

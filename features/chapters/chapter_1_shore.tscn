@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=23 format=3]
 
 [ext_resource type="PackedScene" path="res://features/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://features/camera/camera_rig.tscn" id="2_camera"]
@@ -13,6 +13,12 @@
 [ext_resource type="PackedScene" path="res://features/narrative/fact_card.tscn" id="11_fact_card"]
 [ext_resource type="PackedScene" path="res://features/narrative/choice_point.tscn" id="12_choice_point"]
 [ext_resource type="Script" path="res://features/chapters/chapter_goal.gd" id="13_chapter_goal"]
+[ext_resource type="Script" path="res://features/look/hope_grade.gd" id="14_hope_grade"]
+[ext_resource type="PackedScene" path="res://features/vfx/snow_particles.tscn" id="15_snow_particles"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/iceberg_bg.glb" id="16_iceberg_bg"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/mountain_bg.glb" id="17_mountain_bg"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/rock_formation.glb" id="18_rock_formation"]
+[ext_resource type="PackedScene" path="res://assets/models/environment/pine_tree.glb" id="19_pine_tree"]
 
 [sub_resource type="Environment" id="Environment_ch1"]
 background_mode = 1
@@ -32,9 +38,41 @@ size = Vector3(3, 6, 4)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_ch1")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="HopeGrade" type="Node" parent="WorldEnvironment"]
+script = ExtResource("14_hope_grade")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." groups=["directional_light"]]
 transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 14, 10)
 shadow_enabled = true
+
+[node name="SnowParticles" parent="." instance=ExtResource("15_snow_particles")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 10, 0)
+
+[node name="Background" type="Node3D" parent="."]
+
+[node name="IcebergDistant1" parent="Background" instance=ExtResource("16_iceberg_bg")]
+transform = Transform3D(1.8, 0, 0, 0, 1.8, 0, 0, 0, 1.8, -4, -1, -14)
+
+[node name="IcebergDistant2" parent="Background" instance=ExtResource("16_iceberg_bg")]
+transform = Transform3D(2.2, 0, 0, 0, 2.2, 0, 0, 0, 2.2, 22, 1, -16)
+
+[node name="MountainRidge" parent="Background" instance=ExtResource("17_mountain_bg")]
+transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, 52, 4, -22)
+
+[node name="RockMid1" parent="Background" instance=ExtResource("18_rock_formation")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -10, 0, -4.5)
+
+[node name="RockMid2" parent="Background" instance=ExtResource("18_rock_formation")]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 14, 1, -5)
+
+[node name="RockMid3" parent="Background" instance=ExtResource("18_rock_formation")]
+transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 42, 6, -5.5)
+
+[node name="PineMid1" parent="Background" instance=ExtResource("19_pine_tree")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 38, 7.5, -4)
+
+[node name="PineMid2" parent="Background" instance=ExtResource("19_pine_tree")]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 46, 8, -4.5)
 
 [node name="Geometry" type="Node3D" parent="."]
 

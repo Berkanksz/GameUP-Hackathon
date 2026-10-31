@@ -19,8 +19,8 @@ Log: M3, M4, M5, M6, and M7 completed, Heat, IceTile, Hope, Narrative, Litter lo
 
 ## Sunday 1 November
 * [x] M8 Chapter 3 short level, lamp choice, ending scene with 3 tiers, credits.
-* [ ] M9 Replace greybox with models (Kenney, Quaternius, or Blender), background layers, hope color grade, particles.
+* [x] M9 Replace greybox with models (Kenney, Quaternius, or Blender), background layers, hope color grade, particles.
 * [ ] M10 Audio pass (sfx, ambience, music), settings volume.
 * [ ] M11 Bug pass, both languages, /ship_check, Windows export.
 * [ ] M12 Presentation from the template (docs/SUBMISSION.md), screenshots, demo video, submit the form before 23:59.
-Log: M8 completed, Chapter 3 summit with wind gusts and hut lamp choice, ending scene with hope tiers and camera pull back, rolling credits, waddle walk animation with separated feet, and heat zone debug visuals disabled.
+Log: M9 completed, low-poly 3D models created in Blender for ice tiles, cairns, litter items, recycling bins, litter gate, chick, research hut, solar lamp, rock formations, pine trees, and parallax backgrounds (mountains, icebergs). HopeGrade environment color grading, snow particles, and melt drip VFX integrated across Chapters 1-3. All asset licenses recorded in docs/ASSET_LICENSES.md.

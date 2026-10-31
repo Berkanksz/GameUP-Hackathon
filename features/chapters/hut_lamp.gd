@@ -9,7 +9,7 @@ extends Node3D
 @export var glow_color: Color = Color(1.0, 0.85, 0.45, 1.0)
 
 @onready var _light: OmniLight3D = get_node_or_null("OmniLight3D") as OmniLight3D
-@onready var _bulb: CSGSphere3D = get_node_or_null("Bulb") as CSGSphere3D
+@onready var _bulb: GeometryInstance3D = get_node_or_null("Bulb") as GeometryInstance3D
 
 
 func _ready() -> void:

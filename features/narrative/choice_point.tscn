@@ -1,6 +1,8 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://features/narrative/choice_point.gd" id="1_choice"]
+[ext_resource type="PackedScene" path="res://assets/models/penguin/chick.glb" id="2_chick_glb"]
+[ext_resource type="PackedScene" path="res://assets/models/ice/ice_tile.glb" id="3_floe_glb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_choice"]
 radius = 2.2
@@ -45,28 +47,14 @@ script = ExtResource("1_choice")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_choice")
 
-[node name="FloeBase" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
-size = Vector3(2.2, 0.4, 2.2)
-material = SubResource("StandardMaterial3D_floe")
+[node name="FloeBase" parent="." instance=ExtResource("3_floe_glb")]
+transform = Transform3D(1.2, 0, 0, 0, 0.8, 0, 0, 0, 1.2, 0, -0.2, 0)
 
 [node name="ChickModel" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="ChickBody" type="CSGSphere3D" parent="ChickModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.28, 0)
-radius = 0.28
-material = SubResource("StandardMaterial3D_chick_body")
-
-[node name="ChickHead" type="CSGSphere3D" parent="ChickModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0)
-radius = 0.2
-material = SubResource("StandardMaterial3D_chick_head")
-
-[node name="ChickBeak" type="CSGBox3D" parent="ChickModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, 0.58, 0)
-size = Vector3(0.16, 0.08, 0.08)
-material = SubResource("StandardMaterial3D_beak")
+[node name="ChickGlb" parent="ChickModel" instance=ExtResource("2_chick_glb")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 0, 0)
 
 [node name="SproutModel" type="Node3D" parent="."]
 unique_name_in_owner = true
