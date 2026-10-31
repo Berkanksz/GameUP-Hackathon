@@ -26,12 +26,14 @@ var carried_item_type: StringName = &""
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _current_heat: float = 0.0
+var _was_on_floor: bool = true
 var _carry_visual: Node3D
 var _carry_box: CSGBox3D
 var _carry_label: Label3D
 var _carry_material: StandardMaterial3D
 
 @onready var _visual_root: Node3D = $VisualRoot
+@onready var _penguin_model: Node3D = get_node_or_null("VisualRoot/PenguinModel")
 
 
 func _ready() -> void:
@@ -59,6 +61,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	global_position.z = 0.0
 	velocity.z = 0.0
+	if is_on_floor() and not _was_on_floor:
+		_animate_squash(Vector3(1.15, 0.85, 1.15))
+	_was_on_floor = is_on_floor()
 	_update_state()
 
 
@@ -78,6 +83,14 @@ func die(reason: StringName) -> void:
 	state = State.DEAD
 	velocity = Vector3.ZERO
 	EventBus.player_died.emit(reason)
+
+
+func _animate_squash(target_scale: Vector3) -> void:
+	if _penguin_model == null:
+		return
+	var tween: Tween = create_tween()
+	tween.tween_property(_penguin_model, "scale", target_scale, 0.07)
+	tween.tween_property(_penguin_model, "scale", Vector3.ONE, 0.14)
 
 
 func _setup_carry_visual() -> void:
@@ -146,6 +159,7 @@ func _handle_jump() -> void:
 		velocity.y = tuning.jump_velocity
 		_jump_buffer_timer = 0.0
 		_coyote_timer = 0.0
+		_animate_squash(Vector3(0.86, 1.18, 0.86))
 		Audio.play_sfx(&"jump")
 	if Input.is_action_just_released(&"jump") and velocity.y > 0.0:
 		velocity.y *= tuning.jump_release_multiplier

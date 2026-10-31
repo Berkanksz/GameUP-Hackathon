@@ -4,4 +4,4 @@ Every file under assets/ must be listed here by its path or by its folder path. 
 
 | Name | Author | Source URL | License | Path in project | Credit required |
 |---|---|---|---|---|---|
-| (example) Penguin model | project owner | created in Blender | CC0 original | assets/models/penguin/ | no |
+| Penguin model | project owner | created in Blender | CC0 original | assets/models/penguin/penguin.glb | no |

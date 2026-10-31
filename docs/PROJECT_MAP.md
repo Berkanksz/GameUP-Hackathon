@@ -46,11 +46,12 @@ Status marks: [ ] planned, [x] built.
 15. [x] ChoicePoint (Area3D): @export choice_id: StringName, @export hope_reward: float.
 16. [ ] ChapterData (Resource): chapter_id, title_key, start_position, camera_bounds: Rect2, next_scene.
 17. [x] ChapterGoal (Area3D): @export chapter_id: StringName. Emits chapter_completed.
+18. [x] PenguinModel (Node3D): @export outline_width: float, @export outline_color: Color. Wraps penguin.glb and applies toon.gdshader with outline.gdshader next_pass.
 
 ## Couplings the scanner cannot see
 (Fill as they appear. Also record in memory graph as scene_couples_to.)
 1. CameraRig finds the first node in group player when target is not assigned.
-2. Player flips child VisualRoot on the x scale according to facing direction.
+2. Player flips child VisualRoot on the x scale according to facing direction and scales child PenguinModel for jump and land squash and stretch.
 3. HeatComponent calls die on its parent node when heat reaches heat_max.
 4. HeatZone searches entering player body children for a HeatComponent node.
 5. Respawn finds the first node in group player when player is not assigned and searches group checkpoint by checkpoint_id.

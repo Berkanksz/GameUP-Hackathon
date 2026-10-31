@@ -40,8 +40,10 @@ features/narrative/monologue_ui.gd | CanvasLayer | MonologueUI |  | autoload/eve
 features/narrative/monologue_ui.tscn |  |  |  | features/narrative/monologue_ui.gd | features/chapters/chapter_1_shore.tscn,features/chapters/chapter_2_slope.tscn
 features/narrative/narrative_trigger.gd | Area3D | NarrativeTrigger |  | autoload/event_bus.gd | features/narrative/narrative_trigger.tscn
 features/narrative/narrative_trigger.tscn |  |  |  | features/narrative/narrative_trigger.gd | features/chapters/chapter_1_shore.tscn,features/chapters/chapter_2_slope.tscn
-features/player/player.gd | CharacterBody3D | Player |  | autoload/audio.gd,autoload/event_bus.gd,data/tuning_data.gd | features/player/player.tscn
-features/player/player.tscn |  |  |  | data/tuning.tres,features/heat/heat_component.gd,features/player/player.gd | features/chapters/chapter_1_shore.tscn,features/chapters/chapter_2_slope.tscn,features/player/test_room.tscn
+features/player/penguin_model.gd | Node3D | PenguinModel |  |  | features/player/penguin_model.tscn,features/player/player.gd
+features/player/penguin_model.tscn |  |  |  | features/player/penguin_model.gd | features/player/player.tscn
+features/player/player.gd | CharacterBody3D | Player |  | autoload/audio.gd,autoload/event_bus.gd,data/tuning_data.gd,features/player/penguin_model.gd | features/player/player.tscn
+features/player/player.tscn |  |  |  | data/tuning.tres,features/heat/heat_component.gd,features/player/penguin_model.tscn,features/player/player.gd | features/chapters/chapter_1_shore.tscn,features/chapters/chapter_2_slope.tscn,features/player/test_room.tscn
 features/player/test_room.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/player/player.tscn,features/ui/hud.tscn | 
 features/ui/hud.gd | CanvasLayer | Hud |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd,data/tuning_data.gd,features/narrative/fact_card.gd | features/ui/hud.tscn
 features/ui/hud.tscn |  |  |  | features/ui/hud.gd | features/chapters/chapter_1_shore.tscn,features/chapters/chapter_2_slope.tscn,features/player/test_room.tscn
