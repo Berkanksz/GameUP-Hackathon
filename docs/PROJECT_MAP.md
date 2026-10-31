@@ -29,23 +29,25 @@ Status marks: [ ] planned, [x] built.
 3. [x] Audio: play_sfx(key: StringName) -> void, play_music(key: StringName) -> void.
 
 ### features
-1. Player: respawn_at(position: Vector3) -> void. Group: player.
-2. HeatComponent: set_rate(source_id: StringName, rate: float) -> void, clear_rate(source_id: StringName) -> void, heat: float.
-3. HeatZone (Area3D): @export rate: float, @export zone_id: StringName. Registers with the HeatComponent of the player body that enters.
-4. IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
-5. Checkpoint (Area3D): @export checkpoint_id: StringName. Group: checkpoint.
-6. LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
-7. SortingBin (Area3D): @export accepts: StringName. Group: bin.
-8. LitterGate: @export gate_id: StringName, @export required_count: int. Group: gate.
-9. NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
-10. MonologueUI: listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
-11. FactCard: @export fact_key: StringName, @export source_label: String.
-12. ChoicePoint: @export choice_id: StringName, @export hope_reward: float.
-13. ChapterData (Resource): chapter_id, title_key, start_position, camera_bounds: Rect2, next_scene.
+1. [x] Player: respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void. Group: player.
+2. [x] CameraRig: @export target: Node3D, @export bounds: Rect2, @export use_bounds: bool, set_bounds(new_bounds: Rect2) -> void, snap_to_target() -> void.
+3. [ ] HeatComponent: set_rate(source_id: StringName, rate: float) -> void, clear_rate(source_id: StringName) -> void, heat: float.
+4. [ ] HeatZone (Area3D): @export rate: float, @export zone_id: StringName. Registers with the HeatComponent of the player body that enters.
+5. [ ] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
+6. [ ] Checkpoint (Area3D): @export checkpoint_id: StringName. Group: checkpoint.
+7. [ ] LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
+8. [ ] SortingBin (Area3D): @export accepts: StringName. Group: bin.
+9. [ ] LitterGate: @export gate_id: StringName, @export required_count: int. Group: gate.
+10. [ ] NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
+11. [ ] MonologueUI: listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
+12. [ ] FactCard: @export fact_key: StringName, @export source_label: String.
+13. [ ] ChoicePoint: @export choice_id: StringName, @export hope_reward: float.
+14. [ ] ChapterData (Resource): chapter_id, title_key, start_position, camera_bounds: Rect2, next_scene.
 
 ## Couplings the scanner cannot see
 (Fill as they appear. Also record in memory graph as scene_couples_to.)
-1. none yet
+1. CameraRig finds the first node in group player when target is not assigned.
+2. Player flips child VisualRoot on the x scale according to facing direction.
 
 ## Decisions
 1. Perspective camera FOV about 25, not orthogonal.

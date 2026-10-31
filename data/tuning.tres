@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="TuningData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://data/tuning_data.gd" id="1_tuning"]
+
+[resource]
+script = ExtResource("1_tuning")
+walk_speed = 6.5
+walk_acceleration = 42.0
+walk_friction = 48.0
+air_acceleration = 28.0
+air_friction = 12.0
+jump_velocity = 11.5
+jump_release_multiplier = 0.45
+gravity_up = 26.0
+gravity_down = 36.0
+max_fall_speed = 22.0
+coyote_time = 0.12
+jump_buffer_time = 0.12
+camera_follow_speed = 7.0
+camera_lookahead_x = 2.2
+camera_lookahead_speed = 4.0
+camera_offset = Vector3(0, 2.2, 24)
+camera_fov = 25.0

@@ -6,8 +6,8 @@ Deadline: Sunday 1 November 23:59. Target finish: Sunday 18:00. Keep a one line 
 ## Friday 30 October (tonight)
 * [x] M0 Run /setup. All MCP servers verified.
 * [x] M1 Godot project skeleton: project.godot, folders, input map, four autoloads with EventBus signals from PROJECT_MAP.md, translations imported, Settings.set_language working, main menu with language switch.
-* [ ] M2 Player greybox: walk, jump, coyote and buffer, plane lock. Camera rig with follow and bounds. Test room.
-Log: M0 and M1 completed, project skeleton, autoloads, translations, and main menu verified.
+* [x] M2 Player greybox: walk, jump, coyote and buffer, plane lock. Camera rig with follow and bounds. Test room.
+Log: M0, M1, and M2 completed, player greybox, camera rig, and test room verified.
 
 ## Saturday 31 October
 * [ ] M3 Heat: HeatComponent, HeatZone, HUD heat bar, overheat and respawn, checkpoints.

@@ -7,10 +7,17 @@ Autoloads: Audio=autoload/audio.gd, EventBus=autoload/event_bus.gd, GameState=au
 ## Files
 Format: path | extends | class | signals | uses | used_by
 
-autoload/audio.gd | Node |  |  |  | features/ui/main_menu.gd
-autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/ui/main_menu.gd
+autoload/audio.gd | Node |  |  |  | features/player/player.gd,features/ui/main_menu.gd
+autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/player/player.gd,features/ui/main_menu.gd
 autoload/game_state.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
 autoload/settings.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
+data/tuning.tres |  |  |  | data/tuning_data.gd | features/camera/camera_rig.tscn,features/player/player.tscn
+data/tuning_data.gd | Resource | TuningData |  |  | data/tuning.tres,features/camera/camera_rig.gd,features/player/player.gd
+features/camera/camera_rig.gd | Node3D | CameraRig |  | data/tuning_data.gd | features/camera/camera_rig.tscn
+features/camera/camera_rig.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.gd | features/player/test_room.tscn
+features/player/player.gd | CharacterBody3D | Player |  | autoload/audio.gd,autoload/event_bus.gd,data/tuning_data.gd | features/player/player.tscn
+features/player/player.tscn |  |  |  | data/tuning.tres,features/player/player.gd | features/player/test_room.tscn
+features/player/test_room.tscn |  |  |  | features/camera/camera_rig.tscn,features/player/player.tscn | 
 features/ui/main_menu.gd | Control |  |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd,autoload/settings.gd | features/ui/main_menu.tscn
 features/ui/main_menu.tscn |  |  |  | features/ui/main_menu.gd | 
 
@@ -30,5 +37,5 @@ language_changed (autoload/event_bus.gd) | autoload/settings.gd | features/ui/ma
 litter_picked (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 litter_sorted (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 monologue_requested (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
-player_died (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
+player_died (autoload/event_bus.gd) | features/player/player.gd | NO_LISTENER
 player_respawned (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
