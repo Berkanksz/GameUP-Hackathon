@@ -70,3 +70,12 @@ END_HIGH_TITLE,Went Back Down,Aşağı İndi
 END_HIGH_TEXT,Someone has to tell the others the ice is not joking.,Birinin diğerlerine buzun şaka yapmadığını söylemesi lazım.
 END_CALL,Climate action starts where you stand.,İklim eylemi bulunduğun yerde başlar.
 END_COP31,"COP31 Türkiye, Antalya, 9 to 20 November 2026","COP31 Türkiye, Antalya, 9 ile 20 Kasım 2026"
+UI_CREDITS,Credits,Emeği Geçenler
+UI_SKIP,Skip,Geç
+UI_CREDITS_EVENT,GameUP Türkiye Hackathon 2026,GameUP Türkiye Hackathon 2026
+UI_CREDITS_DESIGN,Design and Programming,Tasarım ve Programlama
+UI_CREDITS_ENGINE,Built with Godot Engine and Blender,Godot Engine ve Blender ile yapıldı
+UI_CREDITS_ART,Original 3D Art and Shaders,Özgün 3B Model ve Gölgelendiriciler
+UI_CREDITS_FACTS,"Data sources: UN, UNEP, IEA, EEA","Veri kaynakları: BM, UNEP, IEA, EEA"
+MONO_C3_WIND,The wind wants me back down. Not yet.,Rüzgâr geri inmemi istiyor. Henüz değil.
+MONO_C3_LAMP,A small light in the cold. It changes something.,Soğukta küçük bir ışık. Bir şeyleri değiştiriyor.

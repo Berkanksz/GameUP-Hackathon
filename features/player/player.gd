@@ -31,9 +31,10 @@ var _carry_visual: Node3D
 var _carry_box: CSGBox3D
 var _carry_label: Label3D
 var _carry_material: StandardMaterial3D
+var _push_sources: Dictionary = {}
 
 @onready var _visual_root: Node3D = $VisualRoot
-@onready var _penguin_model: Node3D = get_node_or_null("VisualRoot/PenguinModel")
+@onready var _penguin_model: PenguinModel = get_node_or_null("VisualRoot/PenguinModel") as PenguinModel
 
 
 func _ready() -> void:
@@ -58,13 +59,29 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
 	_handle_jump()
 	_handle_horizontal(delta)
+	var push_x: float = _get_push_x()
+	velocity.x += push_x
 	move_and_slide()
+	velocity.x -= push_x
+	if is_on_wall() and not is_zero_approx(push_x):
+		velocity.x = 0.0
 	global_position.z = 0.0
 	velocity.z = 0.0
 	if is_on_floor() and not _was_on_floor:
 		_animate_squash(Vector3(1.15, 0.85, 1.15))
 	_was_on_floor = is_on_floor()
 	_update_state()
+	_update_walk_anim()
+
+
+## Adds or replaces an external horizontal push speed, for example wind.
+func set_push(source_id: StringName, speed_x: float) -> void:
+	_push_sources[source_id] = speed_x
+
+
+## Removes an external push source.
+func clear_push(source_id: StringName) -> void:
+	_push_sources.erase(source_id)
 
 
 ## Resets the player state and moves to the target world position on the z plane.
@@ -190,6 +207,22 @@ func _update_state() -> void:
 		state = State.WALK
 	else:
 		state = State.IDLE
+
+
+func _get_push_x() -> float:
+	var total: float = 0.0
+	for speed: float in _push_sources.values():
+		total += speed
+	return total
+
+
+func _update_walk_anim() -> void:
+	if _penguin_model == null:
+		return
+	var amount: float = 0.0
+	if is_on_floor() and tuning.walk_speed > 0.0:
+		amount = absf(velocity.x) / tuning.walk_speed
+	_penguin_model.set_walk_amount(amount)
 
 
 func _on_heat_changed(value: float) -> void:

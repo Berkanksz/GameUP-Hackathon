@@ -18,9 +18,9 @@ Log: M0, M1, and M2 completed, player greybox, camera rig, and test room verifie
 Log: M3, M4, M5, M6, and M7 completed, Heat, IceTile, Hope, Narrative, Litter loop, Chapters 1 and 2 greybox levels, and Blender penguin model with toon and outline shaders verified.
 
 ## Sunday 1 November
-* [ ] M8 Chapter 3 short level, lamp choice, ending scene with 3 tiers, credits.
+* [x] M8 Chapter 3 short level, lamp choice, ending scene with 3 tiers, credits.
 * [ ] M9 Replace greybox with models (Kenney, Quaternius, or Blender), background layers, hope color grade, particles.
 * [ ] M10 Audio pass (sfx, ambience, music), settings volume.
 * [ ] M11 Bug pass, both languages, /ship_check, Windows export.
 * [ ] M12 Presentation from the template (docs/SUBMISSION.md), screenshots, demo video, submit the form before 23:59.
-Log:
+Log: M8 completed, Chapter 3 summit with wind gusts and hut lamp choice, ending scene with hope tiers and camera pull back, rolling credits, waddle walk animation with separated feet, and heat zone debug visuals disabled.

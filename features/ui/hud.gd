@@ -5,6 +5,18 @@ extends CanvasLayer
 const DEFAULT_TUNING_PATH: String = "res://data/tuning.tres"
 const MAIN_MENU_PATH: String = "res://features/ui/main_menu.tscn"
 const CHAPTER_2_PATH: String = "res://features/chapters/chapter_2_slope.tscn"
+const CHAPTER_3_PATH: String = "res://features/chapters/chapter_3_summit.tscn"
+const ENDING_PATH: String = "res://features/ending/ending.tscn"
+const NEXT_SCENES: Dictionary = {
+	&"chapter_1": CHAPTER_2_PATH,
+	&"chapter_2": CHAPTER_3_PATH,
+}
+const CHAPTER_TITLE_KEYS: Dictionary = {
+	&"chapter_1": "UI_CHAPTER_1",
+	&"chapter_2": "UI_CHAPTER_2",
+	&"chapter_3": "UI_CHAPTER_3",
+}
+const FINAL_CHAPTER_ID: StringName = &"chapter_3"
 const FactCardScript = preload("res://features/narrative/fact_card.gd")
 const NORMAL_FILL_COLOR: Color = Color(0.28, 0.72, 0.92, 1.0)
 const HOT_FILL_COLOR: Color = Color(0.95, 0.42, 0.18, 1.0)
@@ -14,6 +26,8 @@ const COLOR_PLASTIC: Color = Color(0.95, 0.78, 0.15, 1.0)
 const COLOR_GLASS: Color = Color(0.20, 0.75, 0.38, 1.0)
 
 @export var tuning: TuningData
+## Pause after the final chapter so the last monologue can be read before the ending.
+@export var ending_delay: float = 2.5
 
 var _current_heat: float = 0.0
 var _shimmer_clock: float = 0.0
@@ -118,11 +132,11 @@ func _refresh_complete_text() -> void:
 	if _complete_panel == null or not _complete_panel.visible:
 		return
 	_complete_title.text = tr("UI_CHAPTER_COMPLETE")
-	var chapter_key: String = "UI_CHAPTER_2" if _completed_chapter_id == &"chapter_2" else "UI_CHAPTER_1"
+	var chapter_key: String = CHAPTER_TITLE_KEYS.get(_completed_chapter_id, "UI_CHAPTER_1")
 	_complete_summary.text = "%s, %s: %d" % [tr(chapter_key), tr("UI_HOPE"), roundi(GameState.hope)]
 	if _complete_continue_button != null:
 		_complete_continue_button.text = tr("UI_CONTINUE")
-		_complete_continue_button.visible = (_completed_chapter_id == &"chapter_1" and ResourceLoader.exists(CHAPTER_2_PATH))
+		_complete_continue_button.visible = NEXT_SCENES.has(_completed_chapter_id) and ResourceLoader.exists(NEXT_SCENES[_completed_chapter_id])
 	_complete_restart_button.text = tr("UI_RESTART")
 	_complete_menu_button.text = tr("UI_MAIN_MENU")
 
@@ -159,6 +173,9 @@ func _on_fact_collected(key: StringName) -> void:
 
 func _on_chapter_completed(chapter_id: StringName) -> void:
 	_completed_chapter_id = chapter_id
+	if chapter_id == FINAL_CHAPTER_ID:
+		get_tree().create_timer(ending_delay).timeout.connect(_go_to_ending)
+		return
 	if _complete_panel != null:
 		_complete_panel.visible = true
 	_refresh_complete_text()
@@ -170,8 +187,14 @@ func _on_chapter_completed(chapter_id: StringName) -> void:
 
 func _on_complete_continue_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
-	if _completed_chapter_id == &"chapter_1" and ResourceLoader.exists(CHAPTER_2_PATH):
-		get_tree().change_scene_to_file(CHAPTER_2_PATH)
+	var next_path: String = NEXT_SCENES.get(_completed_chapter_id, "")
+	if not next_path.is_empty() and ResourceLoader.exists(next_path):
+		get_tree().change_scene_to_file(next_path)
+
+
+func _go_to_ending() -> void:
+	if ResourceLoader.exists(ENDING_PATH):
+		get_tree().change_scene_to_file(ENDING_PATH)
 
 
 func _on_complete_restart_pressed() -> void:

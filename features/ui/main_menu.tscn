@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://b7jalyeqyvoq7"]
 
-[ext_resource type="Script" path="res://features/ui/main_menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://b3ox371dsm80b" path="res://features/ui/main_menu.gd" id="1_menu"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=1586688105]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,8 +10,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
+metadata/_edit_vertical_guides_ = [100.0]
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1303006056]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.11, 0.16, 0.24, 1)
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1547651555]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,31 +29,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1435557257]
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1787334009]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 56
 text = "UI_TITLE"
 horizontal_alignment = 1
 
-[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="PlayButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=950492747]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "UI_PLAY"
 
-[node name="LanguageButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="LanguageButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=939865523]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 28
 text = "UI_LANGUAGE"
 
-[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer"]
+[node name="QuitButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=791857670]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 28

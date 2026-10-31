@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://features/wind/wind_zone.gd" id="1_wind_zone"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wind"]
+size = Vector3(6, 6, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_streak"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_streak"]
+material = SubResource("StandardMaterial3D_streak")
+size = Vector3(0.9, 0.035, 0.035)
+
+[node name="WindZone" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_wind_zone")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_wind")
+
+[node name="Streaks" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 24
+lifetime = 0.7
+mesh = SubResource("BoxMesh_streak")
+emission_shape = 3
+emission_box_extents = Vector3(3, 3, 1.5)
+direction = Vector3(-1, 0, 0)
+spread = 4.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 9.0
+initial_velocity_max = 13.0

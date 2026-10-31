@@ -15,5 +15,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 shape = SubResource("BoxShape3D_zone")
 
 [node name="VisualBox" type="CSGBox3D" parent="."]
+visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -0.4)
 size = Vector3(5, 3, 1.8)

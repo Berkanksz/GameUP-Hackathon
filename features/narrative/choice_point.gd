@@ -19,6 +19,7 @@ var _has_chosen: bool = false
 @onready var _option_b_button: Button = %OptionBButton
 @onready var _chick_model: Node3D = %ChickModel
 @onready var _sprout_model: Node3D = get_node_or_null("%SproutModel")
+@onready var _floe_base: Node3D = get_node_or_null("FloeBase")
 
 
 func _ready() -> void:
@@ -32,8 +33,11 @@ func _ready() -> void:
 	_option_b_button.pressed.connect(_on_option_b_pressed)
 	EventBus.language_changed.connect(_on_language_changed)
 	_refresh_text()
-	if choice_id != &"chick" and _chick_model != null:
-		_chick_model.visible = false
+	if choice_id != &"chick":
+		if _chick_model != null:
+			_chick_model.visible = false
+		if _floe_base != null:
+			_floe_base.visible = false
 	var flag_a: StringName = StringName("choice_" + str(choice_id) + "_" + str(option_a_id))
 	var flag_b: StringName = StringName("choice_" + str(choice_id) + "_" + str(option_b_id))
 	if GameState.has_flag(flag_a):

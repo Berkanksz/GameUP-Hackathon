@@ -7,6 +7,8 @@ const SHADE_COLOR: Color = Color(0.2, 0.62, 0.95, 0.22)
 
 @export var rate: float = 0.35
 @export var zone_id: StringName = &"sun_zone"
+## Debug tint for level layout. Hidden in play so zones do not read as solid blocks.
+@export var show_debug_visual: bool = false
 
 @onready var _visual_box: CSGBox3D = get_node_or_null("VisualBox") as CSGBox3D
 
@@ -46,6 +48,9 @@ func _get_zone_key() -> StringName:
 
 func _apply_visual_tint() -> void:
 	if _visual_box == null:
+		return
+	_visual_box.visible = show_debug_visual
+	if not show_debug_visual:
 		return
 	var mat := StandardMaterial3D.new()
 	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
