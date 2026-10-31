@@ -7,25 +7,28 @@ Autoloads: Audio=autoload/audio.gd, EventBus=autoload/event_bus.gd, GameState=au
 ## Files
 Format: path | extends | class | signals | uses | used_by
 
-autoload/audio.gd | Node |  |  |  | features/player/player.gd,features/ui/main_menu.gd
-autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/camera/camera_rig.gd,features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/player/player.gd,features/ui/hud.gd,features/ui/main_menu.gd
+autoload/audio.gd | Node |  |  |  | features/ice/ice_tile.gd,features/player/player.gd,features/ui/main_menu.gd
+autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/camera/camera_rig.gd,features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/ice/ice_tile.gd,features/player/player.gd,features/ui/hud.gd,features/ui/main_menu.gd
 autoload/game_state.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
 autoload/settings.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
-data/tuning.tres |  |  |  | data/tuning_data.gd | features/camera/camera_rig.tscn,features/player/player.tscn,features/player/test_room.tscn
+data/tuning.tres |  |  |  | data/tuning_data.gd | features/camera/camera_rig.tscn,features/chapters/chapter_1_shore.tscn,features/player/player.tscn,features/player/test_room.tscn
 data/tuning_data.gd | Resource | TuningData |  |  | data/tuning.tres,features/camera/camera_rig.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/player/player.gd,features/ui/hud.gd
 features/camera/camera_rig.gd | Node3D | CameraRig |  | autoload/event_bus.gd,data/tuning_data.gd | features/camera/camera_rig.tscn
-features/camera/camera_rig.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.gd | features/player/test_room.tscn
+features/camera/camera_rig.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
+features/chapters/chapter_1_shore.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/ice/ice_tile.tscn,features/player/player.tscn,features/ui/hud.tscn | 
 features/checkpoint/checkpoint.gd | Area3D | Checkpoint |  | autoload/event_bus.gd | features/checkpoint/checkpoint.tscn
-features/checkpoint/checkpoint.tscn |  |  |  | features/checkpoint/checkpoint.gd | features/player/test_room.tscn
-features/checkpoint/respawn.gd | Node | Respawn |  | autoload/event_bus.gd,data/tuning_data.gd | features/player/test_room.tscn
+features/checkpoint/checkpoint.tscn |  |  |  | features/checkpoint/checkpoint.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
+features/checkpoint/respawn.gd | Node | Respawn |  | autoload/event_bus.gd,data/tuning_data.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/heat/heat_component.gd | Node | HeatComponent |  | autoload/event_bus.gd,data/tuning_data.gd | features/heat/heat_zone.gd,features/player/player.tscn
-features/heat/heat_zone.gd | Area3D | HeatZone |  | features/heat/heat_component.gd | features/heat/heat_zone.tscn
-features/heat/heat_zone.tscn |  |  |  | features/heat/heat_zone.gd | features/player/test_room.tscn
+features/heat/heat_zone.gd | Area3D | HeatZone |  | features/heat/heat_component.gd | features/heat/heat_zone.tscn,features/ice/ice_tile.gd
+features/heat/heat_zone.tscn |  |  |  | features/heat/heat_zone.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
+features/ice/ice_tile.gd | StaticBody3D | IceTile |  | autoload/audio.gd,autoload/event_bus.gd,features/heat/heat_zone.gd | features/ice/ice_tile.tscn
+features/ice/ice_tile.tscn |  |  |  | features/ice/ice_tile.gd | features/chapters/chapter_1_shore.tscn
 features/player/player.gd | CharacterBody3D | Player |  | autoload/audio.gd,autoload/event_bus.gd,data/tuning_data.gd | features/player/player.tscn
-features/player/player.tscn |  |  |  | data/tuning.tres,features/heat/heat_component.gd,features/player/player.gd | features/player/test_room.tscn
+features/player/player.tscn |  |  |  | data/tuning.tres,features/heat/heat_component.gd,features/player/player.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/player/test_room.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/player/player.tscn,features/ui/hud.tscn | 
 features/ui/hud.gd | CanvasLayer | Hud |  | autoload/event_bus.gd,data/tuning_data.gd | features/ui/hud.tscn
-features/ui/hud.tscn |  |  |  | features/ui/hud.gd | features/player/test_room.tscn
+features/ui/hud.tscn |  |  |  | features/ui/hud.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/ui/main_menu.gd | Control |  |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd,autoload/settings.gd | features/ui/main_menu.tscn
 features/ui/main_menu.tscn |  |  |  | features/ui/main_menu.gd | 
 
@@ -46,4 +49,4 @@ litter_picked (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 litter_sorted (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 monologue_requested (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 player_died (autoload/event_bus.gd) | features/player/player.gd | features/checkpoint/respawn.gd,features/ui/hud.gd
-player_respawned (autoload/event_bus.gd) | features/checkpoint/respawn.gd | features/camera/camera_rig.gd,features/heat/heat_component.gd,features/ui/hud.gd
+player_respawned (autoload/event_bus.gd) | features/checkpoint/respawn.gd | features/camera/camera_rig.gd,features/heat/heat_component.gd,features/ice/ice_tile.gd,features/ui/hud.gd

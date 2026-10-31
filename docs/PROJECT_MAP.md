@@ -33,7 +33,7 @@ Status marks: [ ] planned, [x] built.
 2. [x] CameraRig: @export target: Node3D, @export bounds: Rect2, @export use_bounds: bool, set_bounds(new_bounds: Rect2) -> void, snap_to_target() -> void.
 3. [x] HeatComponent: set_rate(source_id: StringName, rate: float) -> void, clear_rate(source_id: StringName) -> void, heat: float.
 4. [x] HeatZone (Area3D): @export rate: float, @export zone_id: StringName. Registers with the HeatComponent of the player body that enters.
-5. [ ] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
+5. [x] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
 6. [x] Checkpoint (Area3D): @export checkpoint_id: StringName, is_active: bool. Group: checkpoint.
 7. [x] Respawn: @export player: Node3D, @export tuning: TuningData, active_checkpoint_id: StringName.
 8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed.
@@ -53,6 +53,7 @@ Status marks: [ ] planned, [x] built.
 3. HeatComponent calls die on its parent node when heat reaches heat_max.
 4. HeatZone searches entering player body children for a HeatComponent node.
 5. Respawn finds the first node in group player when player is not assigned and searches group checkpoint by checkpoint_id.
+6. IceTile checks overlapping HeatZone areas with positive rate on StepDetector to apply sun_multiplier.
 
 ## Decisions
 1. Perspective camera FOV about 25, not orthogonal.
