@@ -26,7 +26,7 @@ Status marks: [ ] planned, [x] built.
 ### autoload
 1. [x] GameState: hope: float, add_hope(amount: float) -> void, get_ending_id() -> StringName, set_flag(id: StringName) -> void, has_flag(id: StringName) -> bool, reset() -> void, current_chapter: StringName.
 2. [x] Settings: set_language(code: String) -> void, get_language() -> String, set_volume(bus: StringName, value: float) -> void, get_volume(bus: StringName) -> float.
-3. [x] Audio: play_sfx(key: StringName) -> void, play_music(key: StringName) -> void.
+3. [x] Audio: play_sfx(key: StringName) -> void, play_music(key: StringName) -> void, play_ambience(key: StringName) -> void, stop_music() -> void, stop_ambience() -> void.
 
 ### features
 1. [x] Player: respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void, set_push(source_id: StringName, speed_x: float) -> void, clear_push(source_id: StringName) -> void, is_carrying: bool, carried_item_type: StringName. Group: player.

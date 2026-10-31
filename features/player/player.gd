@@ -32,6 +32,7 @@ var _carry_box: CSGBox3D
 var _carry_label: Label3D
 var _carry_material: StandardMaterial3D
 var _push_sources: Dictionary = {}
+var _step_timer: float = 0.0
 
 @onready var _visual_root: Node3D = $VisualRoot
 @onready var _penguin_model: PenguinModel = get_node_or_null("VisualRoot/PenguinModel") as PenguinModel
@@ -69,9 +70,11 @@ func _physics_process(delta: float) -> void:
 	velocity.z = 0.0
 	if is_on_floor() and not _was_on_floor:
 		_animate_squash(Vector3(1.15, 0.85, 1.15))
+		Audio.play_sfx(&"land")
 	_was_on_floor = is_on_floor()
 	_update_state()
 	_update_walk_anim()
+	_update_footsteps(delta)
 
 
 ## Adds or replaces an external horizontal push speed, for example wind.
@@ -227,3 +230,17 @@ func _update_walk_anim() -> void:
 
 func _on_heat_changed(value: float) -> void:
 	_current_heat = value
+
+
+func _update_footsteps(delta: float) -> void:
+	if not is_on_floor():
+		_step_timer = 0.0
+		return
+	if state == State.WALK or state == State.CARRY:
+		var speed_ratio: float = absf(velocity.x) / maxf(tuning.walk_speed, 0.1)
+		_step_timer += delta * maxf(speed_ratio, 0.5)
+		if _step_timer >= 0.32:
+			_step_timer = 0.0
+			Audio.play_sfx(&"snow_step")
+	else:
+		_step_timer = 0.25

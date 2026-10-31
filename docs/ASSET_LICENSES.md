@@ -21,3 +21,13 @@ Every file under assets/ must be listed here by its path or by its folder path. 
 | Pine tree | project owner | created in Blender | CC0 original | assets/models/environment/pine_tree.glb | no |
 | Mountain background | project owner | created in Blender | CC0 original | assets/models/environment/mountain_bg.glb | no |
 | Iceberg background | project owner | created in Blender | CC0 original | assets/models/environment/iceberg_bg.glb | no |
+| Wind ambience audio | project owner | synthesized in Python | CC0 original | assets/audio/wind_ambience.wav | no |
+| Snow step audio | project owner | synthesized in Python | CC0 original | assets/audio/snow_step.wav | no |
+| Jump audio | project owner | synthesized in Python | CC0 original | assets/audio/jump.wav | no |
+| Land audio | project owner | synthesized in Python | CC0 original | assets/audio/land.wav | no |
+| Ice crack audio | project owner | synthesized in Python | CC0 original | assets/audio/ice_crack.wav | no |
+| Pickup chime audio | project owner | synthesized in Python | CC0 original | assets/audio/pickup.wav | no |
+| Sort correct audio | project owner | synthesized in Python | CC0 original | assets/audio/sort_ok.wav | no |
+| Sort incorrect audio | project owner | synthesized in Python | CC0 original | assets/audio/sort_bad.wav | no |
+| UI click audio | project owner | synthesized in Python | CC0 original | assets/audio/ui_click.wav | no |
+| Calm music audio | project owner | synthesized in Python | CC0 original | assets/audio/calm_music.wav | no |

@@ -10,12 +10,19 @@ const SUPPORTED_LANGUAGES: PackedStringArray = ["en", "tr"]
 const SILENT_DB: float = -80.0
 
 var _language: String = DEFAULT_LANGUAGE
-var _volumes: Dictionary = { &"Master": 1.0 }
+var _volumes: Dictionary = {
+	&"Master": 1.0,
+	&"Music": 1.0,
+	&"SFX": 1.0,
+	&"Ambience": 1.0,
+}
 var _config: ConfigFile = ConfigFile.new()
 
 
 func _ready() -> void:
 	_load_settings()
+	for bus_name: StringName in _volumes.keys():
+		_apply_bus_volume(bus_name, float(_volumes[bus_name]))
 
 
 ## Sets active locale, persists to user config, and emits language_changed.
