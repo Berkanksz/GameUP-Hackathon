@@ -9,6 +9,7 @@ extends Area3D
 @export var option_b_key: StringName = &"CHOICE_CHICK_SKIP"
 @export var option_a_id: StringName = &"help"
 @export var option_b_id: StringName = &"skip"
+@export var success_monologue_key: StringName = &"CHOICE_CHICK_SAVED"
 
 var _has_chosen: bool = false
 
@@ -17,6 +18,7 @@ var _has_chosen: bool = false
 @onready var _option_a_button: Button = %OptionAButton
 @onready var _option_b_button: Button = %OptionBButton
 @onready var _chick_model: Node3D = %ChickModel
+@onready var _sprout_model: Node3D = get_node_or_null("%SproutModel")
 
 
 func _ready() -> void:
@@ -30,12 +32,16 @@ func _ready() -> void:
 	_option_b_button.pressed.connect(_on_option_b_pressed)
 	EventBus.language_changed.connect(_on_language_changed)
 	_refresh_text()
+	if choice_id != &"chick" and _chick_model != null:
+		_chick_model.visible = false
 	var flag_a: StringName = StringName("choice_" + str(choice_id) + "_" + str(option_a_id))
 	var flag_b: StringName = StringName("choice_" + str(choice_id) + "_" + str(option_b_id))
 	if GameState.has_flag(flag_a):
 		_has_chosen = true
-		if _chick_model != null:
+		if choice_id == &"chick" and _chick_model != null:
 			_chick_model.visible = false
+		elif choice_id == &"seed" and _sprout_model != null:
+			_sprout_model.visible = true
 	elif GameState.has_flag(flag_b):
 		_has_chosen = true
 
@@ -59,7 +65,12 @@ func _on_option_a_pressed() -> void:
 	GameState.add_hope(hope_reward)
 	EventBus.choice_made.emit(choice_id, option_a_id)
 	Audio.play_sfx(&"choice")
-	if _chick_model != null:
+	if choice_id == &"seed" and _sprout_model != null:
+		_sprout_model.visible = true
+		_sprout_model.scale = Vector3(0.01, 0.01, 0.01)
+		var sprout_tween: Tween = create_tween()
+		sprout_tween.tween_property(_sprout_model, "scale", Vector3.ONE, 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	elif _chick_model != null and _chick_model.visible:
 		var start_y: float = _chick_model.position.y
 		var tween: Tween = create_tween()
 		tween.tween_property(_chick_model, "position:y", start_y + 0.8, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
@@ -67,7 +78,8 @@ func _on_option_a_pressed() -> void:
 		tween.tween_property(_chick_model, "position:x", _chick_model.position.x + 3.0, 0.4)
 		tween.parallel().tween_property(_chick_model, "scale", Vector3(0.01, 0.01, 0.01), 0.4)
 		tween.tween_callback(func() -> void: _chick_model.visible = false)
-	EventBus.monologue_requested.emit(&"CHOICE_CHICK_SAVED")
+	if not success_monologue_key.is_empty():
+		EventBus.monologue_requested.emit(success_monologue_key)
 
 
 func _on_option_b_pressed() -> void:

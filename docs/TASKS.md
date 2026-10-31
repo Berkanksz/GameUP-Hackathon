@@ -13,9 +13,9 @@ Log: M0, M1, and M2 completed, player greybox, camera rig, and test room verifie
 * [x] M3 Heat: HeatComponent, HeatZone, HUD heat bar, overheat and respawn, checkpoints.
 * [x] M4 Ice tiles and Chapter 1 greybox level with 3 checkpoints.
 * [x] M5 Hope in GameState, hope HUD, MonologueUI, NarrativeTrigger, FactCard, chick ChoicePoint. Chapter 1 playable start to end.
-* [ ] M6 Litter loop: LitterItem, carry, SortingBin, LitterGate. Chapter 2 greybox with two gates and the seed choice.
+* [x] M6 Litter loop: LitterItem, carry, SortingBin, LitterGate. Chapter 2 greybox with two gates and the seed choice.
 * [ ] M7 Penguin model in Blender and import (skill blender_to_godot). Toon and outline shaders on the penguin.
-Log: M3, M4, and M5 completed, Heat, IceTile, Hope system, HUD hope meter, MonologueUI, NarrativeTrigger, FactCard, ChoicePoint, and Chapter 1 start to end verified.
+Log: M3, M4, M5, and M6 completed, Heat, IceTile, Hope, Narrative, Litter loop, and Chapters 1 and 2 greybox levels verified.
 
 ## Sunday 1 November
 * [ ] M8 Chapter 3 short level, lamp choice, ending scene with 3 tiers, credits.

@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://features/litter/sorting_bin.gd" id="1_bin"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bin"]
+size = Vector3(1.5, 2.0, 2.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rim"]
+albedo_color = Color(0.18, 0.2, 0.24, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_badge"]
+albedo_color = Color(0.96, 0.98, 1, 1)
+roughness = 0.3
+
+[node name="SortingBin" type="Area3D" groups=["bin"]]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_bin")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+shape = SubResource("BoxShape3D_bin")
+
+[node name="VisualRoot" type="Node3D" parent="."]
+unique_name_in_owner = true
+
+[node name="BinBody" type="CSGBox3D" parent="VisualRoot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+size = Vector3(0.85, 1.1, 0.85)
+
+[node name="BinRim" type="CSGBox3D" parent="VisualRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12, 0)
+size = Vector3(0.95, 0.12, 0.95)
+material = SubResource("StandardMaterial3D_rim")
+
+[node name="PaperBadge" type="CSGBox3D" parent="VisualRoot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
+size = Vector3(0.32, 0.32, 0.06)
+material = SubResource("StandardMaterial3D_badge")
+
+[node name="PlasticBadge" type="CSGCylinder3D" parent="VisualRoot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
+visible = false
+radius = 0.16
+height = 0.36
+cone = true
+material = SubResource("StandardMaterial3D_badge")
+
+[node name="GlassBadge" type="CSGSphere3D" parent="VisualRoot"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.58, 0.45)
+visible = false
+radius = 0.18
+material = SubResource("StandardMaterial3D_badge")
+
+[node name="SignLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+pixel_size = 0.007
+billboard = 1
+text = "◼ Paper"
+font_size = 32
+outline_size = 10
+
+[node name="PromptLabel" type="Label3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 0)
+visible = false
+pixel_size = 0.007
+billboard = 1
+modulate = Color(1, 0.95, 0.65, 1)
+text = "[E] Interact"
+font_size = 28
+outline_size = 8

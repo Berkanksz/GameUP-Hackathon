@@ -29,17 +29,17 @@ Status marks: [ ] planned, [x] built.
 3. [x] Audio: play_sfx(key: StringName) -> void, play_music(key: StringName) -> void.
 
 ### features
-1. [x] Player: respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void. Group: player.
+1. [x] Player: respawn_at(target_position: Vector3) -> void, die(reason: StringName) -> void, is_carrying: bool, carried_item_type: StringName. Group: player.
 2. [x] CameraRig: @export target: Node3D, @export bounds: Rect2, @export use_bounds: bool, set_bounds(new_bounds: Rect2) -> void, snap_to_target() -> void.
 3. [x] HeatComponent: set_rate(source_id: StringName, rate: float) -> void, clear_rate(source_id: StringName) -> void, heat: float.
 4. [x] HeatZone (Area3D): @export rate: float, @export zone_id: StringName. Registers with the HeatComponent of the player body that enters.
 5. [x] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
 6. [x] Checkpoint (Area3D): @export checkpoint_id: StringName, is_active: bool. Group: checkpoint.
 7. [x] Respawn: @export player: Node3D, @export tuning: TuningData, active_checkpoint_id: StringName.
-8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed, hope_changed, fact_collected, chapter_completed.
-9. [ ] LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
-10. [ ] SortingBin (Area3D): @export accepts: StringName. Group: bin.
-11. [ ] LitterGate: @export gate_id: StringName, @export required_count: int. Group: gate.
+8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed, hope_changed, fact_collected, litter_picked, litter_sorted, chapter_completed.
+9. [x] LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
+10. [x] SortingBin (Area3D): @export accepts: StringName, sort_from_player(player_node: Node3D) -> bool. Group: bin.
+11. [x] LitterGate (StaticBody3D): @export gate_id: StringName, @export required_count: int, is_open: bool, current_count: int, open_gate() -> void. Group: gate.
 12. [x] NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
 13. [x] MonologueUI (CanvasLayer): listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
 14. [x] FactCard (Area3D): @export fact_key: StringName, @export source_label: String.
@@ -58,6 +58,8 @@ Status marks: [ ] planned, [x] built.
 7. FactCard registers static source lookup used by Hud on fact_collected.
 8. ChoicePoint adds hope_reward to GameState and emits choice_made.
 9. ChapterGoal emits chapter_completed to open completion summary on Hud.
+10. LitterItem and SortingBin inspect entering player body is_carrying and carried_item_type properties.
+11. LitterGate checks group gate for earlier closed gates by x position so gates open sequentially.
 
 ## Decisions
 1. Perspective camera FOV about 25, not orthogonal.

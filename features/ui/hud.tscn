@@ -79,39 +79,43 @@ anchor_right = 1.0
 offset_left = -280.0
 offset_top = 24.0
 offset_right = -24.0
-offset_bottom = 96.0
+offset_bottom = 140.0
 grow_horizontal = 0
 
-[node name="HopePanel" type="PanelContainer" parent="HopeMarginContainer"]
+[node name="RightVBox" type="VBoxContainer" parent="HopeMarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HopePanel" type="PanelContainer" parent="HopeMarginContainer/RightVBox"]
 layout_mode = 2
 
-[node name="InnerMargin" type="MarginContainer" parent="HopeMarginContainer/HopePanel"]
+[node name="InnerMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/HopePanel"]
 layout_mode = 2
 theme_override_constants/margin_left = 12
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 12
 theme_override_constants/margin_bottom = 10
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HopeMarginContainer/HopePanel/InnerMargin"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin"]
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer"]
 layout_mode = 2
 
-[node name="HopeLabel" type="Label" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
+[node name="HopeLabel" type="Label" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "UI_HOPE"
 
-[node name="HopeValueLabel" type="Label" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
+[node name="HopeValueLabel" type="Label" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "10"
 horizontal_alignment = 2
 
-[node name="HopeBar" type="ProgressBar" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer"]
+[node name="HopeBar" type="ProgressBar" parent="HopeMarginContainer/RightVBox/HopePanel/InnerMargin/VBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(220, 22)
 layout_mode = 2
@@ -119,6 +123,24 @@ max_value = 100.0
 step = 1.0
 value = 10.0
 show_percentage = false
+
+[node name="CarryPanel" type="PanelContainer" parent="HopeMarginContainer/RightVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="CarryMargin" type="MarginContainer" parent="HopeMarginContainer/RightVBox/CarryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 6
+
+[node name="CarryLabel" type="Label" parent="HopeMarginContainer/RightVBox/CarryPanel/CarryMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "◼ Paper"
+horizontal_alignment = 1
 
 [node name="FactPopup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
@@ -168,9 +190,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -220.0
+offset_left = -240.0
 offset_top = -120.0
-offset_right = 220.0
+offset_right = 240.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -207,17 +229,24 @@ layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CompletePanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 12
 alignment = 1
+
+[node name="CompleteContinueButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(120, 40)
+layout_mode = 2
+text = "UI_CONTINUE"
 
 [node name="CompleteRestartButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 40)
+custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 text = "UI_RESTART"
 
 [node name="CompleteMenuButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(130, 40)
+custom_minimum_size = Vector2(120, 40)
 layout_mode = 2
 text = "UI_MAIN_MENU"

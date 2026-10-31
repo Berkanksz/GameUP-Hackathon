@@ -1,6 +1,6 @@
 class_name Player
 extends CharacterBody3D
-## Plane locked 2.5D player controller with coyote time and jump buffer.
+## Plane locked 2.5D player controller with coyote time, jump buffer, and single item carry.
 
 enum State {
 	IDLE,
@@ -12,16 +12,24 @@ enum State {
 }
 
 const DEFAULT_TUNING_PATH: String = "res://data/tuning.tres"
+const COLOR_PAPER: Color = Color(0.18, 0.52, 0.88, 1.0)
+const COLOR_PLASTIC: Color = Color(0.95, 0.78, 0.15, 1.0)
+const COLOR_GLASS: Color = Color(0.20, 0.75, 0.38, 1.0)
 
 @export var tuning: TuningData
 
 var state: State = State.IDLE
 var facing_direction: float = 1.0
 var is_carrying: bool = false
+var carried_item_type: StringName = &""
 
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _current_heat: float = 0.0
+var _carry_visual: Node3D
+var _carry_box: CSGBox3D
+var _carry_label: Label3D
+var _carry_material: StandardMaterial3D
 
 @onready var _visual_root: Node3D = $VisualRoot
 
@@ -34,7 +42,10 @@ func _ready() -> void:
 	axis_lock_angular_z = true
 	if tuning == null:
 		tuning = load(DEFAULT_TUNING_PATH) as TuningData
+	_setup_carry_visual()
 	EventBus.heat_changed.connect(_on_heat_changed)
+	EventBus.litter_picked.connect(_on_litter_picked)
+	EventBus.litter_sorted.connect(_on_litter_sorted)
 	global_position.z = 0.0
 
 
@@ -67,6 +78,49 @@ func die(reason: StringName) -> void:
 	state = State.DEAD
 	velocity = Vector3.ZERO
 	EventBus.player_died.emit(reason)
+
+
+func _setup_carry_visual() -> void:
+	_carry_visual = Node3D.new()
+	_carry_visual.name = "CarryVisual"
+	_carry_visual.position = Vector3(0.0, 2.05, 0.0)
+	_carry_visual.visible = false
+	_carry_material = StandardMaterial3D.new()
+	_carry_box = CSGBox3D.new()
+	_carry_box.size = Vector3(0.42, 0.42, 0.42)
+	_carry_box.material = _carry_material
+	_carry_visual.add_child(_carry_box)
+	_carry_label = Label3D.new()
+	_carry_label.position = Vector3(0.0, 0.42, 0.0)
+	_carry_label.pixel_size = 0.008
+	_carry_label.font_size = 42
+	_carry_label.outline_size = 10
+	_carry_visual.add_child(_carry_label)
+	add_child(_carry_visual)
+
+
+func _on_litter_picked(type: StringName) -> void:
+	is_carrying = true
+	carried_item_type = type
+	if _carry_visual == null:
+		return
+	_carry_visual.visible = true
+	if type == &"paper":
+		_carry_material.albedo_color = COLOR_PAPER
+		_carry_label.text = "◼"
+	elif type == &"plastic":
+		_carry_material.albedo_color = COLOR_PLASTIC
+		_carry_label.text = "▲"
+	else:
+		_carry_material.albedo_color = COLOR_GLASS
+		_carry_label.text = "●"
+
+
+func _on_litter_sorted(_type: StringName, _correct: bool) -> void:
+	is_carrying = false
+	carried_item_type = &""
+	if _carry_visual != null:
+		_carry_visual.visible = false
 
 
 func _update_timers(delta: float) -> void:

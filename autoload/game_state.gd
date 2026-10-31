@@ -7,6 +7,7 @@ const HOPE_START: float = 10.0
 const HOPE_MID_THRESHOLD: float = 35.0
 const HOPE_HIGH_THRESHOLD: float = 70.0
 const HOPE_FACT_REWARD: float = 2.0
+const HOPE_SORT_REWARD: float = 3.0
 
 var hope: float = HOPE_START
 var current_chapter: StringName = &""
@@ -17,6 +18,7 @@ var _flags: Dictionary = {}
 func _ready() -> void:
 	EventBus.fact_collected.connect(_on_fact_collected)
 	EventBus.choice_made.connect(_on_choice_made)
+	EventBus.litter_sorted.connect(_on_litter_sorted)
 
 
 ## Increases or decreases hope within bounds and emits hope_changed.
@@ -66,3 +68,9 @@ func _on_fact_collected(key: StringName) -> void:
 
 func _on_choice_made(choice_id: StringName, option: StringName) -> void:
 	set_flag(StringName("choice_" + str(choice_id) + "_" + str(option)))
+
+
+func _on_litter_sorted(_type: StringName, correct: bool) -> void:
+	if correct:
+		add_hope(HOPE_SORT_REWARD)
+
