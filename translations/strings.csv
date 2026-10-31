@@ -1,0 +1,66 @@
+keys,en,tr
+UI_TITLE,Higher Ground,Daha Yukarı
+UI_PLAY,Play,Oyna
+UI_SETTINGS,Settings,Ayarlar
+UI_LANGUAGE,Language,Dil
+UI_LANG_EN,English,English
+UI_LANG_TR,Türkçe,Türkçe
+UI_VOLUME,Volume,Ses
+UI_BACK,Back,Geri
+UI_QUIT,Quit,Çık
+UI_PAUSED,Paused,Duraklatıldı
+UI_RESUME,Resume,Devam Et
+UI_RESTART,Restart,Baştan Başla
+UI_MAIN_MENU,Main Menu,Ana Menü
+UI_HEAT,Heat,Isı
+UI_HOPE,Hope,Umut
+UI_HINT_MOVE,Move,Hareket
+UI_HINT_JUMP,Jump,Zıpla
+UI_HINT_INTERACT,Interact,Etkileşim
+UI_FACT_SOURCE,Source,Kaynak
+UI_CHAPTER_1,Shore,Kıyı
+UI_CHAPTER_2,Slope,Yamaç
+UI_CHAPTER_3,Summit,Zirve
+UI_BIN_PAPER,Paper,Kağıt
+UI_BIN_PLASTIC,Plastic,Plastik
+UI_BIN_GLASS,Glass,Cam
+UI_THANKS,Thanks for playing,Oynadığın için teşekkürler
+MONO_C1_START,Nobody asked where I am going. Good. I do not know either.,Nereye gittiğimi kimse sormadı. İyi. Ben de bilmiyorum.
+MONO_C1_ICE,The ice used to be more confident.,Buz eskiden daha kendinden emindi.
+MONO_C1_MELT,Melting is just the ice changing its mind.,"Erimek, buzun fikrini değiştirmesinden ibaret."
+MONO_C1_WARM,It is warm. That should not be a complaint here.,Hava sıcak. Burada bu bir şikâyet konusu olmamalı.
+MONO_C1_CHICK,Someone small is stuck. Of course.,Küçük biri mahsur kalmış. Tabii ya.
+MONO_C1_END,"Higher. Colder. That is the plan. A bad plan, but a plan.",Daha yukarı. Daha soğuk. Plan bu. Kötü bir plan ama plan.
+MONO_C2_START,No one up here. Finally.,Burada kimse yok. Sonunda.
+MONO_C2_LITTER,A bottle. Someone was here. Someone left.,Bir şişe. Biri buradaymış. Biri gitmiş.
+MONO_C2_SORT_OK,A small thing in the right place.,Doğru yerde küçük bir şey.
+MONO_C2_SORT_BAD,Wrong bin. The universe does not mind. I mind a little.,Yanlış kutu. Evren umursamıyor. Ben biraz umursadım.
+MONO_C2_GATE,"The path opens. Meaningless, but open.",Yol açıldı. Anlamsız ama açık.
+MONO_C2_SEED,A seed. It does not know the odds. Lucky seed.,Bir tohum. İhtimalleri bilmiyor. Şanslı tohum.
+MONO_C2_END,Strange. I feel a little less of nothing.,Garip. Hiçliği biraz daha az hissediyorum.
+MONO_C3_START,The air is thin. So is my argument.,Hava ince. Benim argümanım da.
+MONO_C3_VIEW,From here I can see a road. And a town. Nothing is far.,Buradan bir yol görüyorum. Bir de kasaba. Hiçbir şey uzak değil.
+MONO_C3_TOP,"No place is far enough. Not for ice, not for litter, not for us.","Hiçbir yer yeterince uzak değil. Buz için, çöp için, bizim için."
+CHOICE_CHICK_PROMPT,A chick is stuck on a shrinking floe.,Küçülen bir buz parçasında yavru mahsur kalmış.
+CHOICE_CHICK_HELP,Help,Yardım et
+CHOICE_CHICK_SKIP,Walk on,Yoluna devam et
+CHOICE_SEED_PROMPT,A seed in the litter. A bare patch of ground nearby.,Çöplerin arasında bir tohum. Yakında çıplak bir toprak parçası var.
+CHOICE_SEED_PLANT,Plant it,Ek
+CHOICE_SEED_SKIP,Leave it,Bırak
+CHOICE_LAMP_PROMPT,A small solar lamp lies unplugged in the old hut.,Eski kulübede fişi çekilmiş küçük bir güneş enerjili lamba duruyor.
+CHOICE_LAMP_ON,Connect it,Bağla
+CHOICE_LAMP_SKIP,Sit down,Oturup bekle
+FACT_SEA_ICE,"Emperor penguins breed on sea ice. In 2022, record low sea ice caused breeding failure in several colonies.","İmparator penguenler deniz buzunda ürer. 2022'de rekor düşük deniz buzu, bazı kolonilerde üremenin başarısız olmasına yol açtı."
+FACT_MIGRATION,"As temperatures rise, many species move toward the poles and higher ground.",Sıcaklıklar arttıkça birçok tür kutuplara ve daha yüksek yerlere doğru göç ediyor.
+FACT_PLASTIC,"Plastic pollution has reached remote places, from the deepest ocean trench to near the top of Mount Everest.","Plastik kirliliği, en derin okyanus çukurundan Everest'in zirvesine yakın bölgelere kadar uzak yerlere ulaştı."
+FACT_SORT,Sorting waste at the source helps more of it get recycled.,"Atığı kaynağında ayırmak, daha fazlasının geri dönüştürülmesine yardımcı olur."
+FACT_ZERO_WASTE,"The UN proclaimed 30 March International Day of Zero Waste, on a resolution put forward by Türkiye.","BM, Türkiye'nin sunduğu kararla 30 Mart'ı Uluslararası Sıfır Atık Günü ilan etti."
+FACT_ENERGY,Solar and wind are among the fastest growing sources of electricity.,"Güneş ve rüzgâr, elektrik üretiminde en hızlı büyüyen kaynaklar arasında."
+END_LOW_TITLE,Walked Away,Uzaklaştı
+END_LOW_TEXT,No place is far enough. It keeps walking anyway.,Hiçbir yer yeterince uzak değil. Yine de yürümeye devam ediyor.
+END_MID_TITLE,Looked Back,Geriye Baktı
+END_MID_TEXT,"The colony looks small from here. So does the problem, if we start now.",Koloni buradan küçük görünüyor. Şimdi başlarsak sorun da öyle.
+END_HIGH_TITLE,Went Back Down,Aşağı İndi
+END_HIGH_TEXT,Someone has to tell the others the ice is not joking.,Birinin diğerlerine buzun şaka yapmadığını söylemesi lazım.
+END_CALL,Climate action starts where you stand.,İklim eylemi bulunduğun yerde başlar.
+END_COP31,"COP31 Türkiye, Antalya, 9 to 20 November 2026","COP31 Türkiye, Antalya, 9 ile 20 Kasım 2026"

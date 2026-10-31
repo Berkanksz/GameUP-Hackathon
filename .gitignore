@@ -1,0 +1,8 @@
+.godot/
+export/
+*.translation
+.agents/memory.jsonl
+*.blend1
+*.tmp
+.DS_Store
+.code-review-graph/
