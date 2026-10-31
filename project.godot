@@ -16,6 +16,8 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
 
+McpInteractionServer="*res://mcp_interaction_server.gd"
+
 
 
 EventBus="*res://autoload/event_bus.gd"

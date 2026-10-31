@@ -21,6 +21,7 @@ var is_carrying: bool = false
 
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
+var _current_heat: float = 0.0
 
 @onready var _visual_root: Node3D = $VisualRoot
 
@@ -33,6 +34,7 @@ func _ready() -> void:
 	axis_lock_angular_z = true
 	if tuning == null:
 		tuning = load(DEFAULT_TUNING_PATH) as TuningData
+	EventBus.heat_changed.connect(_on_heat_changed)
 	global_position.z = 0.0
 
 
@@ -101,7 +103,8 @@ func _handle_horizontal(delta: float) -> void:
 	var accel: float = tuning.walk_acceleration if on_ground else tuning.air_acceleration
 	var fric: float = tuning.walk_friction if on_ground else tuning.air_friction
 	if not is_zero_approx(input_axis):
-		velocity.x = move_toward(velocity.x, input_axis * tuning.walk_speed, accel * delta)
+		var speed_mult: float = tuning.heat_slow_multiplier if _current_heat >= tuning.heat_slow_threshold else 1.0
+		velocity.x = move_toward(velocity.x, input_axis * tuning.walk_speed * speed_mult, accel * delta)
 		facing_direction = signf(input_axis)
 		if _visual_root != null:
 			_visual_root.scale.x = facing_direction
@@ -119,3 +122,7 @@ func _update_state() -> void:
 		state = State.WALK
 	else:
 		state = State.IDLE
+
+
+func _on_heat_changed(value: float) -> void:
+	_current_heat = value

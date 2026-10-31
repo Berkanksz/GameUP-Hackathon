@@ -19,3 +19,10 @@ extends Resource
 @export var camera_lookahead_speed: float = 4.0
 @export var camera_offset: Vector3 = Vector3(0.0, 2.2, 24.0)
 @export var camera_fov: float = 25.0
+@export var heat_max: float = 1.0
+@export var heat_slow_threshold: float = 0.7
+@export var heat_slow_multiplier: float = 0.7
+@export var heat_passive_cool_rate: float = 0.05
+@export var heat_sun_rate: float = 0.35
+@export var heat_shade_rate: float = -0.45
+@export var respawn_delay: float = 0.3

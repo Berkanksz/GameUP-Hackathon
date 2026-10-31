@@ -21,6 +21,7 @@ func _ready() -> void:
 		_camera.fov = tuning.camera_fov
 	if target == null:
 		_acquire_target()
+	EventBus.player_respawned.connect(_on_player_respawned)
 	snap_to_target()
 
 
@@ -54,6 +55,10 @@ func _acquire_target() -> void:
 	var node: Node = get_tree().get_first_node_in_group(&"player")
 	if node is Node3D:
 		target = node as Node3D
+
+
+func _on_player_respawned(_checkpoint_id: StringName) -> void:
+	snap_to_target()
 
 
 func _get_target_direction() -> float:

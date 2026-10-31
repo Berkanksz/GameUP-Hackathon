@@ -1,18 +1,23 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://features/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://data/tuning.tres" id="2_tuning"]
+[ext_resource type="Script" path="res://features/heat/heat_component.gd" id="3_heat_comp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.35
-height = 1.1
+height = 1.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+albedo_color = Color(0.16, 0.2, 0.28, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+material = SubResource("StandardMaterial3D_body")
 radius = 0.35
-height = 1.1
+height = 1.2
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beak"]
-albedo_color = Color(0.95, 0.6, 0.15, 1)
+albedo_color = Color(0.95, 0.62, 0.18, 1)
 
 [node name="Player" type="CharacterBody3D" groups=["player"]]
 collision_layer = 2
@@ -25,16 +30,20 @@ script = ExtResource("1_player")
 tuning = ExtResource("2_tuning")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 shape = SubResource("CapsuleShape3D_body")
 
 [node name="VisualRoot" type="Node3D" parent="."]
 
 [node name="BodyMesh" type="MeshInstance3D" parent="VisualRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
 mesh = SubResource("CapsuleMesh_body")
 
 [node name="BeakBox" type="CSGBox3D" parent="VisualRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 0.78, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.32, 0.82, 0)
 size = Vector3(0.28, 0.14, 0.18)
 material = SubResource("StandardMaterial3D_beak")
+
+[node name="HeatComponent" type="Node" parent="."]
+script = ExtResource("3_heat_comp")
+tuning = ExtResource("2_tuning")
