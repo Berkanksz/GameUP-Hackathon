@@ -25,8 +25,13 @@ func _physics_process(delta: float) -> void:
 		return
 	var target_deg: float = 0.0
 	if _player_on_bridge != null and is_instance_valid(_player_on_bridge):
-		var above_plank: bool = _player_on_bridge.global_position.y >= global_position.y - 0.05
-		if above_plank:
+		var player_on_floor: bool = true
+		if _player_on_bridge is CharacterBody3D:
+			player_on_floor = _player_on_bridge.is_on_floor()
+		var plank_surface_y: float = _plank.global_position.y + 0.16
+		var foot_dist_y: float = _player_on_bridge.global_position.y - plank_surface_y
+		var resting_on_plank: bool = player_on_floor and foot_dist_y >= -0.15 and foot_dist_y <= 0.38
+		if resting_on_plank:
 			var offset_x: float = _player_on_bridge.global_position.x - global_position.x
 			var norm_x: float = clampf(offset_x / maxf(half_span, 0.5), -1.0, 1.0)
 			# In Godot 3D (+X right, +Y up, +Z toward viewer), positive Z rotation lowers -X (left) and negative Z rotation lowers +X (right).

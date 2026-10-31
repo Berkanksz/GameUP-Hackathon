@@ -177,6 +177,11 @@ key = &"MONO_C4_END"
 [node name="FactCards" type="Node3D" parent="."]
 
 [node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 3.2, 0)
+fact_key = &"FACT_EDUCATION"
+source_label = "UNESCO, 2024"
+
+[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.5, 4.2, 0)
 fact_key = &"FACT_PERMAFROST"
 source_label = "IPCC AR6, 2023"

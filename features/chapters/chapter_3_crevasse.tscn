@@ -159,6 +159,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.7, 0)
 fact_key = &"FACT_GLACIER"
 source_label = "WMO, 2024"
 
+[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.0, 3.5, 0)
+fact_key = &"FACT_OCEANS"
+source_label = "WMO, 2024"
+
 [node name="ChoicePoints" type="Node3D" parent="."]
 
 [node name="BuoyChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]

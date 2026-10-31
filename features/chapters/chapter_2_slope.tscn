@@ -224,8 +224,8 @@ source_label = "UNEP, 2023"
 
 [node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.5, 3.15, 0)
-fact_key = &"FACT_SORT"
-source_label = "EEA, 2023"
+fact_key = &"FACT_CARBON"
+source_label = "UNEP, 2024"
 
 [node name="FactCard3" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 5.15, 0)

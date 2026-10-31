@@ -248,6 +248,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.2, 11.2, 0)
 fact_key = &"FACT_ENERGY"
 source_label = "IEA, Renewables 2024"
 
+[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.0, 16.2, 0)
+fact_key = &"FACT_RESILIENT_CITIES"
+source_label = "IPCC WGII, 2023"
+
 [node name="ChoicePoints" type="Node3D" parent="."]
 
 [node name="LampChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]

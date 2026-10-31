@@ -187,6 +187,9 @@ func respawn_at(target_position: Vector3) -> void:
 	_jump_buffer_timer = 0.0
 	_is_exit_walking = false
 	is_pushing_object = false
+	if _penguin_model != null:
+		_penguin_model.rotation_degrees.x = 0.0
+		_penguin_model.position.y = 0.0
 	state = State.IDLE
 
 
@@ -196,6 +199,10 @@ func die(reason: StringName) -> void:
 		return
 	state = State.DEAD
 	velocity = Vector3.ZERO
+	if reason == &"overheat" and _penguin_model != null:
+		var tween: Tween = create_tween()
+		tween.tween_property(_penguin_model, "rotation_degrees:x", 65.0, 0.32).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(_penguin_model, "position:y", -0.16, 0.32)
 	EventBus.player_died.emit(reason)
 
 
@@ -203,18 +210,18 @@ func _update_exertion_heat() -> void:
 	if _heat_comp == null:
 		return
 	if _is_sliding_active and absf(velocity.x) > 0.2:
-		_heat_comp.set_rate(&"exertion", -0.24)
+		_heat_comp.set_rate(&"exertion", -0.28)
 	elif is_pushing_object and absf(velocity.x) > 0.05:
-		_heat_comp.set_rate(&"exertion", 0.16 if _heat_comp.heat < 0.78 else 0.0)
+		_heat_comp.set_rate(&"exertion", 0.12 if _heat_comp.heat < 0.40 else 0.0)
 	elif not is_on_floor():
-		_heat_comp.set_rate(&"exertion", 0.14 if _heat_comp.heat < 0.72 else 0.0)
+		_heat_comp.set_rate(&"exertion", 0.08 if _heat_comp.heat < 0.35 else 0.0)
 	elif absf(velocity.x) > 0.2:
-		_heat_comp.set_rate(&"exertion", 0.11 if _heat_comp.heat < 0.62 else 0.0)
+		_heat_comp.set_rate(&"exertion", 0.06 if _heat_comp.heat < 0.30 else 0.0)
 	else:
-		if _heat_comp.heat > 0.14:
+		if _heat_comp.heat > 0.12:
 			_heat_comp.clear_rate(&"exertion")
 		else:
-			_heat_comp.set_rate(&"exertion", 0.05 if _heat_comp.heat < 0.12 else 0.0)
+			_heat_comp.set_rate(&"exertion", 0.03 if _heat_comp.heat < 0.10 else 0.0)
 
 
 func _animate_squash(target_scale: Vector3) -> void:

@@ -39,18 +39,20 @@ visible = false
 
 [node name="SignLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, 0.35)
 billboard = 1
+pixel_size = 0.01
 text = "BIN"
-font_size = 32
-outline_size = 9
+font_size = 54
+outline_size = 16
 
 [node name="PromptLabel" type="Label3D" parent="VisualRoot"]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.9, 0.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.38, 0.35)
 visible = false
 billboard = 1
-modulate = Color(1, 0.92, 0.35, 1)
+pixel_size = 0.01
+modulate = Color(1, 0.94, 0.42, 1)
 text = "[E] Sort"
-font_size = 30
-outline_size = 9
+font_size = 40
+outline_size = 14

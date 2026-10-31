@@ -95,16 +95,13 @@ func _start_interaction_cinematic(player_body: Node3D) -> void:
 	if choice_id == &"chick" and _chick_model != null:
 		Audio.play_sfx(&"ice_crack")
 		var base_y: float = _chick_model.position.y
-		if _floe_base != null:
-			cine.tween_property(_floe_base, "rotation_degrees:z", -6.5, 0.14)
-			cine.tween_property(_floe_base, "rotation_degrees:z", 5.5, 0.14)
-			cine.tween_property(_floe_base, "rotation_degrees:z", -3.0, 0.12)
-		# Chick slips into cracking ice crust and wiggles frantically
-		cine.parallel().tween_property(_chick_model, "position:y", base_y - 0.08, 0.22)
-		cine.tween_property(_chick_model, "rotation_degrees:z", 14.0, 0.11)
-		cine.tween_property(_chick_model, "rotation_degrees:z", -14.0, 0.11)
-		cine.tween_property(_chick_model, "rotation_degrees:z", 10.0, 0.11)
-		cine.tween_property(_chick_model, "rotation_degrees:z", 0.0, 0.11)
+		# Chick does distressed frightened hops and wing flutter crying for help on the melting ice
+		cine.tween_property(_chick_model, "position:y", base_y + 0.22, 0.12).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		cine.tween_property(_chick_model, "position:y", base_y, 0.10).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+		cine.tween_property(_chick_model, "scale:y", 0.88, 0.06)
+		cine.tween_property(_chick_model, "scale:y", 1.0, 0.08)
+		cine.tween_property(_chick_model, "position:y", base_y + 0.16, 0.10).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		cine.tween_property(_chick_model, "position:y", base_y, 0.09).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	elif choice_id == &"seed" and _seed_patch_model != null:
 		Audio.play_sfx(&"pickup")
 		cine.tween_property(_seed_patch_model, "scale", Vector3(1.62, 1.62, 1.62), 0.25).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -160,9 +157,7 @@ func _on_option_a_pressed() -> void:
 		out_tween.tween_property(_sprout_model, "scale", Vector3(1.55, 1.55, 1.55), 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 		out_tween.tween_interval(0.25)
 	elif choice_id == &"chick" and _chick_model != null and _chick_model.visible:
-		if _floe_base != null:
-			_floe_base.rotation_degrees.z = 0.0
-		var start_y: float = 0.14
+		var start_y: float = 0.0
 		out_tween.tween_property(_chick_model, "position:y", start_y + 0.85, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		out_tween.tween_property(_chick_model, "position:y", start_y, 0.18).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 		out_tween.tween_property(_chick_model, "position:x", _chick_model.position.x + 2.6, 0.42)

@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" path="res://assets/models/props/seed_patch.glb" id="4_seed_glb"]
 [ext_resource type="PackedScene" path="res://assets/models/props/ocean_buoy.glb" id="5_buoy_glb"]
 [ext_resource type="PackedScene" path="res://assets/models/props/weather_tower.glb" id="6_tower_glb"]
+[ext_resource type="PackedScene" path="res://assets/models/props/arctic_flower.glb" id="7_flower_glb"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_choice"]
-radius = 2.3
+radius = 2.4
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sprout"]
 albedo_color = Color(0.2, 0.82, 0.42, 1)
@@ -117,17 +118,17 @@ script = ExtResource("1_choice")
 shape = SubResource("SphereShape3D_choice")
 
 [node name="FloeBase" parent="." instance=ExtResource("3_floe_glb")]
-transform = Transform3D(1.35, 0, 0, 0, 0.45, 0, 0, 0, 1.35, 0, -0.18, 0)
+transform = Transform3D(1.4, 0, 0, 0, 0.45, 0, 0, 0, 1.4, 0, -0.05, 0)
 
 [node name="ChickModel" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.14, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0)
 
 [node name="ChickGlb" parent="ChickModel" instance=ExtResource("2_chick_glb")]
-transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 0, 0, 0)
+transform = Transform3D(1.45, 0, 0, 0, 1.45, 0, 0, 0, 1.45, 0, 0, 0)
 
 [node name="AlertLabel" type="Label3D" parent="ChickModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.72, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
 pixel_size = 0.009
 text = "!"
 font_size = 64
@@ -153,26 +154,8 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
-[node name="Stem" type="CSGCylinder3D" parent="SproutModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
-radius = 0.06
-height = 0.75
-material = SubResource("StandardMaterial3D_sprout")
-
-[node name="LeafLeft" type="CSGSphere3D" parent="SproutModel"]
-transform = Transform3D(1.2, 0, 0, 0, 0.5, 0, 0, 0, 0.7, -0.18, 0.48, 0)
-radius = 0.18
-material = SubResource("StandardMaterial3D_sprout")
-
-[node name="LeafRight" type="CSGSphere3D" parent="SproutModel"]
-transform = Transform3D(1.2, 0, 0, 0, 0.5, 0, 0, 0, 0.7, 0.18, 0.56, 0)
-radius = 0.18
-material = SubResource("StandardMaterial3D_sprout")
-
-[node name="FlowerBud" type="CSGSphere3D" parent="SproutModel"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.82, 0)
-radius = 0.16
-material = SubResource("StandardMaterial3D_flower")
+[node name="ArcticFlowerGlb" parent="SproutModel" instance=ExtResource("7_flower_glb")]
+transform = Transform3D(1.35, 0, 0, 0, 1.35, 0, 0, 0, 1.35, 0, 0, 0)
 
 [node name="ChoiceLayer" type="CanvasLayer" parent="."]
 unique_name_in_owner = true

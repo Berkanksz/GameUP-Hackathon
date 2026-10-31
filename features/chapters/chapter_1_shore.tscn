@@ -63,34 +63,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 10, 0)
 [node name="Background" type="Node3D" parent="."]
 
 [node name="MountainDistant0" parent="Background" instance=ExtResource("17_mountain_bg")]
-transform = Transform3D(2.5, 0, 0, 0, 2.5, 0, 0, 0, 2.5, -28, 0.5, -22)
+transform = Transform3D(2.4, 0, 0, 0, 2.4, 0, 0, 0, 2.4, -28, 1.0, -26)
 
 [node name="IcebergDistant0" parent="Background" instance=ExtResource("16_iceberg_bg")]
-transform = Transform3D(1.9, 0, 0, 0, 1.9, 0, 0, 0, 1.9, -18, -1.5, -14)
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, -16, -1.5, -20)
 
 [node name="IcebergDistant1" parent="Background" instance=ExtResource("16_iceberg_bg")]
-transform = Transform3D(2.0, 0, 0, 0, 2.0, 0, 0, 0, 2.0, 2, -1.5, -15)
+transform = Transform3D(1.65, 0, 0, 0, 1.65, 0, 0, 0, 1.65, 6, -1.5, -22)
 
 [node name="IcebergDistant2" parent="Background" instance=ExtResource("16_iceberg_bg")]
-transform = Transform3D(2.3, 0, 0, 0, 2.3, 0, 0, 0, 2.3, 24, -1.5, -16)
+transform = Transform3D(1.7, 0, 0, 0, 1.7, 0, 0, 0, 1.7, 28, -1.5, -21)
 
 [node name="MountainRidge" parent="Background" instance=ExtResource("17_mountain_bg")]
-transform = Transform3D(2.8, 0, 0, 0, 2.8, 0, 0, 0, 2.8, 52, 2.0, -20)
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 56, 3.0, -25)
 
 [node name="MountainRidgeExit" parent="Background" instance=ExtResource("17_mountain_bg")]
-transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 78, 3.5, -22)
+transform = Transform3D(2.6, 0, 0, 0, 2.6, 0, 0, 0, 2.6, 84, 4.0, -27)
 
 [node name="RockMid0" parent="Background" instance=ExtResource("18_rock_formation")]
-transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -32, 1.0, -1.6)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -32, 1.0, -2.2)
 
 [node name="RockMid1" parent="Background" instance=ExtResource("18_rock_formation")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -8, 0.0, -1.6)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, -8, 0.0, -2.2)
 
 [node name="RockMid2" parent="Background" instance=ExtResource("18_rock_formation")]
-transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 13, 0.5, -1.6)
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 11.5, 0.5, -2.2)
 
 [node name="RockMid3" parent="Background" instance=ExtResource("18_rock_formation")]
-transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 36, 2.0, -1.6)
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 36, 2.0, -2.2)
 
 [node name="PineMid0" parent="Background" instance=ExtResource("19_pine_tree")]
 transform = Transform3D(1.25, 0, 0, 0, 1.25, 0, 0, 0, 1.25, -35, 1.0, -1.6)
@@ -149,9 +149,9 @@ size = Vector3(140, 1, 22)
 material = SubResource("StandardMaterial3D_water")
 
 [node name="MidIsland" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, -2.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.5, -2.5, 0)
 use_collision = true
-size = Vector3(12, 6, 4)
+size = Vector3(8, 6, 4)
 material = SubResource("StandardMaterial3D_rock")
 
 [node name="IcebergShadePillar1" type="CSGBox3D" parent="Geometry"]
@@ -161,9 +161,9 @@ size = Vector3(4.5, 5.4, 1.2)
 material = SubResource("StandardMaterial3D_cliff")
 
 [node name="CliffBase" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.5, -1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.5, -1.0, 0)
 use_collision = true
-size = Vector3(11, 7, 4)
+size = Vector3(11, 6, 4)
 material = SubResource("StandardMaterial3D_rock")
 
 [node name="ThermalVent1" parent="Geometry" instance=ExtResource("21_thermal_vent")]
@@ -204,13 +204,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.8, 0.2, 0)
 
 [node name="IceTile3" parent="IceTiles" instance=ExtResource("7_ice_tile")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.0, 0.5, 0)
+transform = Transform3D(1.3, 0, 0, 0, 1, 0, 0, 0, 1.3, 21.0, 0.4, 0)
 
 [node name="IceTile4" parent="IceTiles" instance=ExtResource("7_ice_tile")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.2, 1.0, 0)
+transform = Transform3D(1.3, 0, 0, 0, 1, 0, 0, 0, 1.3, 24.8, 0.75, 0)
 
 [node name="IceTile5" parent="IceTiles" instance=ExtResource("7_ice_tile")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.0, 1.5, 0)
+transform = Transform3D(1.3, 0, 0, 0, 1, 0, 0, 0, 1.3, 28.6, 1.15, 0)
 
 [node name="IceTile6" parent="IceTiles" instance=ExtResource("7_ice_tile")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.8, 4.6, 0)
@@ -224,7 +224,7 @@ zone_id = &"ch1_shade_1"
 
 [node name="SunSection1" parent="Zones" instance=ExtResource("3_heat_zone")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, -0.2, 0)
-rate = 0.35
+rate = 0.25
 zone_id = &"ch1_sun_1"
 
 [node name="ShadeMid" parent="Zones" instance=ExtResource("3_heat_zone")]
@@ -233,8 +233,8 @@ rate = -0.45
 zone_id = &"ch1_shade_2"
 
 [node name="SunSection2" parent="Zones" instance=ExtResource("3_heat_zone")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.0, 0.5, 0)
-rate = 0.35
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.0, 0.5, 0)
+rate = 0.09
 zone_id = &"ch1_sun_2"
 
 [node name="ShadeCliff" parent="Zones" instance=ExtResource("3_heat_zone")]
@@ -274,6 +274,10 @@ key = &"MONO_C1_ICE"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 1.2, 0)
 key = &"MONO_C1_WARM"
 
+[node name="TriggerHeatWarn" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.5, 1.2, 0)
+key = &"MONO_HEAT_WARNING"
+
 [node name="TriggerTutVent" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.5, 2.8, 0)
 key = &"TUT_VENT"
@@ -291,13 +295,13 @@ source_label = "BAS, 2023"
 
 [node name="FactCard2" parent="FactCards" instance=ExtResource("11_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 3.1, 0)
-fact_key = &"FACT_MIGRATION"
-source_label = "IPCC, 2022"
+fact_key = &"FACT_FOOD_SECURITY"
+source_label = "FAO / Nature, 2023"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 
 [node name="ChickChoice" parent="ChoicePoints" instance=ExtResource("12_choice_point")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 0.65, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.2, 0.08, 0)
 choice_id = &"chick"
 hope_reward = 15.0
 

@@ -803,6 +803,75 @@ def build_seed_patch():
     finalize_and_export("seed_patch", "seed_patch.blend", "props/seed_patch.glb")
 
 
+def build_arctic_flower():
+    """Blooming Arctic tundra cushion plant with vibrant star flowers (arctic_flower.glb)."""
+    clear_scene()
+    mat_soil = make_mat("mat_fl_soil", "2A1E17", 0.94)
+    mat_stone = make_mat("mat_fl_stone", "546E7A", 0.88)
+    mat_moss = make_mat("mat_fl_moss", "2D6A4F", 0.72)
+    mat_stem = make_mat("mat_fl_stem", "40916C", 0.55)
+    mat_leaf = make_mat("mat_fl_leaf", "52B788", 0.48)
+    mat_petal = make_mat("mat_fl_petal", "FFD166", 0.32, emission_hex="F4A261", emission_strength=0.35)
+    mat_center = make_mat("mat_fl_center", "E76F51", 0.25, emission_hex="E76F51", emission_strength=0.7)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.55, depth=0.14, location=(0.0, 0.0, 0.07))
+    base = bpy.context.active_object
+    base.data.materials.append(mat_soil)
+
+    for i in range(11):
+        ang = i * (2.0 * math.pi / 11.0)
+        sx = math.cos(ang) * 0.54
+        sy = math.sin(ang) * 0.54
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.10, location=(sx, sy, 0.08))
+        st = bpy.context.active_object
+        st.scale = (1.1, 0.9, 0.7)
+        st.data.materials.append(mat_stone)
+
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=18, ring_count=12, radius=0.48, location=(0.0, 0.0, 0.16))
+    cushion = bpy.context.active_object
+    cushion.scale = (1.0, 0.95, 0.42)
+    cushion.data.materials.append(mat_moss)
+
+    for i in range(8):
+        ang = i * (2.0 * math.pi / 8.0) + 0.18
+        lx = math.cos(ang) * 0.34
+        ly = math.sin(ang) * 0.34
+        bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.08, radius2=0.01, depth=0.28, location=(lx, ly, 0.22))
+        leaf = bpy.context.active_object
+        leaf.scale = (0.7, 1.3, 0.3)
+        leaf.rotation_euler = (math.sin(ang) * 0.5, -math.cos(ang) * 0.5, ang)
+        leaf.data.materials.append(mat_leaf)
+
+    flower_positions = [
+        (0.0, 0.0, 0.55),
+        (-0.22, 0.14, 0.46),
+        (0.24, 0.12, 0.48),
+        (0.02, -0.24, 0.44),
+    ]
+
+    for fx, fy, fz in flower_positions:
+        bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.028, depth=fz - 0.20, location=(fx * 0.65, fy * 0.65, (fz + 0.20) / 2.0))
+        stem = bpy.context.active_object
+        stem.data.materials.append(mat_stem)
+
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.065, location=(fx, fy, fz))
+        center = bpy.context.active_object
+        center.scale = (1.0, 1.0, 0.6)
+        center.data.materials.append(mat_center)
+
+        for p in range(5):
+            pang = p * (2.0 * math.pi / 5.0)
+            px = fx + math.cos(pang) * 0.11
+            py = fy + math.sin(pang) * 0.11
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=6, radius=0.072, location=(px, py, fz - 0.01))
+            petal = bpy.context.active_object
+            petal.scale = (0.65, 1.15, 0.28)
+            petal.rotation_euler = (0.0, 0.0, pang)
+            petal.data.materials.append(mat_petal)
+
+    finalize_and_export("arctic_flower", "arctic_flower.blend", "props/arctic_flower.glb")
+
+
 def build_ocean_buoy():
     """Polar ocean acoustic monitoring buoy (ocean_buoy.glb)."""
     clear_scene()
@@ -885,6 +954,7 @@ if __name__ == "__main__":
     build_litter_gate()
     build_fact_holo_globe()
     build_seed_patch()
+    build_arctic_flower()
     build_ocean_buoy()
     build_weather_tower()
     print("ALL REALISTIC BLENDER MODELS BUILT AND EXPORTED SUCCESSFULLY.")

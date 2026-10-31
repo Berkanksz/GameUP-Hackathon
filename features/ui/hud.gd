@@ -69,6 +69,9 @@ var _active_chapter_id: StringName = &""
 @onready var _fact_popup: PanelContainer = %FactPopup
 @onready var _fact_text_label: Label = %FactTextLabel
 @onready var _fact_source_label: Label = %FactSourceLabel
+@onready var _overheat_notice: PanelContainer = get_node_or_null("%OverheatNotice")
+@onready var _overheat_title: Label = get_node_or_null("%OverheatTitle")
+@onready var _overheat_desc: Label = get_node_or_null("%OverheatDesc")
 @onready var _complete_panel: PanelContainer = %CompletePanel
 @onready var _complete_title: Label = %CompleteTitle
 @onready var _complete_summary: Label = %CompleteSummary
@@ -415,12 +418,25 @@ func _on_complete_menu_pressed() -> void:
 
 func _on_player_died(reason: StringName) -> void:
 	if reason == &"overheat":
-		_flash_alpha = 0.38
+		_flash_alpha = 0.55
+		if _overheat_notice != null:
+			if _overheat_title != null:
+				_overheat_title.text = tr("UI_OVERHEAT_TITLE")
+			if _overheat_desc != null:
+				_overheat_desc.text = tr("UI_OVERHEAT_DESC")
+			_overheat_notice.visible = true
+			_overheat_notice.modulate.a = 0.0
+			var ot: Tween = create_tween()
+			ot.tween_property(_overheat_notice, "modulate:a", 1.0, 0.25)
 
 
 func _on_player_respawned(_checkpoint_id: StringName) -> void:
 	_flash_alpha = 0.0
-	_apply_heat(0.14)
+	if _overheat_notice != null and _overheat_notice.visible:
+		var ot: Tween = create_tween()
+		ot.tween_property(_overheat_notice, "modulate:a", 0.0, 0.22)
+		ot.tween_callback(func() -> void: _overheat_notice.visible = false)
+	_apply_heat(0.12)
 
 
 func _apply_heat(value: float) -> void:
@@ -433,7 +449,21 @@ func _apply_heat(value: float) -> void:
 		_heat_value_label.text = "%d%%" % pct
 	var threshold: float = tuning.heat_slow_threshold if tuning != null else 0.7
 	if _heat_fill_style != null:
-		_heat_fill_style.bg_color = HOT_FILL_COLOR if _current_heat >= threshold else NORMAL_FILL_COLOR
+		if _current_heat >= threshold:
+			_heat_fill_style.bg_color = Color(0.96, 0.22, 0.16, 1.0)
+			if _heat_label != null:
+				_heat_label.text = "⚠ %s" % tr("UI_HEAT_ALERT")
+				_heat_label.modulate = Color(1.0, 0.35, 0.35, 1.0)
+		elif _current_heat >= 0.40:
+			_heat_fill_style.bg_color = HOT_FILL_COLOR
+			if _heat_label != null:
+				_heat_label.text = tr("UI_HEAT")
+				_heat_label.modulate = Color(1.0, 0.88, 0.35, 1.0)
+		else:
+			_heat_fill_style.bg_color = NORMAL_FILL_COLOR
+			if _heat_label != null:
+				_heat_label.text = tr("UI_HEAT")
+				_heat_label.modulate = Color.WHITE
 
 
 func _apply_hope(value: float) -> void:
@@ -468,12 +498,11 @@ func _update_fact_popup(delta: float) -> void:
 func _update_shimmer(delta: float) -> void:
 	if _shimmer_overlay == null:
 		return
-	_flash_alpha = maxf(0.0, _flash_alpha - delta * 1.2)
-	var threshold: float = tuning.heat_slow_threshold if tuning != null else 0.7
+	_flash_alpha = maxf(0.0, _flash_alpha - delta * 0.9)
 	var max_heat: float = tuning.heat_max if tuning != null else 1.0
 	var shimmer_alpha: float = 0.0
-	if _current_heat >= threshold and max_heat > threshold:
-		_shimmer_clock += delta * 6.5
-		var ratio: float = (_current_heat - threshold) / (max_heat - threshold)
-		shimmer_alpha = ratio * (0.08 + 0.08 * (0.5 + 0.5 * sin(_shimmer_clock)))
-	_shimmer_overlay.color = Color(1.0, 0.48, 0.15, clampf(maxf(shimmer_alpha, _flash_alpha), 0.0, 0.45))
+	if _current_heat >= 0.38 and max_heat > 0.0:
+		_shimmer_clock += delta * 5.5
+		var ratio: float = clampf((_current_heat - 0.38) / (max_heat - 0.38), 0.0, 1.0)
+		shimmer_alpha = ratio * (0.12 + 0.14 * (0.5 + 0.5 * sin(_shimmer_clock)))
+	_shimmer_overlay.color = Color(0.96, 0.26, 0.12, clampf(shimmer_alpha + _flash_alpha, 0.0, 0.45))

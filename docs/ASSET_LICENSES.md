@@ -23,6 +23,7 @@ Every file under assets/ must be listed here by its path or by its folder path. 
 | Iceberg background | project owner | created in Blender | CC0 original | assets/models/environment/iceberg_bg.glb | no |
 | Fact holo globe prop | project owner | created in Blender | CC0 original | assets/models/props/fact_holo_globe.glb | no |
 | Seed patch prop | project owner | created in Blender | CC0 original | assets/models/props/seed_patch.glb | no |
+| Arctic flower prop | project owner | created in Blender | CC0 original | assets/models/props/arctic_flower.glb | no |
 | Ocean buoy prop | project owner | created in Blender | CC0 original | assets/models/props/ocean_buoy.glb | no |
 | Weather tower prop | project owner | created in Blender | CC0 original | assets/models/props/weather_tower.glb | no |
 | Wind ambience audio | project owner | synthesized in Python | CC0 original | assets/audio/wind_ambience.wav | no |

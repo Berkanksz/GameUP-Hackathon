@@ -35,7 +35,7 @@ UI_BIN_GLASS,Glass,Cam
 UI_THANKS,Thanks for playing,Oynadığın için teşekkürler
 UI_CHAPTER_COMPLETE,Chapter Complete,Bölüm Tamamlandı
 UI_CONTINUE,Continue,Devam Et
-MONO_C1_START,Nobody asked where I am going. Good. I do not know either.,Nereye gittiğimi kimse sormadı. İyi. Ben de bilmiyorum.
+MONO_C1_START,Like that lone penguin in the documentary... I walked away toward the mountains. But running away solves nothing. We have to learn and return.,Tıpkı o belgeseldeki yalnız penguen gibi... Koloniyi arkamda bırakıp dağlara doğru tek başıma yürüyordum. Ama kaçmak çare değil. Öğrenip geri dönmeliyiz.
 MONO_C1_ICE,The ice used to be more confident.,Buz eskiden daha kendinden emindi.
 MONO_C1_MELT,Melting is just the ice changing its mind.,"Erimek, buzun fikrini değiştirmesinden ibaret."
 MONO_C1_WARM,It is warm. That should not be a complaint here.,Hava sıcak. Burada bu bir şikâyet konusu olmamalı.
@@ -103,3 +103,12 @@ CHOICE_TOWER_SAVED,The relay dish locked onto the satellite with a steady chime.
 FACT_GLACIER,"Mountain glaciers worldwide lost more ice between 2021 and 2024 than in any other four year period on record.","Dünya genelindeki dağ buzulları, 2021 ile 2024 arasında kayıtlardaki diğer tüm dört yıllık dönemlerden daha fazla buz kaybetti."
 FACT_PERMAFROST,"Early warning weather stations help polar researchers track ice sheet stability and extreme storms in real time.","Erken uyarı hava istasyonları, kutup araştırmacılarının buz tabakası dengesini ve aşırı fırtınaları anlık izlemesini sağlar."
 MONO_LITTER_PILE_INTRO,"What is all this trash doing on the glacier? It completely blocked the trail. I need to pull each item from the pile and sort it into the right bin.","Buzulun ortasında bu çöp yığınının ne işi var? Yolu tamamen kapatmışlar. Yığındaki atıkları tek tek alıp doğru geri dönüşüm kutularına atmalıyım."
+MONO_HEAT_WARNING,"The direct sun is heating my feathers rapidly! I need to keep moving toward the cold shadows ahead.","Doğrudan güneş tüylerimi hızla ısıtıyor! Karşıdaki serin gölgelere doğru hızla ilerlemeliyim."
+UI_HEAT_ALERT,HEAT WARNING,ISI UYARISI
+UI_OVERHEAT_TITLE,Hyperthermia Alert,Aşırı Sıcaklık Uyarısı
+UI_OVERHEAT_DESC,"Emperor penguins endure minus 50 degrees but cannot sweat. Unshaded heat rapidly causes fatal exhaustion. Keep to shadows and cold air!","İmparator penguenler eksi 50 dereceye dayanıklıdır fakat ter bezleri bulunmaz. Doğrudan güneşte aşırı ısı hızla bitkinliğe yol açar. Gölgelerde ve serin havada ilerle!"
+FACT_FOOD_SECURITY,"Melting sea ice disrupts polar krill algae habitats, threatening the entire Antarctic marine food web and global food security.","Deniz buzlarının erimesi kril alg yaşam alanlarını yok ederek tüm kutup deniz besin zincirini ve küresel gıda güvenliğini tehdit eder."
+FACT_CARBON,"Tracking carbon footprints and choosing conscious consumption directly slow polar ice sheet melting.","Karbon ayak izini takip etmek ve bilinçli tüketimi seçmek, kutup buzullarının erimesini doğrudan yavaşlatır."
+FACT_RESILIENT_CITIES,"Climate resilient settlements use nature-based coastal buffers and storm warning networks to withstand extreme climate impacts.","İklim dirençli yerleşimler, aşırı iklim etkilerine dayanmak için doğa temelli kıyı tamponları ve fırtına uyarı ağları kullanır."
+FACT_OCEANS,"Oceans absorb more than 90 percent of the excess heat trapped by greenhouse gases, driving marine heatwaves and glacier melt.","Okyanuslar, sera gazlarının hapsettiği fazla ısının yüzde 90'ından fazlasını emer; deniz sıcak dalgalarını ve buzul erimesini tetikler."
+FACT_EDUCATION,"Climate education and data literacy empower communities to take informed, effective action for a sustainable future.","İklim eğitimi ve veri okuryazarlığı, toplulukların sürdürülebilir bir gelecek için bilinçli ve etkili adımlar atmasını sağlar."

@@ -40,8 +40,11 @@ func _on_checkpoint_reached(checkpoint_id: StringName) -> void:
 			return
 
 
-func _on_player_died(_reason: StringName) -> void:
-	_respawn_timer = tuning.respawn_delay if tuning != null else 0.3
+func _on_player_died(reason: StringName) -> void:
+	if reason == &"overheat":
+		_respawn_timer = 2.0
+	else:
+		_respawn_timer = tuning.respawn_delay if tuning != null else 0.3
 
 
 func _perform_respawn() -> void:
