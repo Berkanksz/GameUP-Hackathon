@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://narrative_trigger_001"]
+
+[ext_resource type="Script" path="res://features/narrative/narrative_trigger.gd" id="1_trigger"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(2, 4, 3)
+
+[node name="NarrativeTrigger" type="Area3D"]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_trigger")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_trigger")

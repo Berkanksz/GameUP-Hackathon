@@ -36,15 +36,16 @@ Status marks: [ ] planned, [x] built.
 5. [x] IceTile (StaticBody3D): @export melt_time: float, @export respawn_time: float, @export sun_multiplier: float.
 6. [x] Checkpoint (Area3D): @export checkpoint_id: StringName, is_active: bool. Group: checkpoint.
 7. [x] Respawn: @export player: Node3D, @export tuning: TuningData, active_checkpoint_id: StringName.
-8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed.
+8. [x] Hud (CanvasLayer): @export tuning: TuningData. Listens to heat_changed, player_died, player_respawned, language_changed, hope_changed, fact_collected, chapter_completed.
 9. [ ] LitterItem (Area3D): @export litter_type: StringName (paper, plastic, glass). Group: litter.
 10. [ ] SortingBin (Area3D): @export accepts: StringName. Group: bin.
 11. [ ] LitterGate: @export gate_id: StringName, @export required_count: int. Group: gate.
-12. [ ] NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
-13. [ ] MonologueUI: listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
-14. [ ] FactCard: @export fact_key: StringName, @export source_label: String.
-15. [ ] ChoicePoint: @export choice_id: StringName, @export hope_reward: float.
+12. [x] NarrativeTrigger (Area3D): @export key: StringName, @export once: bool.
+13. [x] MonologueUI (CanvasLayer): listens to monologue_requested, picks key variant by hope tier (_LOW, _MID, _HIGH suffix if present, else base key).
+14. [x] FactCard (Area3D): @export fact_key: StringName, @export source_label: String.
+15. [x] ChoicePoint (Area3D): @export choice_id: StringName, @export hope_reward: float.
 16. [ ] ChapterData (Resource): chapter_id, title_key, start_position, camera_bounds: Rect2, next_scene.
+17. [x] ChapterGoal (Area3D): @export chapter_id: StringName. Emits chapter_completed.
 
 ## Couplings the scanner cannot see
 (Fill as they appear. Also record in memory graph as scene_couples_to.)
@@ -54,6 +55,9 @@ Status marks: [ ] planned, [x] built.
 4. HeatZone searches entering player body children for a HeatComponent node.
 5. Respawn finds the first node in group player when player is not assigned and searches group checkpoint by checkpoint_id.
 6. IceTile checks overlapping HeatZone areas with positive rate on StepDetector to apply sun_multiplier.
+7. FactCard registers static source lookup used by Hud on fact_collected.
+8. ChoicePoint adds hope_reward to GameState and emits choice_made.
+9. ChapterGoal emits chapter_completed to open completion summary on Hud.
 
 ## Decisions
 1. Perspective camera FOV about 25, not orthogonal.

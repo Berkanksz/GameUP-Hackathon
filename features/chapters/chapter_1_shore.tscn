@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://features/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://features/camera/camera_rig.tscn" id="2_camera"]
@@ -8,6 +8,11 @@
 [ext_resource type="PackedScene" path="res://features/ui/hud.tscn" id="6_hud"]
 [ext_resource type="PackedScene" path="res://features/ice/ice_tile.tscn" id="7_ice_tile"]
 [ext_resource type="Resource" path="res://data/tuning.tres" id="8_tuning"]
+[ext_resource type="PackedScene" path="res://features/narrative/monologue_ui.tscn" id="9_monologue_ui"]
+[ext_resource type="PackedScene" path="res://features/narrative/narrative_trigger.tscn" id="10_narrative_trigger"]
+[ext_resource type="PackedScene" path="res://features/narrative/fact_card.tscn" id="11_fact_card"]
+[ext_resource type="PackedScene" path="res://features/narrative/choice_point.tscn" id="12_choice_point"]
+[ext_resource type="Script" path="res://features/chapters/chapter_goal.gd" id="13_chapter_goal"]
 
 [sub_resource type="Environment" id="Environment_ch1"]
 background_mode = 1
@@ -18,6 +23,9 @@ ambient_light_energy = 0.75
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rock"]
 albedo_color = Color(0.62, 0.72, 0.82, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_goal"]
+size = Vector3(3, 6, 4)
 
 [node name="Chapter1Shore" type="Node3D"]
 
@@ -185,6 +193,59 @@ checkpoint_id = &"ch1_cp_2"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35, 2.0, 0)
 checkpoint_id = &"ch1_cp_3"
 
+[node name="Narrative" type="Node3D" parent="."]
+
+[node name="TriggerStart" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.5, 1.0, 0)
+key = &"MONO_C1_START"
+
+[node name="TriggerIce" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.8, 0)
+key = &"MONO_C1_ICE"
+
+[node name="TriggerWarm" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.0, 1.0, 0)
+key = &"MONO_C1_WARM"
+
+[node name="TriggerChick" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0, 1.0, 0)
+key = &"MONO_C1_CHICK"
+
+[node name="TriggerEnd" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 59.0, 9.0, 0)
+key = &"MONO_C1_END"
+
+[node name="FactCards" type="Node3D" parent="."]
+
+[node name="FactCard1" parent="FactCards" instance=ExtResource("11_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.5, 1.2, 0)
+fact_key = &"FACT_SEA_ICE"
+source_label = "BAS, 2023"
+
+[node name="FactCard2" parent="FactCards" instance=ExtResource("11_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 37.0, 2.8, 0)
+fact_key = &"FACT_MIGRATION"
+source_label = "IPCC, 2022"
+
+[node name="ChoicePoints" type="Node3D" parent="."]
+
+[node name="ChickChoice" parent="ChoicePoints" instance=ExtResource("12_choice_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.8, 0.1, 0)
+choice_id = &"chick"
+hope_reward = 15.0
+
+[node name="Goals" type="Node3D" parent="."]
+
+[node name="ChapterGoal" type="Area3D" parent="Goals"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 9, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("13_chapter_goal")
+chapter_id = &"chapter_1"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Goals/ChapterGoal"]
+shape = SubResource("BoxShape3D_goal")
+
 [node name="Respawn" type="Node" parent="." node_paths=PackedStringArray("player")]
 script = ExtResource("5_respawn")
 player = NodePath("../Player")
@@ -197,5 +258,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 0.1, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15, 2.3, 24)
 target = NodePath("../Player")
 bounds = Rect2(-16, -2, 80, 16)
+
+[node name="MonologueUI" parent="." instance=ExtResource("9_monologue_ui")]
 
 [node name="Hud" parent="." instance=ExtResource("6_hud")]

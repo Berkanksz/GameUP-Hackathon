@@ -25,12 +25,18 @@ UI_BIN_PAPER,Paper,Kağıt
 UI_BIN_PLASTIC,Plastic,Plastik
 UI_BIN_GLASS,Glass,Cam
 UI_THANKS,Thanks for playing,Oynadığın için teşekkürler
+UI_CHAPTER_COMPLETE,Chapter Complete,Bölüm Tamamlandı
+UI_CONTINUE,Continue,Devam Et
 MONO_C1_START,Nobody asked where I am going. Good. I do not know either.,Nereye gittiğimi kimse sormadı. İyi. Ben de bilmiyorum.
 MONO_C1_ICE,The ice used to be more confident.,Buz eskiden daha kendinden emindi.
 MONO_C1_MELT,Melting is just the ice changing its mind.,"Erimek, buzun fikrini değiştirmesinden ibaret."
 MONO_C1_WARM,It is warm. That should not be a complaint here.,Hava sıcak. Burada bu bir şikâyet konusu olmamalı.
 MONO_C1_CHICK,Someone small is stuck. Of course.,Küçük biri mahsur kalmış. Tabii ya.
 MONO_C1_END,"Higher. Colder. That is the plan. A bad plan, but a plan.",Daha yukarı. Daha soğuk. Plan bu. Kötü bir plan ama plan.
+MONO_C1_END_LOW,"Higher. Colder. If it even matters.",Daha yukarı. Daha soğuk. Bir önemi varsa tabii.
+MONO_C1_END_MID,"Higher. Colder. That is the plan. A bad plan, but a plan.",Daha yukarı. Daha soğuk. Plan bu. Kötü bir plan ama plan.
+MONO_C1_END_HIGH,"Higher. Colder. We will make it work.",Daha yukarı. Daha soğuk. Bunu başaracağız.
+CHOICE_CHICK_SAVED,The chick hopped safely toward the rocks.,Yavru güvenle kayalıklara doğru zıpladı.
 MONO_C2_START,No one up here. Finally.,Burada kimse yok. Sonunda.
 MONO_C2_LITTER,A bottle. Someone was here. Someone left.,Bir şişe. Biri buradaymış. Biri gitmiş.
 MONO_C2_SORT_OK,A small thing in the right place.,Doğru yerde küçük bir şey.

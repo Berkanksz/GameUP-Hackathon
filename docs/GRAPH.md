@@ -7,15 +7,16 @@ Autoloads: Audio=autoload/audio.gd, EventBus=autoload/event_bus.gd, GameState=au
 ## Files
 Format: path | extends | class | signals | uses | used_by
 
-autoload/audio.gd | Node |  |  |  | features/ice/ice_tile.gd,features/player/player.gd,features/ui/main_menu.gd
-autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/camera/camera_rig.gd,features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/ice/ice_tile.gd,features/player/player.gd,features/ui/hud.gd,features/ui/main_menu.gd
-autoload/game_state.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
+autoload/audio.gd | Node |  |  |  | features/ice/ice_tile.gd,features/narrative/choice_point.gd,features/narrative/fact_card.gd,features/player/player.gd,features/ui/hud.gd,features/ui/main_menu.gd,mcp_interaction_server.gd
+autoload/event_bus.gd | Node |  | player_died,player_respawned,heat_changed,hope_changed,litter_picked,litter_sorted,gate_opened,checkpoint_reached,monologue_requested,fact_collected,choice_made,chapter_started,chapter_completed,language_changed,game_ended |  | autoload/game_state.gd,autoload/settings.gd,features/camera/camera_rig.gd,features/chapters/chapter_goal.gd,features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/ice/ice_tile.gd,features/narrative/choice_point.gd,features/narrative/fact_card.gd,features/narrative/monologue_ui.gd,features/narrative/narrative_trigger.gd,features/player/player.gd,features/ui/hud.gd,features/ui/main_menu.gd
+autoload/game_state.gd | Node |  |  | autoload/event_bus.gd | features/narrative/choice_point.gd,features/narrative/fact_card.gd,features/narrative/monologue_ui.gd,features/ui/hud.gd,features/ui/main_menu.gd
 autoload/settings.gd | Node |  |  | autoload/event_bus.gd | features/ui/main_menu.gd
 data/tuning.tres |  |  |  | data/tuning_data.gd | features/camera/camera_rig.tscn,features/chapters/chapter_1_shore.tscn,features/player/player.tscn,features/player/test_room.tscn
 data/tuning_data.gd | Resource | TuningData |  |  | data/tuning.tres,features/camera/camera_rig.gd,features/checkpoint/respawn.gd,features/heat/heat_component.gd,features/player/player.gd,features/ui/hud.gd
 features/camera/camera_rig.gd | Node3D | CameraRig |  | autoload/event_bus.gd,data/tuning_data.gd | features/camera/camera_rig.tscn
 features/camera/camera_rig.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
-features/chapters/chapter_1_shore.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/ice/ice_tile.tscn,features/player/player.tscn,features/ui/hud.tscn | 
+features/chapters/chapter_1_shore.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/chapters/chapter_goal.gd,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/ice/ice_tile.tscn,features/narrative/choice_point.tscn,features/narrative/fact_card.tscn,features/narrative/monologue_ui.tscn,features/narrative/narrative_trigger.tscn,features/player/player.tscn,features/ui/hud.tscn | 
+features/chapters/chapter_goal.gd | Area3D | ChapterGoal |  | autoload/event_bus.gd | features/chapters/chapter_1_shore.tscn
 features/checkpoint/checkpoint.gd | Area3D | Checkpoint |  | autoload/event_bus.gd | features/checkpoint/checkpoint.tscn
 features/checkpoint/checkpoint.tscn |  |  |  | features/checkpoint/checkpoint.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/checkpoint/respawn.gd | Node | Respawn |  | autoload/event_bus.gd,data/tuning_data.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
@@ -24,29 +25,38 @@ features/heat/heat_zone.gd | Area3D | HeatZone |  | features/heat/heat_component
 features/heat/heat_zone.tscn |  |  |  | features/heat/heat_zone.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/ice/ice_tile.gd | StaticBody3D | IceTile |  | autoload/audio.gd,autoload/event_bus.gd,features/heat/heat_zone.gd | features/ice/ice_tile.tscn
 features/ice/ice_tile.tscn |  |  |  | features/ice/ice_tile.gd | features/chapters/chapter_1_shore.tscn
+features/narrative/choice_point.gd | Area3D | ChoicePoint |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd | features/narrative/choice_point.tscn
+features/narrative/choice_point.tscn |  |  |  | features/narrative/choice_point.gd | features/chapters/chapter_1_shore.tscn
+features/narrative/fact_card.gd | Area3D | FactCard |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd | features/narrative/fact_card.tscn,features/ui/hud.gd
+features/narrative/fact_card.tscn |  |  |  | features/narrative/fact_card.gd | features/chapters/chapter_1_shore.tscn
+features/narrative/monologue_ui.gd | CanvasLayer | MonologueUI |  | autoload/event_bus.gd,autoload/game_state.gd | features/narrative/monologue_ui.tscn
+features/narrative/monologue_ui.tscn |  |  |  | features/narrative/monologue_ui.gd | features/chapters/chapter_1_shore.tscn
+features/narrative/narrative_trigger.gd | Area3D | NarrativeTrigger |  | autoload/event_bus.gd | features/narrative/narrative_trigger.tscn
+features/narrative/narrative_trigger.tscn |  |  |  | features/narrative/narrative_trigger.gd | features/chapters/chapter_1_shore.tscn
 features/player/player.gd | CharacterBody3D | Player |  | autoload/audio.gd,autoload/event_bus.gd,data/tuning_data.gd | features/player/player.tscn
 features/player/player.tscn |  |  |  | data/tuning.tres,features/heat/heat_component.gd,features/player/player.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/player/test_room.tscn |  |  |  | data/tuning.tres,features/camera/camera_rig.tscn,features/checkpoint/checkpoint.tscn,features/checkpoint/respawn.gd,features/heat/heat_zone.tscn,features/player/player.tscn,features/ui/hud.tscn | 
-features/ui/hud.gd | CanvasLayer | Hud |  | autoload/event_bus.gd,data/tuning_data.gd | features/ui/hud.tscn
+features/ui/hud.gd | CanvasLayer | Hud |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd,data/tuning_data.gd,features/narrative/fact_card.gd | features/ui/hud.tscn
 features/ui/hud.tscn |  |  |  | features/ui/hud.gd | features/chapters/chapter_1_shore.tscn,features/player/test_room.tscn
 features/ui/main_menu.gd | Control |  |  | autoload/audio.gd,autoload/event_bus.gd,autoload/game_state.gd,autoload/settings.gd | features/ui/main_menu.tscn
 features/ui/main_menu.tscn |  |  |  | features/ui/main_menu.gd | 
+mcp_interaction_server.gd | Node |  |  | autoload/audio.gd | 
 
 ## Signals
 Format: name (declared in) | emit | listen
 
-chapter_completed (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
+chapter_completed (autoload/event_bus.gd) | features/chapters/chapter_goal.gd | features/ui/hud.gd
 chapter_started (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 checkpoint_reached (autoload/event_bus.gd) | features/checkpoint/checkpoint.gd | features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd
-choice_made (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
-fact_collected (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
+choice_made (autoload/event_bus.gd) | features/narrative/choice_point.gd | autoload/game_state.gd
+fact_collected (autoload/event_bus.gd) | features/narrative/fact_card.gd | autoload/game_state.gd,features/ui/hud.gd
 game_ended (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 gate_opened (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 heat_changed (autoload/event_bus.gd) | features/heat/heat_component.gd | features/player/player.gd,features/ui/hud.gd
-hope_changed (autoload/event_bus.gd) | autoload/game_state.gd | NO_LISTENER
-language_changed (autoload/event_bus.gd) | autoload/settings.gd | features/ui/hud.gd,features/ui/main_menu.gd
+hope_changed (autoload/event_bus.gd) | autoload/game_state.gd | features/ui/hud.gd
+language_changed (autoload/event_bus.gd) | autoload/settings.gd | features/narrative/choice_point.gd,features/narrative/monologue_ui.gd,features/ui/hud.gd,features/ui/main_menu.gd
 litter_picked (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
 litter_sorted (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
-monologue_requested (autoload/event_bus.gd) | NO_EMITTER | NO_LISTENER
+monologue_requested (autoload/event_bus.gd) | features/narrative/choice_point.gd,features/narrative/narrative_trigger.gd | features/narrative/monologue_ui.gd
 player_died (autoload/event_bus.gd) | features/player/player.gd | features/checkpoint/respawn.gd,features/ui/hud.gd
 player_respawned (autoload/event_bus.gd) | features/checkpoint/respawn.gd | features/camera/camera_rig.gd,features/heat/heat_component.gd,features/ice/ice_tile.gd,features/ui/hud.gd

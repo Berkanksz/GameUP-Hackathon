@@ -1,6 +1,30 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://features/ui/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fact"]
+bg_color = Color(0.08, 0.12, 0.18, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.65, 0.85, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_complete"]
+bg_color = Color(0.08, 0.12, 0.18, 0.94)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.3, 0.6, 0.8, 0.8)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="Hud" type="CanvasLayer"]
 script = ExtResource("1_hud")
@@ -47,3 +71,153 @@ layout_mode = 2
 max_value = 1.0
 step = 0.001
 show_percentage = false
+
+[node name="HopeMarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -280.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = 96.0
+grow_horizontal = 0
+
+[node name="HopePanel" type="PanelContainer" parent="HopeMarginContainer"]
+layout_mode = 2
+
+[node name="InnerMargin" type="MarginContainer" parent="HopeMarginContainer/HopePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HopeMarginContainer/HopePanel/InnerMargin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer"]
+layout_mode = 2
+
+[node name="HopeLabel" type="Label" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "UI_HOPE"
+
+[node name="HopeValueLabel" type="Label" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "10"
+horizontal_alignment = 2
+
+[node name="HopeBar" type="ProgressBar" parent="HopeMarginContainer/HopePanel/InnerMargin/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 22)
+layout_mode = 2
+max_value = 100.0
+step = 1.0
+value = 10.0
+show_percentage = false
+
+[node name="FactPopup" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 110.0
+offset_right = 300.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fact")
+
+[node name="MarginContainer" type="MarginContainer" parent="FactPopup"]
+layout_mode = 2
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FactPopup/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="FactTextLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+text = "FACT_SEA_ICE"
+autowrap_mode = 3
+
+[node name="FactSourceLabel" type="Label" parent="FactPopup/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.85, 0.95, 0.85)
+theme_override_font_sizes/font_size = 13
+text = "Source: BAS"
+horizontal_alignment = 2
+
+[node name="CompletePanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -120.0
+offset_right = 220.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_complete")
+
+[node name="MarginContainer" type="MarginContainer" parent="CompletePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 24
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CompletePanel/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="CompleteTitle" type="Label" parent="CompletePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "UI_CHAPTER_COMPLETE"
+horizontal_alignment = 1
+
+[node name="CompleteSummary" type="Label" parent="CompletePanel/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.9, 0.95, 1)
+theme_override_font_sizes/font_size = 18
+text = "Shore, Hope: 25"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CompletePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CompletePanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="CompleteRestartButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+text = "UI_RESTART"
+
+[node name="CompleteMenuButton" type="Button" parent="CompletePanel/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(130, 40)
+layout_mode = 2
+text = "UI_MAIN_MENU"
