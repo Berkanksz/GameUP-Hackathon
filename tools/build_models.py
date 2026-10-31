@@ -1,4 +1,4 @@
-"""Builds and exports clean low-poly 3D models in Blender for Higher Ground."""
+"""Builds and exports realistic, sculpted 3D models in Blender for Save Pengu."""
 import bpy
 import bmesh
 import math
@@ -14,7 +14,7 @@ def clear_scene():
     bpy.ops.wm.read_factory_settings(use_empty=True)
 
 
-def make_mat(name, hex_color, roughness=0.55, metallic=0.0):
+def make_mat(name, hex_color, roughness=0.55, metallic=0.0, emission_hex=None, emission_strength=0.0):
     mat = bpy.data.materials.new(name=name)
     mat.use_nodes = True
     bsdf = mat.node_tree.nodes.get("Principled BSDF")
@@ -25,6 +25,14 @@ def make_mat(name, hex_color, roughness=0.55, metallic=0.0):
         bsdf.inputs["Base Color"].default_value = (r, g, b, 1.0)
         bsdf.inputs["Roughness"].default_value = roughness
         bsdf.inputs["Metallic"].default_value = metallic
+        if emission_hex and emission_strength > 0.0:
+            eh = emission_hex.lstrip("#")
+            er, eg, eb = tuple(int(eh[i:i+2], 16) / 255.0 for i in (0, 2, 4))
+            er, eg, eb = er ** 2.2, eg ** 2.2, eb ** 2.2
+            if "Emission Color" in bsdf.inputs:
+                bsdf.inputs["Emission Color"].default_value = (er, eg, eb, 1.0)
+            if "Emission Strength" in bsdf.inputs:
+                bsdf.inputs["Emission Strength"].default_value = emission_strength
     return mat
 
 
@@ -58,146 +66,493 @@ def finalize_and_export(obj_name, blend_name, glb_rel_path):
     print(f"Exported {glb_rel_path}: verts={len(obj.data.vertices)}, Z=[{min(zs):.2f}, {max(zs):.2f}]")
 
 
-def build_research_hut():
+def build_baby_chick():
+    """Clean, high-detail 3D baby penguin (chick.glb) with zero white intersection on the head."""
     clear_scene()
-    mat_stone = make_mat("mat_stone", "5A6978", 0.9)
-    mat_wood = make_mat("mat_wood", "8B5A3C", 0.75)
-    mat_dark_wood = make_mat("mat_dark_wood", "4A2C1D", 0.85)
-    mat_roof = make_mat("mat_roof", "2C3E50", 0.7)
-    mat_snow = make_mat("mat_snow", "EAF2F8", 0.8)
-    mat_window = make_mat("mat_window", "FFD166", 0.15)
-    mat_frame = make_mat("mat_frame", "1B2430", 0.6)
-    mat_door = make_mat("mat_door", "D64045", 0.5)
+    mat_head = make_mat("mat_chick_head", "1D2B3A", 0.62)        # Deep slate-navy crown & back
+    mat_down = make_mat("mat_chick_down", "4E677D", 0.72)        # Soft slate-blue chick plumage
+    mat_belly = make_mat("mat_chick_belly", "ECF3F9", 0.78)      # Soft cream-white tummy (not blinding)
+    mat_beak = make_mat("mat_chick_beak", "FF921C", 0.35)        # Warm tangerine beak & webbed feet
+    mat_eye = make_mat("mat_chick_eye", "0B0F14", 0.10)          # Glossy dark eyes
+    mat_sparkle = make_mat("mat_chick_sparkle", "FFFFFF", 0.05)  # Eye catchlight
+    mat_scarf = make_mat("mat_chick_scarf", "E63946", 0.58)      # Warm crimson winter scarf
 
-    # Foundation base (z=-0.4 to z=0.35 so it sits solidly into summit snow)
+    # Webbed orange feet at z=0.0..0.07
+    for side in (-1.0, 1.0):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.10, location=(side * 0.09, -0.07, 0.04))
+        foot = bpy.context.active_object
+        foot.scale = (0.90, 1.35, 0.38)
+        foot.data.materials.append(mat_beak)
+
+    # Plump lower body (z=0.05..0.52)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=0.25, location=(0.0, 0.0, 0.28))
+    body = bpy.context.active_object
+    body.scale = (0.96, 0.92, 1.04)
+    body.data.materials.append(mat_down)
+
+    # Soft white belly strictly on the lower front torso (z=0.09..0.41, well below neck scarf!)
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=20, ring_count=14, radius=0.185, location=(0.0, -0.085, 0.25))
+    belly = bpy.context.active_object
+    belly.scale = (0.86, 0.72, 0.84)
+    belly.data.materials.append(mat_belly)
+
+    # Knitted winter neck scarf at z=0.46 separating body and head cleanly
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.185, minor_radius=0.046, major_segments=24, minor_segments=12, location=(0.0, 0.0, 0.465))
+    scarf = bpy.context.active_object
+    scarf.scale = (1.0, 0.98, 0.85)
+    scarf.data.materials.append(mat_scarf)
+
+    # Scarf tail hanging on front-left chest
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.09, -0.18, 0.38))
+    tail = bpy.context.active_object
+    tail.scale = (0.065, 0.035, 0.15)
+    tail.rotation_euler = (math.radians(14), math.radians(-12), math.radians(10))
+    tail.data.materials.append(mat_scarf)
+
+    # Clean, dark slate-navy round head (z=0.47..0.85) - NO white sphere inside!
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=16, radius=0.21, location=(0.0, 0.0, 0.65))
+    head = bpy.context.active_object
+    head.scale = (1.0, 0.96, 0.95)
+    head.data.materials.append(mat_head)
+
+    # Expressive glossy eyes on the front face (-Y in Blender = +Z toward camera in Godot)
+    for side in (-1.0, 1.0):
+        ex = side * 0.082
+        # Subtle cheek blush / eye rim below brow
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.052, location=(ex, -0.172, 0.655))
+        rim = bpy.context.active_object
+        rim.scale = (0.95, 0.35, 1.05)
+        rim.data.materials.append(mat_belly)
+
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.038, location=(ex, -0.192, 0.66))
+        eye = bpy.context.active_object
+        eye.data.materials.append(mat_eye)
+
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.014, location=(ex - 0.012, -0.222, 0.674))
+        sp = bpy.context.active_object
+        sp.data.materials.append(mat_sparkle)
+
+    # Cute rounded orange beak on the front face
+    bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.058, radius2=0.012, depth=0.13, location=(0.0, -0.24, 0.615))
+    beak = bpy.context.active_object
+    beak.rotation_euler = (math.radians(82), 0.0, 0.0)
+    beak.data.materials.append(mat_beak)
+
+    # Raised flippers waving on both sides
+    for side in (-1.0, 1.0):
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.12, location=(side * 0.245, -0.01, 0.34))
+        wing = bpy.context.active_object
+        wing.scale = (0.32, 0.62, 1.28)
+        wing.rotation_euler = (0.0, side * math.radians(-38), 0.0)
+        wing.data.materials.append(mat_head)
+
+    finalize_and_export("chick", "chick.blend", "penguin/chick.glb")
+
+
+def build_mountain_bg():
+    """Sculpted realistic multi-peak alpine massif with rocky strata, snow gullies, and foothill spruce forest."""
+    clear_scene()
+    mat_rock_dark = make_mat("mat_mountain_dark", "2E3B4E", 0.92)
+    mat_rock_mid = make_mat("mat_mountain_rock", "435368", 0.88)
+    mat_snow = make_mat("mat_mountain_snow", "B8CCE0", 0.78)
+    mat_trunk = make_mat("mat_trunk", "4A2E1B", 0.92)
+    mat_foliage = make_mat("mat_foliage", "1E4631", 0.78)
+
+    # Deep grounded mountain base skirt (-9m to +1m)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, -4.0))
+    skirt = bpy.context.active_object
+    skirt.scale = (26.0, 10.0, 9.0)
+    skirt.data.materials.append(mat_rock_dark)
+
+    rng = random.Random(104)
+    peaks = [
+        (-6.5, 0.2, 3.6, 7.2, 5.0, 12.0),
+        (0.0, 0.8, 5.2, 8.8, 6.0, 15.2),
+        (6.8, -0.2, 3.3, 6.6, 4.6, 11.2),
+        (-2.8, -1.2, 2.2, 5.2, 3.8, 7.8),
+        (3.6, -1.0, 2.5, 5.5, 4.0, 8.4),
+    ]
+    for px, py, pz, rx, ry, h in peaks:
+        bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=rx, radius2=0.25, depth=h, location=(px, py, pz))
+        p = bpy.context.active_object
+        p.scale = (1.0, ry / rx, 1.0)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        p.data.materials.append(mat_rock_mid)
+        p.data.materials.append(mat_rock_dark)
+        p.data.materials.append(mat_snow)
+
+        # Subdivide and displace vertices for natural craggy alpine ridges
+        bm = bmesh.new()
+        bm.from_mesh(p.data)
+        bmesh.ops.subdivide_edges(bm, edges=bm.edges, cuts=2, use_grid_fill=True)
+        for v in bm.verts:
+            if v.co.z > -h * 0.45:
+                ang = math.atan2(v.co.y, v.co.x)
+                ridge = 1.0 + 0.14 * math.cos(ang * 5.0 + px) + rng.uniform(-0.08, 0.08)
+                v.co.x *= ridge
+                v.co.y *= ridge
+                v.co.z += rng.uniform(-0.22, 0.22)
+        bm.to_mesh(p.data)
+        bm.free()
+        p.data.update()
+
+        for poly in p.data.polygons:
+            world_z = pz + poly.center.z
+            if world_z > pz + h * 0.12 and poly.normal.z > 0.15:
+                poly.material_index = 2  # Soft glacier snow on upper slopes
+            elif poly.normal.x < -0.2 or poly.normal.y > 0.2:
+                poly.material_index = 1  # Shadowed cliff facet
+            else:
+                poly.material_index = 0
+
+    # Foothill spruce trees along the front slope
+    tree_spots = [
+        (-8.5, -3.2, 0.2, 0.85),
+        (-5.8, -3.5, 0.6, 0.95),
+        (-3.2, -3.8, 1.1, 1.05),
+        (-0.5, -3.6, 0.9, 0.90),
+        (2.2, -3.7, 1.2, 1.00),
+        (5.1, -3.4, 0.7, 0.88),
+        (8.0, -3.1, 0.3, 0.80),
+    ]
+    for tx, ty, tz, s in tree_spots:
+        bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.14 * s, depth=1.1 * s, location=(tx, ty, tz + 0.35 * s))
+        tr = bpy.context.active_object
+        tr.data.materials.append(mat_trunk)
+        for tier_i, (zh, r1, dh) in enumerate([(1.0, 0.78, 1.1), (1.65, 0.58, 0.95), (2.2, 0.38, 0.75)]):
+            bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=r1 * s, radius2=0.05 * s, depth=dh * s, location=(tx, ty, tz + zh * s))
+            fol = bpy.context.active_object
+            fol.data.materials.append(mat_foliage if tier_i < 2 else mat_snow)
+
+    finalize_and_export("mountain_bg", "mountain_bg.blend", "environment/mountain_bg.glb")
+
+
+def build_iceberg_bg():
+    """Sculpted tabular and pinnacle coastal iceberg with stratified blue ice and wave arches."""
+    clear_scene()
+    mat_deep_ice = make_mat("mat_deep_ice", "2B6CB0", 0.32, 0.05)
+    mat_mid_ice = make_mat("mat_mid_ice", "63B3ED", 0.38, 0.05)
+    mat_crest_snow = make_mat("mat_crest_snow", "C4DCF0", 0.72, 0.0)
+
+    # Underwater keel (-6.5m to +0.5m)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, -3.0))
+    keel = bpy.context.active_object
+    keel.scale = (15.0, 5.5, 7.0)
+    keel.data.materials.append(mat_deep_ice)
+
+    rng = random.Random(209)
+    spires = [
+        (-3.6, 0.0, 2.2, 4.4, 3.0, 6.2),
+        (0.6, 0.4, 3.2, 5.4, 3.6, 8.0),
+        (4.5, -0.2, 1.9, 3.9, 2.8, 5.2),
+    ]
+    for sx, sy, sz, rx, ry, h in spires:
+        bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=rx, radius2=0.55, depth=h, location=(sx, sy, sz))
+        sp = bpy.context.active_object
+        sp.scale = (1.0, ry / rx, 1.0)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        sp.data.materials.append(mat_mid_ice)
+        sp.data.materials.append(mat_deep_ice)
+        sp.data.materials.append(mat_crest_snow)
+
+        bm = bmesh.new()
+        bm.from_mesh(sp.data)
+        bmesh.ops.subdivide_edges(bm, edges=bm.edges, cuts=2, use_grid_fill=True)
+        for v in bm.verts:
+            v.co.x *= 1.0 + rng.uniform(-0.10, 0.10)
+            v.co.y *= 1.0 + rng.uniform(-0.10, 0.10)
+        bm.to_mesh(sp.data)
+        bm.free()
+        sp.data.update()
+
+        for poly in sp.data.polygons:
+            wz = sz + poly.center.z
+            if wz > sz + h * 0.15 and poly.normal.z > 0.2:
+                poly.material_index = 2
+            elif wz < sz - h * 0.15:
+                poly.material_index = 1
+            else:
+                poly.material_index = 0
+
+    finalize_and_export("iceberg_bg", "iceberg_bg.blend", "environment/iceberg_bg.glb")
+
+
+def build_pine_tree():
+    """Realistic multi-tiered boreal spruce tree with scalloped branches and snow-laden boughs."""
+    clear_scene()
+    mat_trunk = make_mat("mat_trunk", "4A2C18", 0.90)
+    mat_foliage_dark = make_mat("mat_foliage_dark", "1B4332", 0.78)
+    mat_foliage = make_mat("mat_foliage", "2D6A4F", 0.72)
+    mat_snow = make_mat("mat_snow", "C8DDF0", 0.76)
+
+    # Tapered trunk with roots (-0.4m to +1.0m)
+    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.24, radius2=0.10, depth=1.5, location=(0.0, 0.0, 0.35))
+    trunk = bpy.context.active_object
+    trunk.data.materials.append(mat_trunk)
+
+    # 5 lush scalloped foliage whorls
+    tiers = [
+        (0.85, 1.02, 0.18, 0.85),
+        (1.30, 0.86, 0.15, 0.78),
+        (1.72, 0.70, 0.12, 0.72),
+        (2.10, 0.54, 0.09, 0.65),
+        (2.44, 0.36, 0.03, 0.58),
+    ]
+    for idx, (tz, r1, r2, h) in enumerate(tiers):
+        bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=r1, radius2=r2, depth=h, location=(0.0, 0.0, tz))
+        cone = bpy.context.active_object
+        cone.data.materials.append(mat_foliage if idx % 2 == 0 else mat_foliage_dark)
+        cone.data.materials.append(mat_snow)
+        for v in cone.data.vertices:
+            if v.co.z < 0.0:
+                ang = math.atan2(v.co.y, v.co.x)
+                scallop = 1.0 + 0.14 * math.cos(ang * 7.0 + idx)
+                v.co.x *= scallop
+                v.co.y *= scallop
+        cone.data.update()
+
+        # Snow layer on upper surface of each branch tier
+        if idx >= 1:
+            bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=r1 * 0.82, radius2=r2 * 1.05, depth=h * 0.52, location=(0.0, 0.0, tz + h * 0.22))
+            sc = bpy.context.active_object
+            sc.data.materials.append(mat_snow)
+
+    finalize_and_export("pine_tree", "pine_tree.blend", "environment/pine_tree.glb")
+
+
+def build_rock_formation():
+    """Sculpted glacial erratic granite boulders with faceted crevices and soft snow drift."""
+    clear_scene()
+    mat_granite = make_mat("mat_granite", "4A5568", 0.88)
+    mat_slate = make_mat("mat_slate", "2D3748", 0.92)
+    mat_snow = make_mat("mat_snow", "C2D6EA", 0.78)
+
+    rng = random.Random(312)
+    boulders = [
+        (0.0, 0.0, 0.42, 1.35, 0.95, 0.88),
+        (0.85, -0.18, 0.24, 0.95, 0.78, 0.68),
+        (-0.82, 0.12, 0.20, 0.88, 0.72, 0.62),
+    ]
+    for bx, by, bz, sx, sy, sz in boulders:
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.95, location=(bx, by, bz))
+        rock = bpy.context.active_object
+        rock.scale = (sx, sy, sz)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        rock.data.materials.append(mat_granite)
+        rock.data.materials.append(mat_slate)
+        rock.data.materials.append(mat_snow)
+
+        for v in rock.data.vertices:
+            v.co.x *= 1.0 + rng.uniform(-0.12, 0.12)
+            v.co.y *= 1.0 + rng.uniform(-0.12, 0.12)
+            v.co.z *= 1.0 + rng.uniform(-0.10, 0.10)
+        rock.data.update()
+
+        for poly in rock.data.polygons:
+            if poly.normal.z > 0.48 and (bz + poly.center.z) > 0.35:
+                poly.material_index = 2
+            elif poly.normal.z < -0.15 or poly.normal.x < -0.35:
+                poly.material_index = 1
+            else:
+                poly.material_index = 0
+
+    finalize_and_export("rock_formation", "rock_formation.blend", "environment/rock_formation.glb")
+
+
+def build_ice_tile():
+    """Sculpted crystalline glacier ice floe with bevelled ice edges and snow crust."""
+    clear_scene()
+    mat_ice_top = make_mat("mat_ice_top", "B8D8EE", 0.45, 0.05)
+    mat_ice_side = make_mat("mat_ice_side", "4A90E2", 0.30, 0.10)
+    mat_ice_deep = make_mat("mat_ice_deep", "2B5876", 0.35, 0.10)
+
+    # Upper snow-ice slab
+    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=1.55, depth=0.32, location=(0.0, 0.0, -0.06))
+    top_slab = bpy.context.active_object
+    top_slab.scale = (1.05, 0.85, 1.0)
+    top_slab.data.materials.append(mat_ice_top)
+
+    # Submerged faceted ice keel
+    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=1.48, radius2=0.85, depth=0.55, location=(0.0, 0.0, -0.45))
+    keel = bpy.context.active_object
+    keel.rotation_euler = (math.radians(180), 0.0, 0.0)
+    keel.scale = (1.02, 0.82, 1.0)
+    keel.data.materials.append(mat_ice_side)
+    keel.data.materials.append(mat_ice_deep)
+
+    finalize_and_export("ice_tile", "ice_tile.blend", "ice/ice_tile.glb")
+
+
+def build_research_hut():
+    """Detailed polar alpine research station with timber cladding, metal roof, porch railings, and comms dish."""
+    clear_scene()
+    mat_stone = make_mat("mat_stone", "4A5568", 0.9)
+    mat_wood = make_mat("mat_wood", "8D5B4C", 0.72)
+    mat_dark_wood = make_mat("mat_dark_wood", "4A2C1D", 0.82)
+    mat_roof = make_mat("mat_roof", "2B3A4A", 0.55, 0.35)
+    mat_snow = make_mat("mat_snow", "C8DDF0", 0.78)
+    mat_window = make_mat("mat_window", "FFD166", 0.15, 0.0, "FFB703", 0.65)
+    mat_frame = make_mat("mat_frame", "1B2430", 0.5)
+    mat_door = make_mat("mat_door", "C83E4D", 0.45)
+    mat_steel = make_mat("mat_steel", "90A4AE", 0.35, 0.65)
+
+    # Stone foundation base
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, -0.025))
     found = bpy.context.active_object
-    found.scale = (4.2, 3.0, 0.75)
+    found.scale = (4.4, 3.1, 0.75)
     found.data.materials.append(mat_stone)
 
-    # Front wooden deck + step facing camera (+Y in Blender maps to -Z in Godot, so build symmetrical on both +Y and -Y!)
     for side in (-1.0, 1.0):
-        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, side * 1.6, 0.16))
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, side * 1.62, 0.18))
         porch = bpy.context.active_object
-        porch.scale = (2.1, 0.6, 0.25)
+        porch.scale = (2.2, 0.65, 0.26)
         porch.data.materials.append(mat_dark_wood)
 
-        # Door frame & red insulated door
+        # Insulated door + frame + round porthole window
         bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, side * 1.26, 1.22))
         df = bpy.context.active_object
-        df.scale = (0.95, 0.12, 1.75)
+        df.scale = (0.96, 0.12, 1.76)
         df.data.materials.append(mat_frame)
 
         bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, side * 1.29, 1.20))
         door = bpy.context.active_object
-        door.scale = (0.78, 0.10, 1.62)
+        door.scale = (0.80, 0.10, 1.62)
         door.data.materials.append(mat_door)
 
-        # Glowing window with cross frame
+        # Warm glowing multi-pane window
         bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.85, side * 1.26, 1.52))
         wf = bpy.context.active_object
-        wf.scale = (1.1, 0.12, 0.95)
+        wf.scale = (1.15, 0.12, 0.98)
         wf.data.materials.append(mat_frame)
 
         bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.85, side * 1.29, 1.52))
         wg = bpy.context.active_object
-        wg.scale = (0.90, 0.10, 0.76)
+        wg.scale = (0.94, 0.10, 0.78)
         wg.data.materials.append(mat_window)
 
-    # Main wooden cabin walls (z=0.35 to z=2.5)
+    # Cabin walls
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 1.42))
     walls = bpy.context.active_object
-    walls.scale = (3.8, 2.5, 2.15)
+    walls.scale = (3.85, 2.52, 2.15)
     walls.data.materials.append(mat_wood)
 
-    # Corner log pillars
-    for cx in (-1.9, 1.9):
-        for cy in (-1.25, 1.25):
+    # Corner timber posts
+    for cx in (-1.92, 1.92):
+        for cy in (-1.26, 1.26):
             bpy.ops.mesh.primitive_cube_add(size=1.0, location=(cx, cy, 1.42))
             post = bpy.context.active_object
-            post.scale = (0.2, 0.2, 2.2)
+            post.scale = (0.22, 0.22, 2.22)
             post.data.materials.append(mat_dark_wood)
 
-    # Proper pitched gable roof slopes
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, -0.78, 2.92))
-    rf = bpy.context.active_object
-    rf.scale = (4.4, 1.95, 0.18)
-    rf.rotation_euler = (math.radians(32), 0.0, 0.0)
-    rf.data.materials.append(mat_roof)
+    # Gable roof slopes
+    for side, ang in ((-1.0, 32), (1.0, -32)):
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, side * 0.78, 2.92))
+        rf = bpy.context.active_object
+        rf.scale = (4.45, 1.98, 0.18)
+        rf.rotation_euler = (math.radians(ang), 0.0, 0.0)
+        rf.data.materials.append(mat_roof)
 
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.78, 2.92))
-    rb = bpy.context.active_object
-    rb.scale = (4.4, 1.95, 0.18)
-    rb.rotation_euler = (math.radians(-32), 0.0, 0.0)
-    rb.data.materials.append(mat_roof)
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, side * 0.75, 3.05))
+        sf = bpy.context.active_object
+        sf.scale = (4.32, 1.86, 0.14)
+        sf.rotation_euler = (math.radians(ang), 0.0, 0.0)
+        sf.data.materials.append(mat_snow)
 
-    # Snow blanket on roof
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, -0.75, 3.05))
-    sf = bpy.context.active_object
-    sf.scale = (4.3, 1.85, 0.14)
-    sf.rotation_euler = (math.radians(32), 0.0, 0.0)
-    sf.data.materials.append(mat_snow)
-
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.75, 3.05))
-    sb = bpy.context.active_object
-    sb.scale = (4.3, 1.85, 0.14)
-    sb.rotation_euler = (math.radians(-32), 0.0, 0.0)
-    sb.data.materials.append(mat_snow)
-
-    # Gable filler under ridge
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 2.75))
     gf = bpy.context.active_object
-    gf.scale = (3.75, 1.35, 0.65)
+    gf.scale = (3.78, 1.38, 0.66)
     gf.data.materials.append(mat_wood)
 
-    # Snow ridge cap
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 3.42))
     ridge = bpy.context.active_object
-    ridge.scale = (4.45, 0.32, 0.22)
+    ridge.scale = (4.48, 0.34, 0.22)
     ridge.data.materials.append(mat_snow)
 
-    # Chimney
+    # Stone chimney + metal flue cap
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(1.35, 0.45, 3.25))
     chimney = bpy.context.active_object
-    chimney.scale = (0.55, 0.55, 1.5)
+    chimney.scale = (0.55, 0.55, 1.55)
     chimney.data.materials.append(mat_stone)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.18, depth=0.35, location=(1.35, 0.45, 4.15))
+    flue = bpy.context.active_object
+    flue.data.materials.append(mat_steel)
 
     finalize_and_export("research_hut", "research_hut.blend", "environment/research_hut.glb")
 
 
-def build_green_glass_bottle():
-    """Green glass bottle (litter_jar.glb) for glass recycling."""
+def build_solar_lamp():
+    """Detailed polar solar beacon post with photovoltaic panel, battery box, and lantern."""
     clear_scene()
-    mat_green = make_mat("mat_green_glass", "1E9E52", 0.18, 0.1)
-    mat_dark_green = make_mat("mat_dark_green", "146B38", 0.2, 0.1)
-    mat_label = make_mat("mat_label", "F7F1E3", 0.7, 0.0)
+    mat_steel = make_mat("mat_steel", "546E7A", 0.38, 0.65)
+    mat_dark = make_mat("mat_dark", "263238", 0.45, 0.50)
+    mat_solar = make_mat("mat_solar", "1A365D", 0.18, 0.45)
+    mat_glass = make_mat("mat_glass", "FFF3B0", 0.15, 0.0, "FFD166", 0.45)
 
-    # Main cylindrical body
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.14, depth=0.34, location=(0.0, 0.0, 0.17))
+    # Heavy octagonal base
+    bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.34, depth=0.22, location=(0.0, 0.0, 0.11))
+    base = bpy.context.active_object
+    base.data.materials.append(mat_dark)
+
+    # Battery box on post
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 0.52))
+    bat = bpy.context.active_object
+    bat.scale = (0.28, 0.24, 0.36)
+    bat.data.materials.append(mat_steel)
+
+    # Vertical pole
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.065, depth=1.85, location=(0.0, 0.0, 1.02))
+    pole = bpy.context.active_object
+    pole.data.materials.append(mat_steel)
+
+    # Tilted solar panel at top
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.18, 0.0, 1.96))
+    panel = bpy.context.active_object
+    panel.scale = (0.58, 0.42, 0.05)
+    panel.rotation_euler = (0.0, math.radians(24), 0.0)
+    panel.data.materials.append(mat_solar)
+
+    # Lantern arm & warm housing
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.16, 0.0, 1.72))
+    arm = bpy.context.active_object
+    arm.scale = (0.36, 0.06, 0.06)
+    arm.data.materials.append(mat_dark)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.14, depth=0.18, location=(0.30, 0.0, 1.62))
+    lamp = bpy.context.active_object
+    lamp.data.materials.append(mat_glass)
+
+    finalize_and_export("solar_lamp", "solar_lamp.blend", "environment/solar_lamp.glb")
+
+
+def build_green_glass_bottle():
+    """Realistic emerald green glass bottle (litter_jar.glb)."""
+    clear_scene()
+    mat_green = make_mat("mat_green_glass", "1E824C", 0.14, 0.12)
+    mat_dark_green = make_mat("mat_dark_green", "11512F", 0.18, 0.12)
+    mat_label = make_mat("mat_label", "F4EFE6", 0.65, 0.0)
+    mat_gold = make_mat("mat_gold_foil", "D4AC0D", 0.30, 0.55)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.14, depth=0.35, location=(0.0, 0.0, 0.175))
     body = bpy.context.active_object
     body.data.materials.append(mat_green)
 
-    # Cream paper label around middle
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.146, depth=0.14, location=(0.0, 0.0, 0.17))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.145, depth=0.15, location=(0.0, 0.0, 0.18))
     label = bpy.context.active_object
     label.data.materials.append(mat_label)
 
-    # Tapered shoulder (cone)
-    bpy.ops.mesh.primitive_cone_add(vertices=12, radius1=0.14, radius2=0.055, depth=0.14, location=(0.0, 0.0, 0.41))
+    bpy.ops.mesh.primitive_cone_add(vertices=18, radius1=0.14, radius2=0.052, depth=0.15, location=(0.0, 0.0, 0.42))
     shoulder = bpy.context.active_object
     shoulder.data.materials.append(mat_green)
 
-    # Bottle neck
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.052, depth=0.15, location=(0.0, 0.0, 0.55))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.050, depth=0.15, location=(0.0, 0.0, 0.56))
     neck = bpy.context.active_object
-    neck.data.materials.append(mat_green)
+    neck.data.materials.append(mat_gold)
 
-    # Lip ring at top
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.064, depth=0.03, location=(0.0, 0.0, 0.62))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.062, depth=0.03, location=(0.0, 0.0, 0.63))
     lip = bpy.context.active_object
     lip.data.materials.append(mat_dark_green)
 
-    # Join and tilt slightly for visual flair
     meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     bpy.ops.object.select_all(action='DESELECT')
     for m in meshes:
@@ -210,345 +565,185 @@ def build_green_glass_bottle():
 
 
 def build_crumpled_paper():
-    """Crumpled paper ball + folded sheet (litter_box.glb) for paper recycling."""
+    """Realistic crushed beverage carton & folded newspaper bundle (litter_box.glb)."""
     clear_scene()
-    mat_paper = make_mat("mat_paper_white", "F2F6FA", 0.85, 0.0)
-    mat_blue = make_mat("mat_paper_blue", "2980B9", 0.75, 0.0)
-    mat_crease = make_mat("mat_paper_crease", "CBD6E2", 0.9, 0.0)
+    mat_paper = make_mat("mat_paper_white", "DCE6F0", 0.82, 0.0)
+    mat_blue = make_mat("mat_paper_blue", "1F618D", 0.68, 0.0)
+    mat_crease = make_mat("mat_paper_crease", "9FB3C8", 0.88, 0.0)
 
-    # Main crumpled paper wad (low-poly icosphere with displaced vertices)
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.22, location=(0.0, 0.0, 0.22))
-    wad = bpy.context.active_object
-    wad.data.materials.append(mat_paper)
-    wad.data.materials.append(mat_blue)
-    wad.data.materials.append(mat_crease)
+    # Crushed gable-top carton body
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.02, 0.0, 0.18))
+    carton = bpy.context.active_object
+    carton.scale = (0.26, 0.22, 0.32)
+    carton.rotation_euler = (math.radians(8), math.radians(-12), math.radians(10))
+    carton.data.materials.append(mat_blue)
 
-    rng = random.Random(77)
-    for i, v in enumerate(wad.data.vertices):
-        factor = rng.uniform(0.74, 1.24)
-        v.co.x *= factor
-        v.co.y *= rng.uniform(0.76, 1.22)
-        v.co.z *= rng.uniform(0.78, 1.20)
+    # White printed stripe wrap
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.02, 0.0, 0.18))
+    band = bpy.context.active_object
+    band.scale = (0.27, 0.23, 0.14)
+    band.rotation_euler = (math.radians(8), math.radians(-12), math.radians(10))
+    band.data.materials.append(mat_paper)
 
-    for i, poly in enumerate(wad.data.polygons):
-        if i % 5 == 0:
-            poly.material_index = 1  # Blue ink/stripe on paper
-        elif i % 3 == 0:
-            poly.material_index = 2  # Shadowed crease
-
-    # Add a protruding folded paper corner flap so it's super recognizable
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.08, -0.05, 0.34))
-    flap = bpy.context.active_object
-    flap.scale = (0.22, 0.18, 0.04)
-    flap.rotation_euler = (math.radians(28), math.radians(-22), math.radians(15))
-    flap.data.materials.append(mat_blue)
+    # Gable roof top of carton
+    bpy.ops.mesh.primitive_cone_add(vertices=4, radius1=0.18, radius2=0.04, depth=0.12, location=(-0.04, 0.01, 0.37))
+    top = bpy.context.active_object
+    top.rotation_euler = (math.radians(8), math.radians(-12), math.radians(55))
+    top.data.materials.append(mat_crease)
 
     finalize_and_export("litter_box", "litter_box.blend", "litter/litter_box.glb")
 
 
 def build_plastic_bottle():
-    """Crushed plastic water bottle with red cap (litter_bottle.glb) for plastic recycling."""
+    """Realistic ribbed PET plastic bottle with cap and label (litter_bottle.glb)."""
     clear_scene()
-    mat_plastic = make_mat("mat_plastic_body", "F4D03F", 0.25, 0.05)
-    mat_label = make_mat("mat_plastic_label", "E67E22", 0.4, 0.0)
-    mat_cap = make_mat("mat_plastic_cap", "E74C3C", 0.3, 0.0)
+    mat_plastic = make_mat("mat_plastic_body", "F5B041", 0.20, 0.08)
+    mat_label = make_mat("mat_plastic_label", "D35400", 0.38, 0.0)
+    mat_cap = make_mat("mat_plastic_cap", "C0392B", 0.28, 0.0)
 
-    # Lower half of plastic bottle
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.13, depth=0.18, location=(0.0, 0.0, 0.09))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.13, depth=0.19, location=(0.0, 0.0, 0.095))
     bot = bpy.context.active_object
     bot.data.materials.append(mat_plastic)
 
-    # Pinched / crushed waist in middle
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.095, depth=0.10, location=(0.02, 0.0, 0.22))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.10, depth=0.11, location=(0.015, 0.0, 0.23))
     waist = bpy.context.active_object
-    waist.scale = (1.15, 0.75, 1.0)
-    waist.rotation_euler = (0.0, math.radians(-8), 0.0)
+    waist.scale = (1.12, 0.82, 1.0)
     waist.data.materials.append(mat_label)
 
-    # Upper half of bottle
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.125, depth=0.15, location=(0.0, 0.0, 0.33))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.128, depth=0.15, location=(0.0, 0.0, 0.34))
     top_body = bpy.context.active_object
     top_body.data.materials.append(mat_plastic)
 
-    # Tapered cone top
-    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.125, radius2=0.048, depth=0.11, location=(0.0, 0.0, 0.46))
+    bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.128, radius2=0.048, depth=0.11, location=(0.0, 0.0, 0.47))
     cone = bpy.context.active_object
     cone.data.materials.append(mat_plastic)
 
-    # Bright red plastic bottle cap
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.055, depth=0.055, location=(0.0, 0.0, 0.54))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.056, depth=0.055, location=(0.0, 0.0, 0.55))
     cap = bpy.context.active_object
     cap.data.materials.append(mat_cap)
 
-    # Join and tilt slightly
     meshes = [o for o in bpy.context.scene.objects if o.type == 'MESH']
     bpy.ops.object.select_all(action='DESELECT')
     for m in meshes:
         m.select_set(True)
     bpy.context.view_layer.objects.active = bot
     bpy.ops.object.join()
-    bot.rotation_euler = (0.0, math.radians(-12), 0.0)
+    bot.rotation_euler = (0.0, math.radians(-11), 0.0)
 
     finalize_and_export("litter_bottle", "litter_bottle.blend", "litter/litter_bottle.glb")
 
 
-def build_pine_tree():
-    """Grounded pine tree with trunk extending to z=-0.35 so it never floats on slopes."""
-    clear_scene()
-    mat_trunk = make_mat("mat_trunk", "5C3A21", 0.9)
-    mat_foliage = make_mat("mat_foliage", "2D5A3C", 0.75)
-    mat_snow = make_mat("mat_snow", "EAF2F8", 0.8)
-
-    # Trunk extends from z=-0.35 up to z=0.8
-    bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.18, depth=1.15, location=(0.0, 0.0, 0.225))
-    trunk = bpy.context.active_object
-    trunk.data.materials.append(mat_trunk)
-
-    # Three foliage tiers
-    tiers = [
-        (0.0, 0.0, 1.05, 0.85, 0.15, 1.0),
-        (0.0, 0.0, 1.65, 0.68, 0.12, 0.9),
-        (0.0, 0.0, 2.20, 0.48, 0.04, 0.8),
+def build_recycling_bins():
+    """Realistic wheeled recycling containers with dome lids and color-coded trim."""
+    configs = [
+        ("bin_paper", "bin_paper.blend", "litter/bin_paper.glb", "1F618D", "5499C7"),
+        ("bin_plastic", "bin_plastic.blend", "litter/bin_plastic.glb", "D4AC0D", "F4D03F"),
+        ("bin_glass", "bin_glass.blend", "litter/bin_glass.glb", "1E8449", "52BE80"),
     ]
-    for x, y, z, r1, r2, h in tiers:
-        bpy.ops.mesh.primitive_cone_add(vertices=7, radius1=r1, radius2=r2, depth=h, location=(x, y, z))
-        c = bpy.context.active_object
-        c.data.materials.append(mat_foliage)
+    for name, blend_name, rel_path, body_hex, lid_hex in configs:
+        clear_scene()
+        mat_body = make_mat(f"mat_{name}_body", body_hex, 0.42, 0.12)
+        mat_lid = make_mat(f"mat_{name}_lid", lid_hex, 0.35, 0.15)
+        mat_dark = make_mat(f"mat_{name}_dark", "1C2833", 0.75, 0.2)
 
-    # Snow cap on top tier
-    bpy.ops.mesh.primitive_cone_add(vertices=7, radius1=0.32, radius2=0.02, depth=0.45, location=(0.0, 0.0, 2.42))
-    cap = bpy.context.active_object
-    cap.data.materials.append(mat_snow)
+        # Base plinth / wheels
+        bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.46, depth=0.10, location=(0.0, 0.0, 0.05))
+        base = bpy.context.active_object
+        base.data.materials.append(mat_dark)
 
-    finalize_and_export("pine_tree", "pine_tree.blend", "environment/pine_tree.glb")
+        # Tapered ribbed bin body
+        bpy.ops.mesh.primitive_cone_add(vertices=16, radius1=0.44, radius2=0.50, depth=0.92, location=(0.0, 0.0, 0.56))
+        body = bpy.context.active_object
+        body.data.materials.append(mat_body)
+
+        # Collar rim
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.50, minor_radius=0.045, major_segments=20, minor_segments=10, location=(0.0, 0.0, 1.02))
+        rim = bpy.context.active_object
+        rim.data.materials.append(mat_lid)
+
+        # Dome hood lid
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=18, ring_count=10, radius=0.49, location=(0.0, 0.0, 1.04))
+        dome = bpy.context.active_object
+        dome.scale = (1.0, 1.0, 0.42)
+        dome.data.materials.append(mat_lid)
+
+        finalize_and_export(name, blend_name, rel_path)
 
 
-def build_rock_formation():
-    """Grounded rock formation extending down to z=-0.4 so it never floats."""
+def build_litter_gate():
+    """Realistic multi-item coastal waste & debris mound blocking the pass (litter_gate.glb)."""
     clear_scene()
-    mat_rock = make_mat("mat_rock", "5C6B7A", 0.9)
-    mat_snow = make_mat("mat_snow", "EAF2F8", 0.8)
+    mat_sludge = make_mat("mat_debris_base", "3E4C59", 0.88)
+    mat_wood = make_mat("mat_debris_wood", "5D4037", 0.85)
+    mat_paper = make_mat("mat_debris_paper", "2980B9", 0.65)
+    mat_plastic = make_mat("mat_debris_plastic", "F39C12", 0.30)
+    mat_glass = make_mat("mat_debris_glass", "27AE60", 0.20)
+    mat_rust = make_mat("mat_debris_rust", "A04000", 0.75, 0.35)
 
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=1.1, location=(0.0, 0.0, 0.45))
-    r1 = bpy.context.active_object
-    r1.scale = (1.3, 0.9, 0.85)
-    r1.data.materials.append(mat_rock)
+    # Compacted snow/debris mound core
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1.25, location=(0.0, 0.0, 0.85))
+    core = bpy.context.active_object
+    core.scale = (0.95, 1.15, 0.85)
+    core.data.materials.append(mat_sludge)
 
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.75, location=(0.75, -0.15, 0.25))
-    r2 = bpy.context.active_object
-    r2.scale = (1.1, 0.85, 0.75)
-    r2.data.materials.append(mat_rock)
+    # Rusted barrel wedged in pile
+    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.42, depth=1.05, location=(0.15, 0.12, 1.35))
+    barrel = bpy.context.active_object
+    barrel.rotation_euler = (math.radians(28), math.radians(-22), 0.0)
+    barrel.data.materials.append(mat_rust)
 
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.65, location=(-0.7, 0.1, 0.2))
-    r3 = bpy.context.active_object
-    r3.scale = (1.0, 0.8, 0.7)
-    r3.data.materials.append(mat_rock)
+    # Tangled driftwood beams
+    for pos, rot in [((-0.35, -0.25, 1.15), (0.4, 0.5, 0.2)), ((0.30, -0.30, 1.65), (-0.3, -0.4, 0.5))]:
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=pos)
+        beam = bpy.context.active_object
+        beam.scale = (0.22, 1.45, 0.18)
+        beam.rotation_euler = rot
+        beam.data.materials.append(mat_wood)
 
-    # Snow cap on main boulder
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.78, location=(0.0, 0.0, 0.88))
-    s1 = bpy.context.active_object
-    s1.scale = (1.15, 0.8, 0.42)
-    s1.data.materials.append(mat_snow)
+    # Visible recyclable items embedded in the mound
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, -0.35, 0.75))
+    cbox = bpy.context.active_object
+    cbox.scale = (0.48, 0.42, 0.48)
+    cbox.rotation_euler = (0.2, -0.3, 0.4)
+    cbox.data.materials.append(mat_paper)
 
-    finalize_and_export("rock_formation", "rock_formation.blend", "environment/rock_formation.glb")
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.22, depth=0.62, location=(-0.38, 0.32, 1.15))
+    pbot = bpy.context.active_object
+    pbot.rotation_euler = (0.5, 0.2, -0.3)
+    pbot.data.materials.append(mat_plastic)
 
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.20, depth=0.65, location=(0.25, -0.42, 0.95))
+    gbot = bpy.context.active_object
+    gbot.rotation_euler = (-0.4, 0.3, 0.2)
+    gbot.data.materials.append(mat_glass)
 
-def build_mountain_bg():
-    """Mountain range with deep skirt (-8m) and pine trees sitting directly on its lower slopes!"""
-    clear_scene()
-    mat_rock = make_mat("mat_mountain_rock", "4A5868", 0.92)
-    mat_snow = make_mat("mat_mountain_snow", "E6F0F8", 0.82)
-    mat_trunk = make_mat("mat_trunk", "5C3A21", 0.9)
-    mat_foliage = make_mat("mat_foliage", "2D5A3C", 0.75)
-
-    # Deep base skirt from z=-8.0 to z=0.5 so mountain NEVER floats in the air
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, -3.75))
-    skirt = bpy.context.active_object
-    skirt.scale = (24.0, 9.0, 8.5)
-    skirt.data.materials.append(mat_rock)
-
-    # Three main mountain peaks rising from z=-2.0 up to z=11.0
-    peaks = [
-        (-5.5, 0.0, 3.5, 6.5, 4.5, 11.0),
-        (0.5, 0.6, 4.8, 7.8, 5.2, 13.5),
-        (6.2, -0.3, 3.0, 6.0, 4.2, 10.0),
-    ]
-    for px, py, pz, rx, ry, h in peaks:
-        bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=rx, radius2=0.3, depth=h, location=(px, py, pz))
-        p = bpy.context.active_object
-        p.scale = (1.0, ry / rx, 1.0)
-        p.data.materials.append(mat_rock)
-
-        # Snow cap on top 40% of peak
-        cap_h = h * 0.42
-        cap_z = pz + (h * 0.5) - (cap_h * 0.5) + 0.08
-        bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=rx * 0.45, radius2=0.32, depth=cap_h, location=(px, py, cap_z))
-        sc = bpy.context.active_object
-        sc.scale = (1.02, (ry / rx) * 1.02, 1.0)
-        sc.data.materials.append(mat_snow)
-
-    # Add pine trees directly rooted onto the mountain's lower/mid rocky slopes!
-    tree_spots = [
-        (-7.2, -2.2, 0.2, 0.8),
-        (-3.8, -2.5, 0.8, 0.9),
-        (-1.2, -2.8, 1.4, 0.85),
-        (2.5, -2.6, 1.1, 0.95),
-        (5.0, -2.3, 0.5, 0.8),
-        (7.8, -2.1, 0.1, 0.75),
-    ]
-    for tx, ty, tz, s in tree_spots:
-        bpy.ops.mesh.primitive_cylinder_add(vertices=6, radius=0.15 * s, depth=1.0 * s, location=(tx, ty, tz + 0.3 * s))
-        tr = bpy.context.active_object
-        tr.data.materials.append(mat_trunk)
-
-        bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.75 * s, radius2=0.08 * s, depth=1.8 * s, location=(tx, ty, tz + 1.3 * s))
-        fol = bpy.context.active_object
-        fol.data.materials.append(mat_foliage)
-
-    finalize_and_export("mountain_bg", "mountain_bg.blend", "environment/mountain_bg.glb")
-
-
-def build_iceberg_bg():
-    """Grounded iceberg with deep underwater skirt (-6m) so it never floats."""
-    clear_scene()
-    mat_ice = make_mat("mat_ice", "C8E6F5", 0.35)
-    mat_snow = make_mat("mat_snow", "F0F7FC", 0.75)
-
-    # Underwater / base block from z=-6.0 to z=0.5
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, -2.75))
-    skirt = bpy.context.active_object
-    skirt.scale = (14.0, 5.0, 6.5)
-    skirt.data.materials.append(mat_ice)
-
-    # Angular iceberg spires
-    spires = [
-        (-3.2, 0.0, 2.0, 4.2, 2.8, 5.5),
-        (0.8, 0.3, 2.8, 5.0, 3.2, 7.0),
-        (4.2, -0.2, 1.6, 3.6, 2.5, 4.5),
-    ]
-    for sx, sy, sz, rx, ry, h in spires:
-        bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=rx, radius2=0.6, depth=h, location=(sx, sy, sz))
-        sp = bpy.context.active_object
-        sp.scale = (1.0, ry / rx, 1.0)
-        sp.data.materials.append(mat_ice)
-
-        bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=rx * 0.5, radius2=0.62, depth=h * 0.4, location=(sx, sy, sz + h * 0.31))
-        cap = bpy.context.active_object
-        cap.scale = (1.02, (ry / rx) * 1.02, 1.0)
-        cap.data.materials.append(mat_snow)
-
-    finalize_and_export("iceberg_bg", "iceberg_bg.blend", "environment/iceberg_bg.glb")
-
-
-def build_baby_chick():
-    """Adorable, high-visibility 3D baby penguin model (chick.glb) with feet at z=0.0."""
-    clear_scene()
-    mat_down = make_mat("mat_chick_down", "7F9EB2", 0.75)       # Soft blue-grey fluffy back
-    mat_head = make_mat("mat_chick_head", "2C3E50", 0.7)        # Dark slate cap
-    mat_belly = make_mat("mat_chick_belly", "FFFDF9", 0.8)      # Bright snow-white tummy/cheeks
-    mat_beak = make_mat("mat_chick_beak", "FF9F1C", 0.4)        # Bright orange-gold beak & feet
-    mat_eye = make_mat("mat_chick_eye", "11161B", 0.15)         # Glossy dark eyes
-    mat_sparkle = make_mat("mat_chick_sparkle", "FFFFFF", 0.05) # Eye highlight
-    mat_scarf = make_mat("mat_chick_scarf", "FF5964", 0.6)      # Bright coral-red winter band
-
-    # Webbed orange feet sitting right on z=0.0..0.08
-    for side in (-1.0, 1.0):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.11, location=(side * 0.04, -0.11 * side, 0.045))
-        foot = bpy.context.active_object
-        foot.scale = (1.35, 0.85, 0.42)
-        foot.data.materials.append(mat_beak)
-
-    # Plump fluffy body (z=0.06 to z=0.52)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.25, location=(0.0, 0.0, 0.29))
-    body = bpy.context.active_object
-    body.scale = (0.95, 0.92, 1.08)
-    body.data.materials.append(mat_down)
-
-    # Bright white tummy & chest patch facing camera (-Y in Blender = +Z in Godot) and -X (player side)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.22, location=(-0.05, -0.06, 0.28))
-    belly = bpy.context.active_object
-    belly.scale = (0.88, 0.85, 0.98)
-    belly.data.materials.append(mat_belly)
-
-    # Warm coral-red neck scarf so the chick stands out vividly against ice
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.19, minor_radius=0.048, location=(0.0, 0.0, 0.47))
-    scarf = bpy.context.active_object
-    scarf.scale = (1.0, 1.0, 0.85)
-    scarf.data.materials.append(mat_scarf)
-
-    # Cute big round head (z=0.46 to z=0.82)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=12, radius=0.22, location=(0.0, 0.0, 0.64))
-    head = bpy.context.active_object
-    head.scale = (1.0, 0.98, 0.96)
-    head.data.materials.append(mat_head)
-
-    # White face cheeks facing front-left (-X, -Y)
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.185, location=(-0.05, -0.06, 0.62))
-    face = bpy.context.active_object
-    face.scale = (0.92, 0.88, 0.86)
-    face.data.materials.append(mat_belly)
-
-    # Expressive big eyes + white sparkles on front/camera side
-    for ex, ey in ((-0.14, -0.15), (0.04, -0.20)):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.048, location=(ex, ey, 0.66))
-        eye = bpy.context.active_object
-        eye.data.materials.append(mat_eye)
-
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=8, ring_count=6, radius=0.018, location=(ex - 0.015, ey - 0.038, 0.678))
-        sp = bpy.context.active_object
-        sp.data.materials.append(mat_sparkle)
-
-    # Bright orange beak pointing toward front-left (-X, -Y)
-    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.065, radius2=0.01, depth=0.15, location=(-0.12, -0.22, 0.61))
-    beak = bpy.context.active_object
-    beak.rotation_euler = (math.radians(72), 0.0, math.radians(-28))
-    beak.data.materials.append(mat_beak)
-
-    # Little flippers raised out to the sides as if waving for help!
-    for side in (-1.0, 1.0):
-        bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.12, location=(side * 0.25, 0.02, 0.36))
-        wing = bpy.context.active_object
-        wing.scale = (0.35, 0.65, 1.25)
-        wing.rotation_euler = (0.0, side * math.radians(-42), 0.0)
-        wing.data.materials.append(mat_head)
-
-    # Fluffy tuft on top of head
-    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.05, radius2=0.008, depth=0.12, location=(0.0, 0.0, 0.87))
-    tuft = bpy.context.active_object
-    tuft.rotation_euler = (math.radians(-12), math.radians(10), 0.0)
-    tuft.data.materials.append(mat_down)
-
-    finalize_and_export("chick", "chick.blend", "penguin/chick.glb")
+    finalize_and_export("litter_gate", "litter_gate.blend", "litter/litter_gate.glb")
 
 
 def build_fact_holo_globe():
-    """Climate Research Globe & Crystal Ring (fact_holo_globe.glb) for FactCard collectibles."""
+    """Climate Research Globe & Crystal Ring (fact_holo_globe.glb)."""
     clear_scene()
-    mat_gold = make_mat("mat_ring_gold", "FFB703", 0.25, 0.75)
-    mat_ocean = make_mat("mat_globe_ocean", "0096C7", 0.25, 0.1)
-    mat_land = make_mat("mat_globe_land", "2EC4B6", 0.45, 0.05)
-    mat_ice = make_mat("mat_globe_ice", "F8FDFF", 0.3, 0.0)
-    mat_crystal = make_mat("mat_globe_crystal", "48CAE4", 0.15, 0.2)
+    mat_gold = make_mat("mat_ring_gold", "FFB703", 0.22, 0.78)
+    mat_ocean = make_mat("mat_globe_ocean", "0077B6", 0.22, 0.12)
+    mat_land = make_mat("mat_globe_land", "2A9D8F", 0.42, 0.05)
+    mat_ice = make_mat("mat_globe_ice", "E0F2FE", 0.35, 0.0)
+    mat_crystal = make_mat("mat_globe_crystal", "48CAE4", 0.15, 0.2, "48CAE4", 0.4)
 
-    # Lower brass capsule pedestal
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.18, depth=0.08, location=(0.0, 0.0, -0.36))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.18, depth=0.08, location=(0.0, 0.0, -0.36))
     base = bpy.context.active_object
     base.data.materials.append(mat_gold)
 
-    # Outer golden gyroscope ring
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.38, minor_radius=0.036, major_segments=20, minor_segments=10, location=(0.0, 0.0, 0.0))
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.38, minor_radius=0.036, major_segments=24, minor_segments=12, location=(0.0, 0.0, 0.0))
     ring1 = bpy.context.active_object
     ring1.rotation_euler = (math.radians(90), 0.0, math.radians(18))
     ring1.data.materials.append(mat_gold)
 
-    # Inner tilted meridian ring
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.32, minor_radius=0.024, major_segments=18, minor_segments=8, location=(0.0, 0.0, 0.0))
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.32, minor_radius=0.024, major_segments=20, minor_segments=10, location=(0.0, 0.0, 0.0))
     ring2 = bpy.context.active_object
     ring2.rotation_euler = (math.radians(65), math.radians(32), 0.0)
     ring2.data.materials.append(mat_crystal)
 
-    # Central miniature Earth globe
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.23, location=(0.0, 0.0, 0.0))
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=0.23, location=(0.0, 0.0, 0.0))
     globe = bpy.context.active_object
     globe.data.materials.append(mat_ocean)
     globe.data.materials.append(mat_land)
@@ -557,16 +752,15 @@ def build_fact_holo_globe():
     for i, poly in enumerate(globe.data.polygons):
         cz = poly.center.z
         if abs(cz) > 0.155:
-            poly.material_index = 2  # Polar ice caps
+            poly.material_index = 2
         elif (i % 4 == 0) or (i % 7 == 0):
-            poly.material_index = 1  # Green-teal continents
+            poly.material_index = 1
 
-    # Top floating climate crystal diamond
-    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.09, radius2=0.0, depth=0.14, location=(0.0, 0.0, 0.50))
+    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.09, radius2=0.0, depth=0.14, location=(0.0, 0.0, 0.50))
     top_c1 = bpy.context.active_object
     top_c1.data.materials.append(mat_crystal)
 
-    bpy.ops.mesh.primitive_cone_add(vertices=6, radius1=0.09, radius2=0.0, depth=0.10, location=(0.0, 0.0, 0.40))
+    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.09, radius2=0.0, depth=0.10, location=(0.0, 0.0, 0.40))
     top_c2 = bpy.context.active_object
     top_c2.rotation_euler = (math.radians(180), 0.0, 0.0)
     top_c2.data.materials.append(mat_crystal)
@@ -577,34 +771,31 @@ def build_fact_holo_globe():
 def build_seed_patch():
     """Fertile soil mound ringed with stones and a golden seed pod (seed_patch.glb)."""
     clear_scene()
-    mat_soil = make_mat("mat_soil", "4E342E", 0.92)
-    mat_stone = make_mat("mat_stone", "78909C", 0.85)
-    mat_seed = make_mat("mat_seed_gold", "FFD166", 0.3)
-    mat_leaf = make_mat("mat_seed_tip", "52B788", 0.5)
+    mat_soil = make_mat("mat_soil", "3E2723", 0.92)
+    mat_stone = make_mat("mat_stone", "607D8B", 0.85)
+    mat_seed = make_mat("mat_seed_gold", "FFD166", 0.28)
+    mat_leaf = make_mat("mat_seed_tip", "40916C", 0.48)
 
-    # Soil mound
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.52, depth=0.16, location=(0.0, 0.0, 0.08))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.52, depth=0.16, location=(0.0, 0.0, 0.08))
     mound = bpy.context.active_object
     mound.data.materials.append(mat_soil)
 
-    # Ring of stones around soil
-    for i in range(8):
-        ang = i * (2.0 * math.pi / 8.0)
+    for i in range(10):
+        ang = i * (2.0 * math.pi / 10.0)
         sx = math.cos(ang) * 0.50
         sy = math.sin(ang) * 0.50
-        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.11, location=(sx, sy, 0.09))
+        bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=0.11, location=(sx, sy, 0.09))
         st = bpy.context.active_object
         st.scale = (1.2, 1.0, 0.75)
         st.data.materials.append(mat_stone)
 
-    # Glowing golden seed pod resting on soil
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.12, location=(0.0, -0.05, 0.22))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.12, location=(0.0, -0.05, 0.22))
     seed = bpy.context.active_object
     seed.scale = (1.35, 0.9, 0.95)
     seed.rotation_euler = (0.0, math.radians(-20), 0.0)
     seed.data.materials.append(mat_seed)
 
-    bpy.ops.mesh.primitive_cone_add(vertices=8, radius1=0.05, radius2=0.01, depth=0.12, location=(0.08, -0.05, 0.30))
+    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=0.05, radius2=0.01, depth=0.12, location=(0.08, -0.05, 0.30))
     tip = bpy.context.active_object
     tip.rotation_euler = (0.0, math.radians(35), 0.0)
     tip.data.materials.append(mat_leaf)
@@ -613,35 +804,31 @@ def build_seed_patch():
 
 
 def build_ocean_buoy():
-    """Polar ocean acoustic monitoring buoy (ocean_buoy.glb) for Level 3 ChoicePoint."""
+    """Polar ocean acoustic monitoring buoy (ocean_buoy.glb)."""
     clear_scene()
-    mat_red = make_mat("mat_buoy_red", "E63946", 0.4, 0.2)
-    mat_white = make_mat("mat_buoy_white", "F1FAEE", 0.5, 0.1)
-    mat_steel = make_mat("mat_buoy_steel", "457B9D", 0.35, 0.6)
-    mat_beacon = make_mat("mat_buoy_beacon", "00F5D4", 0.15, 0.1)
+    mat_red = make_mat("mat_buoy_red", "D62828", 0.38, 0.22)
+    mat_white = make_mat("mat_buoy_white", "DCE6F0", 0.48, 0.10)
+    mat_steel = make_mat("mat_buoy_steel", "457B9D", 0.32, 0.65)
+    mat_beacon = make_mat("mat_buoy_beacon", "00F5D4", 0.15, 0.1, "00F5D4", 0.5)
 
-    # Buoy base ring
-    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.45, depth=0.35, location=(0.0, 0.0, 0.175))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.45, depth=0.35, location=(0.0, 0.0, 0.175))
     b1 = bpy.context.active_object
     b1.data.materials.append(mat_red)
 
-    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.36, depth=0.25, location=(0.0, 0.0, 0.45))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=18, radius=0.36, depth=0.25, location=(0.0, 0.0, 0.45))
     b2 = bpy.context.active_object
     b2.data.materials.append(mat_white)
 
-    # Mast tower
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.07, depth=0.95, location=(0.0, 0.0, 0.95))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.07, depth=0.95, location=(0.0, 0.0, 0.95))
     mast = bpy.context.active_object
     mast.data.materials.append(mat_steel)
 
-    # Crossbars
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.0, 0.0, 1.15))
     bar = bpy.context.active_object
     bar.scale = (0.55, 0.08, 0.08)
     bar.data.materials.append(mat_steel)
 
-    # Top glowing sensor dome
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=12, ring_count=8, radius=0.14, location=(0.0, 0.0, 1.48))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=16, ring_count=10, radius=0.14, location=(0.0, 0.0, 1.48))
     dome = bpy.context.active_object
     dome.data.materials.append(mat_beacon)
 
@@ -649,38 +836,33 @@ def build_ocean_buoy():
 
 
 def build_weather_tower():
-    """Automated mountain weather relay dish & solar station (weather_tower.glb) for Level 4 ChoicePoint."""
+    """Automated mountain weather relay dish & solar station (weather_tower.glb)."""
     clear_scene()
-    mat_frame = make_mat("mat_tower_frame", "5C6B7A", 0.45, 0.5)
-    mat_dish = make_mat("mat_tower_dish", "F8F9FA", 0.35, 0.2)
-    mat_solar = make_mat("mat_tower_solar", "1D3557", 0.2, 0.4)
-    mat_beacon = make_mat("mat_tower_beacon", "FFD166", 0.15, 0.1)
+    mat_frame = make_mat("mat_tower_frame", "546E7A", 0.40, 0.55)
+    mat_dish = make_mat("mat_tower_dish", "DCE6F0", 0.35, 0.25)
+    mat_solar = make_mat("mat_tower_solar", "1D3557", 0.20, 0.45)
+    mat_beacon = make_mat("mat_tower_beacon", "FFD166", 0.15, 0.1, "FFD166", 0.5)
 
-    # Heavy stone/steel base pad
-    bpy.ops.mesh.primitive_cylinder_add(vertices=8, radius=0.50, depth=0.22, location=(0.0, 0.0, 0.11))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.50, depth=0.22, location=(0.0, 0.0, 0.11))
     pad = bpy.context.active_object
     pad.data.materials.append(mat_frame)
 
-    # Central mast
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.09, depth=1.55, location=(0.0, 0.0, 0.92))
+    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.09, depth=1.55, location=(0.0, 0.0, 0.92))
     mast = bpy.context.active_object
     mast.data.materials.append(mat_frame)
 
-    # Solar wing panel
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.38, 0.0, 0.95))
     solar = bpy.context.active_object
     solar.scale = (0.55, 0.38, 0.05)
     solar.rotation_euler = (math.radians(25), 0.0, 0.0)
     solar.data.materials.append(mat_solar)
 
-    # Radar / relay dish
-    bpy.ops.mesh.primitive_cone_add(vertices=14, radius1=0.36, radius2=0.06, depth=0.18, location=(0.18, -0.12, 1.42))
+    bpy.ops.mesh.primitive_cone_add(vertices=18, radius1=0.36, radius2=0.06, depth=0.18, location=(0.18, -0.12, 1.42))
     dish = bpy.context.active_object
     dish.rotation_euler = (math.radians(55), 0.0, math.radians(-25))
     dish.data.materials.append(mat_dish)
 
-    # Top anemometer / beacon light
-    bpy.ops.mesh.primitive_uv_sphere_add(segments=10, ring_count=8, radius=0.11, location=(0.0, 0.0, 1.76))
+    bpy.ops.mesh.primitive_uv_sphere_add(segments=14, ring_count=10, radius=0.11, location=(0.0, 0.0, 1.76))
     light = bpy.context.active_object
     light.data.materials.append(mat_beacon)
 
@@ -688,17 +870,21 @@ def build_weather_tower():
 
 
 if __name__ == "__main__":
+    build_baby_chick()
+    build_mountain_bg()
+    build_iceberg_bg()
+    build_pine_tree()
+    build_rock_formation()
+    build_ice_tile()
     build_research_hut()
+    build_solar_lamp()
     build_green_glass_bottle()
     build_crumpled_paper()
     build_plastic_bottle()
-    build_pine_tree()
-    build_rock_formation()
-    build_mountain_bg()
-    build_iceberg_bg()
-    build_baby_chick()
+    build_recycling_bins()
+    build_litter_gate()
     build_fact_holo_globe()
     build_seed_patch()
     build_ocean_buoy()
     build_weather_tower()
-    print("ALL BLENDER MODELS BUILT AND EXPORTED SUCCESSFULLY.")
+    print("ALL REALISTIC BLENDER MODELS BUILT AND EXPORTED SUCCESSFULLY.")

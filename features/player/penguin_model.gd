@@ -6,7 +6,7 @@ const TOON_SHADER: Shader = preload("res://shaders/toon.gdshader")
 const OUTLINE_SHADER: Shader = preload("res://shaders/outline.gdshader")
 
 const COLOR_DARK: Color = Color("1B2430")
-const COLOR_BELLY: Color = Color("EAF2F8")
+const COLOR_BELLY: Color = Color("D4E2EE")
 const COLOR_SCARF: Color = Color("D64045")
 const COLOR_ORANGE: Color = Color("FFB347")
 const FOOT_L_NAME: String = "foot_l"
@@ -29,6 +29,8 @@ const MIN_PHASE_SPEED: float = 0.5
 @export var slide_pitch: float = -1.35
 @export var slide_lift_y: float = 0.28
 @export var slide_offset_x: float = -0.25
+@export var push_pitch: float = -0.44
+@export var push_offset_x: float = 0.16
 
 var _outline_mat: ShaderMaterial
 var _toon_mats: Dictionary = {}
@@ -41,6 +43,8 @@ var _walk_amount: float = 0.0
 var _walk_target: float = 0.0
 var _slide_amount: float = 0.0
 var _slide_target: float = 0.0
+var _push_amount: float = 0.0
+var _push_target: float = 0.0
 var _step_phase: float = 0.0
 
 
@@ -62,8 +66,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_walk_amount = move_toward(_walk_amount, _walk_target, walk_blend_speed * delta)
 	_slide_amount = move_toward(_slide_amount, _slide_target, slide_blend_speed * delta)
-	if _walk_amount > 0.0 and _slide_amount < 0.5:
-		_step_phase = fmod(_step_phase + delta * step_frequency * TAU * maxf(_walk_amount, MIN_PHASE_SPEED), TAU)
+	_push_amount = move_toward(_push_amount, _push_target, walk_blend_speed * delta)
+	var cadence_mult: float = 1.0 + 0.45 * _push_amount
+	if (_walk_amount > 0.0 or _push_amount > 0.0) and _slide_amount < 0.5:
+		_step_phase = fmod(_step_phase + delta * step_frequency * cadence_mult * TAU * maxf(maxf(_walk_amount, _push_amount), MIN_PHASE_SPEED), TAU)
 	elif not is_zero_approx(_step_phase):
 		_step_phase = 0.0
 	_apply_walk_pose()
@@ -79,21 +85,29 @@ func set_slide_amount(amount: float) -> void:
 	_slide_target = clampf(amount, 0.0, 1.0)
 
 
+## Sets boulder-pushing animation strength from 0 (normal) to 1 (leaning forward and pushing).
+func set_push_amount(amount: float) -> void:
+	_push_target = clampf(amount, 0.0, 1.0)
+
+
 func _apply_walk_pose() -> void:
 	var wave: float = sin(_step_phase)
-	var walk_weight: float = _walk_amount * (1.0 - _slide_amount)
-	rotation.z = slide_pitch * _slide_amount
-	position.y = slide_lift_y * _slide_amount
-	position.x = slide_offset_x * _slide_amount
+	var active_walk: float = maxf(_walk_amount, _push_amount)
+	var walk_weight: float = active_walk * (1.0 - _slide_amount)
+	var push_weight: float = _push_amount * (1.0 - _slide_amount)
+	rotation.z = slide_pitch * _slide_amount + push_pitch * push_weight
+	position.y = slide_lift_y * _slide_amount - 0.05 * push_weight
+	position.x = slide_offset_x * _slide_amount + push_offset_x * push_weight
+	var stride_mult: float = 1.0 + 0.35 * push_weight
 	if _foot_l != null:
-		_foot_l.position = _foot_l_rest + Vector3(0.0, maxf(wave, 0.0) * foot_lift * walk_weight, 0.0)
-		_foot_l.rotation.z = lerpf(wave * foot_swing * walk_weight, -0.85, _slide_amount)
+		_foot_l.position = _foot_l_rest + Vector3(0.0, maxf(wave, 0.0) * foot_lift * stride_mult * walk_weight, 0.0)
+		_foot_l.rotation.z = lerpf(wave * foot_swing * stride_mult * walk_weight, -0.85, _slide_amount)
 	if _foot_r != null:
-		_foot_r.position = _foot_r_rest + Vector3(0.0, maxf(-wave, 0.0) * foot_lift * walk_weight, 0.0)
-		_foot_r.rotation.z = lerpf(-wave * foot_swing * walk_weight, -0.85, _slide_amount)
+		_foot_r.position = _foot_r_rest + Vector3(0.0, maxf(-wave, 0.0) * foot_lift * stride_mult * walk_weight, 0.0)
+		_foot_r.rotation.z = lerpf(-wave * foot_swing * stride_mult * walk_weight, -0.85, _slide_amount)
 	if _body != null:
-		_body.rotation.x = wave * waddle_angle * walk_weight
-		_body.position.y = absf(wave) * body_bob * walk_weight
+		_body.rotation.x = wave * waddle_angle * (1.0 + 0.5 * push_weight) * walk_weight
+		_body.position.y = absf(wave) * body_bob * (1.0 + 0.4 * push_weight) * walk_weight
 
 
 func _apply_materials_recursive(node: Node) -> void:

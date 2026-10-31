@@ -1,6 +1,6 @@
 class_name SortingBin
 extends Area3D
-## Color and icon coded recycling bin that sorts carried player litter on interact.
+## Color and icon coded recycling bin that sorts carried player litter on interact or matching contact.
 
 const COLOR_PAPER: Color = Color(0.18, 0.52, 0.88, 1.0)
 const COLOR_PLASTIC: Color = Color(0.95, 0.78, 0.15, 1.0)
@@ -55,7 +55,7 @@ func sort_from_player(player_node: Node3D) -> bool:
 	EventBus.monologue_requested.emit(&"MONO_C2_SORT_OK" if is_correct else &"MONO_C2_SORT_BAD")
 	if _visual_root != null:
 		var tween: Tween = create_tween()
-		tween.tween_property(_visual_root, "scale", Vector3(1.12, 0.88, 1.12), 0.09)
+		tween.tween_property(_visual_root, "scale", Vector3(1.14, 0.86, 1.14), 0.09)
 		tween.tween_property(_visual_root, "scale", Vector3.ONE, 0.14)
 	return is_correct
 
@@ -107,6 +107,8 @@ func _on_language_changed(_code: String) -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group(&"player"):
 		_player_in_range = body
+		if bool(body.get("is_carrying")) and (body.get("carried_item_type") as StringName) == accepts:
+			sort_from_player(body)
 
 
 func _on_body_exited(body: Node3D) -> void:

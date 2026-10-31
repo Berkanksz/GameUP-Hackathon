@@ -1,5 +1,6 @@
 keys,en,tr
-UI_TITLE,Higher Ground,Daha Yukarı
+UI_TITLE,Waddle We Do? Save Pengu!,Penguyu Kurtar
+UI_SUBTITLE,An Arctic Climate Adventure,Bir Kutup İklim Macerası
 UI_PLAY,Play,Oyna
 UI_SETTINGS,Settings,Ayarlar
 UI_LANGUAGE,Language,Dil
@@ -27,7 +28,7 @@ TUT_MOVE,Use A and D or Arrow Keys to walk across the ice.,Buzda yürümek için
 TUT_JUMP,Press SPACE to jump. Hold SPACE longer for a higher jump!,Zıplamak için SPACE tuşuna bas. Daha yükseğe zıplamak için basılı tut!
 TUT_SLIDE,Hold SHIFT down the curved ramp to belly slide and launch across!,Kıvrımlı rampadan aşağı SHIFT tuşuna basılı tutarak kay ve karşıya uç!
 TUT_VENT,Step into the thermal updraft geyser to soar up to high ledges!,Yüksek çıkıntılara uçmak için sıcak hava gayzerinin içine gir!
-TUT_BOULDER,Slide or walk into the giant snowball to smash the ice barrier!,Buz bariyerini kırmak için dev kartopuna çarparak yuvarla!
+TUT_BOULDER,Walk into the giant snowball and push it into the ice wall to break through!,Dev kartopuna doğru yürü ve buz duvarını kırmak için iterek yuvarla!
 UI_BIN_PAPER,Paper,Kağıt
 UI_BIN_PLASTIC,Plastic,Plastik
 UI_BIN_GLASS,Glass,Cam
@@ -101,3 +102,4 @@ CHOICE_TOWER_SKIP,Keep climbing,Tırmanmaya devam et
 CHOICE_TOWER_SAVED,The relay dish locked onto the satellite with a steady chime.,Röle anteni sabit bir sinyal sesiyle uyduya kilitlendi.
 FACT_GLACIER,"Mountain glaciers worldwide lost more ice between 2021 and 2024 than in any other four year period on record.","Dünya genelindeki dağ buzulları, 2021 ile 2024 arasında kayıtlardaki diğer tüm dört yıllık dönemlerden daha fazla buz kaybetti."
 FACT_PERMAFROST,"Early warning weather stations help polar researchers track ice sheet stability and extreme storms in real time.","Erken uyarı hava istasyonları, kutup araştırmacılarının buz tabakası dengesini ve aşırı fırtınaları anlık izlemesini sağlar."
+MONO_LITTER_PILE_INTRO,"What is all this trash doing on the glacier? It completely blocked the trail. I need to pull each item from the pile and sort it into the right bin.","Buzulun ortasında bu çöp yığınının ne işi var? Yolu tamamen kapatmışlar. Yığındaki atıkları tek tek alıp doğru geri dönüşüm kutularına atmalıyım."

@@ -1,6 +1,6 @@
 class_name Player
 extends CharacterBody3D
-## Plane locked 2.5D player controller with coyote time, jump buffer, and single item carry.
+## Plane locked 2.5D player controller with coyote time, jump buffer, boulder pushing, and single item carry.
 
 enum State {
 	IDLE,
@@ -29,12 +29,14 @@ var facing_direction: float = 1.0
 var is_carrying: bool = false
 var carried_item_type: StringName = &""
 var is_cinematic_locked: bool = false
+var is_pushing_object: bool = false
 
 var _coyote_timer: float = 0.0
 var _jump_buffer_timer: float = 0.0
 var _current_heat: float = 0.0
 var _was_on_floor: bool = true
 var _is_sliding_active: bool = false
+var _is_exit_walking: bool = false
 var _carry_visual: Node3D
 var _carry_paper: Node3D
 var _carry_plastic: Node3D
@@ -45,6 +47,7 @@ var _step_timer: float = 0.0
 
 @onready var _visual_root: Node3D = $VisualRoot
 @onready var _penguin_model: PenguinModel = get_node_or_null("VisualRoot/PenguinModel") as PenguinModel
+@onready var _heat_comp: HeatComponent = get_node_or_null("HeatComponent") as HeatComponent
 
 
 func _ready() -> void:
@@ -60,10 +63,27 @@ func _ready() -> void:
 	EventBus.litter_picked.connect(_on_litter_picked)
 	EventBus.litter_sorted.connect(_on_litter_sorted)
 	global_position.z = 0.0
+	if _heat_comp != null:
+		_heat_comp.heat = 0.14
+		EventBus.heat_changed.emit(_heat_comp.heat)
 
 
 func _physics_process(delta: float) -> void:
 	if state == State.DEAD:
+		return
+	if _is_exit_walking:
+		_is_sliding_active = false
+		facing_direction = 1.0
+		if _visual_root != null:
+			_visual_root.scale.x = 1.0
+		velocity.x = move_toward(velocity.x, tuning.walk_speed * 1.18, tuning.walk_acceleration * delta)
+		_apply_gravity(delta)
+		move_and_slide()
+		global_position.z = 0.0
+		velocity.z = 0.0
+		state = State.WALK
+		_update_walk_anim()
+		_update_footsteps(delta)
 		return
 	if global_position.y < fall_death_y:
 		die(&"fall")
@@ -98,6 +118,7 @@ func _physics_process(delta: float) -> void:
 		Audio.play_sfx(&"land")
 	_was_on_floor = is_on_floor()
 	_update_state()
+	_update_exertion_heat()
 	_update_walk_anim()
 	_update_footsteps(delta)
 
@@ -112,11 +133,28 @@ func clear_push(source_id: StringName) -> void:
 	_push_sources.erase(source_id)
 
 
+## Sets whether the penguin is actively pushing a heavy object such as a snow boulder.
+func set_pushing_object(pushing: bool) -> void:
+	is_pushing_object = pushing
+
+
+## Starts the automatic rightward walk-off sequence at the end of a chapter.
+func start_level_exit_walk() -> void:
+	_is_exit_walking = true
+	is_cinematic_locked = false
+	is_pushing_object = false
+	_is_sliding_active = false
+	facing_direction = 1.0
+	if _visual_root != null:
+		_visual_root.scale.x = 1.0
+
+
 ## Locks or unlocks player movement and input during interactive cinematics.
 func set_cinematic_lock(locked: bool) -> void:
 	is_cinematic_locked = locked
 	if locked:
 		_is_sliding_active = false
+		is_pushing_object = false
 		velocity.x = 0.0
 		state = State.IDLE
 		_update_walk_anim()
@@ -147,16 +185,36 @@ func respawn_at(target_position: Vector3) -> void:
 	velocity = Vector3.ZERO
 	_coyote_timer = 0.0
 	_jump_buffer_timer = 0.0
+	_is_exit_walking = false
+	is_pushing_object = false
 	state = State.IDLE
 
 
 ## Marks the player dead and notifies listeners through EventBus.
 func die(reason: StringName) -> void:
-	if state == State.DEAD:
+	if state == State.DEAD or _is_exit_walking:
 		return
 	state = State.DEAD
 	velocity = Vector3.ZERO
 	EventBus.player_died.emit(reason)
+
+
+func _update_exertion_heat() -> void:
+	if _heat_comp == null:
+		return
+	if _is_sliding_active and absf(velocity.x) > 0.2:
+		_heat_comp.set_rate(&"exertion", -0.24)
+	elif is_pushing_object and absf(velocity.x) > 0.05:
+		_heat_comp.set_rate(&"exertion", 0.16 if _heat_comp.heat < 0.78 else 0.0)
+	elif not is_on_floor():
+		_heat_comp.set_rate(&"exertion", 0.14 if _heat_comp.heat < 0.72 else 0.0)
+	elif absf(velocity.x) > 0.2:
+		_heat_comp.set_rate(&"exertion", 0.11 if _heat_comp.heat < 0.62 else 0.0)
+	else:
+		if _heat_comp.heat > 0.14:
+			_heat_comp.clear_rate(&"exertion")
+		else:
+			_heat_comp.set_rate(&"exertion", 0.05 if _heat_comp.heat < 0.12 else 0.0)
 
 
 func _animate_squash(target_scale: Vector3) -> void:
@@ -216,7 +274,9 @@ func _on_litter_picked(type: StringName) -> void:
 		_carry_label.text = "●"
 
 
-func _on_litter_sorted(_type: StringName, _correct: bool) -> void:
+func _on_litter_sorted(_type: StringName, correct: bool) -> void:
+	if not correct:
+		return
 	is_carrying = false
 	carried_item_type = &""
 	if _carry_visual != null:
@@ -259,7 +319,7 @@ func _is_slide_pressed() -> bool:
 func _handle_horizontal(delta: float) -> void:
 	var input_axis: float = Input.get_axis(&"move_left", &"move_right")
 	var on_ground: bool = is_on_floor()
-	_is_sliding_active = _is_slide_pressed()
+	_is_sliding_active = _is_slide_pressed() and not is_pushing_object
 	var accel: float = tuning.walk_acceleration if on_ground else tuning.air_acceleration
 	var fric: float = tuning.walk_friction if on_ground else tuning.air_friction
 	if _is_sliding_active and is_zero_approx(input_axis):
@@ -309,6 +369,7 @@ func _update_walk_anim() -> void:
 		amount = absf(velocity.x) / tuning.walk_speed
 	_penguin_model.set_walk_amount(amount)
 	_penguin_model.set_slide_amount(1.0 if _is_sliding_active else 0.0)
+	_penguin_model.set_push_amount(1.0 if (is_pushing_object and absf(velocity.x) > 0.05) else 0.0)
 	if _carry_visual != null:
 		_carry_visual.position.y = 1.32 if _is_sliding_active else 2.05
 

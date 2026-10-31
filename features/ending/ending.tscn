@@ -13,14 +13,14 @@
 
 [sub_resource type="Environment" id="Environment_end"]
 background_mode = 1
-background_color = Color(0.7, 0.77, 0.85, 1)
+background_color = Color(0.56, 0.66, 0.78, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.84, 0.88, 0.94, 1)
-ambient_light_energy = 0.85
+ambient_light_color = Color(0.68, 0.76, 0.86, 1)
+ambient_light_energy = 0.74
 
 [sub_resource type="StandardMaterial3D" id="Mat_snow"]
-albedo_color = Color(0.9, 0.95, 0.99, 1)
-roughness = 0.85
+albedo_color = Color(0.75, 0.82, 0.89, 1)
+roughness = 0.88
 
 [sub_resource type="StandardMaterial3D" id="Mat_rock"]
 albedo_color = Color(0.44, 0.52, 0.6, 1)

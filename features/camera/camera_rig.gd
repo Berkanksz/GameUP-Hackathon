@@ -12,6 +12,7 @@ const DEFAULT_TUNING_PATH: String = "res://data/tuning.tres"
 var _lookahead: float = 0.0
 var _cinematic_focus_active: bool = false
 var _cinematic_focus_pos: Vector3 = Vector3.ZERO
+var _frozen_for_exit: bool = false
 var _fov_tween: Tween
 
 @onready var _camera: Camera3D = $Camera3D
@@ -30,6 +31,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if _frozen_for_exit:
+		return
 	if _cinematic_focus_active:
 		var focus_desired: Vector3 = Vector3(
 			_cinematic_focus_pos.x,
@@ -70,6 +73,12 @@ func release_focus(duration: float = 0.55) -> void:
 		_fov_tween.kill()
 	_fov_tween = create_tween().set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
 	_fov_tween.tween_property(_camera, "fov", tuning.camera_fov, duration)
+
+
+## Freezes the camera at its current position so the player can walk off the right edge of the frame.
+func freeze_at_current_position() -> void:
+	_frozen_for_exit = true
+	_cinematic_focus_active = false
 
 
 ## Replaces the camera bounds rectangle and enables clamping.

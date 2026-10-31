@@ -8,40 +8,40 @@ font_weight = 700
 subpixel_positioning = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mono"]
-bg_color = Color(0.09, 0.36, 0.58, 0.95)
+bg_color = Color(0.07, 0.28, 0.46, 0.95)
 border_width_left = 4
 border_width_top = 3
 border_width_right = 4
 border_width_bottom = 3
-border_color = Color(0.52, 0.94, 1, 1)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-expand_margin_left = 28.0
+border_color = Color(0.48, 0.9, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 20.0
 expand_margin_top = 14.0
-expand_margin_right = 28.0
+expand_margin_right = 20.0
 expand_margin_bottom = 14.0
-shadow_color = Color(0.02, 0.1, 0.2, 0.55)
+shadow_color = Color(0.01, 0.06, 0.14, 0.55)
 shadow_size = 12
 shadow_offset = Vector2(0, 4)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_callout"]
-bg_color = Color(0.12, 0.46, 0.66, 0.96)
-border_width_left = 3
+bg_color = Color(0.08, 0.32, 0.5, 0.96)
+border_width_left = 4
 border_width_top = 3
-border_width_right = 3
+border_width_right = 4
 border_width_bottom = 3
-border_color = Color(1, 0.86, 0.35, 1)
-corner_radius_top_left = 18
-corner_radius_top_right = 18
-corner_radius_bottom_right = 18
-corner_radius_bottom_left = 18
-expand_margin_left = 22.0
+border_color = Color(1, 0.84, 0.34, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 18.0
 expand_margin_top = 12.0
-expand_margin_right = 22.0
+expand_margin_right = 18.0
 expand_margin_bottom = 12.0
-shadow_color = Color(0.02, 0.1, 0.2, 0.5)
+shadow_color = Color(0.01, 0.06, 0.14, 0.5)
 shadow_size = 10
 shadow_offset = Vector2(0, 3)
 
@@ -50,14 +50,10 @@ layer = 8
 script = ExtResource("1_monologue")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -165.0
-offset_bottom = -34.0
-grow_horizontal = 2
-grow_vertical = 0
+offset_left = 36.0
+offset_top = 580.0
+offset_right = 516.0
+offset_bottom = 735.0
 mouse_filter = 2
 
 [node name="CenterContainer" type="CenterContainer" parent="MarginContainer"]
@@ -72,42 +68,42 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_mono")
 
 [node name="SubtitleLabel" type="Label" parent="MarginContainer/CenterContainer/PanelContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(640, 0)
+custom_minimum_size = Vector2(430, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.99, 0.92, 1)
-theme_override_colors/font_outline_color = Color(0.03, 0.12, 0.24, 1)
-theme_override_colors/font_shadow_color = Color(0.02, 0.08, 0.16, 0.75)
+theme_override_colors/font_color = Color(0.98, 0.97, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.09, 0.18, 1)
+theme_override_colors/font_shadow_color = Color(0.01, 0.06, 0.12, 0.75)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_constants/outline_size = 7
+theme_override_constants/outline_size = 6
 theme_override_fonts/font = SubResource("SystemFont_narrative")
-theme_override_font_sizes/font_size = 27
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 0
 vertical_alignment = 1
 autowrap_mode = 3
 
 [node name="PenguinCallout" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-offset_left = 400.0
-offset_top = 240.0
-offset_right = 820.0
-offset_bottom = 310.0
+offset_left = 36.0
+offset_top = 580.0
+offset_right = 516.0
+offset_bottom = 735.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_callout")
 
 [node name="CalloutLabel" type="Label" parent="PenguinCallout"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(360, 0)
+custom_minimum_size = Vector2(430, 0)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.99, 0.9, 1)
-theme_override_colors/font_outline_color = Color(0.03, 0.12, 0.24, 1)
-theme_override_colors/font_shadow_color = Color(0.02, 0.08, 0.16, 0.75)
+theme_override_colors/font_color = Color(0.98, 0.97, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.09, 0.18, 1)
+theme_override_colors/font_shadow_color = Color(0.01, 0.06, 0.12, 0.75)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
 theme_override_constants/outline_size = 6
 theme_override_fonts/font = SubResource("SystemFont_narrative")
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
+theme_override_font_sizes/font_size = 21
+horizontal_alignment = 0
 vertical_alignment = 1
 autowrap_mode = 3

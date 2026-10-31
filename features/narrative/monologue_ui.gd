@@ -1,6 +1,6 @@
 class_name MonologueUI
 extends CanvasLayer
-## Displays subtitle monologues at the bottom of the screen or floating in front of the penguin.
+## Displays narrative and reactive messages inside a fixed rectangular dock at the left-middle-lower screen area.
 
 const BOTTOM_CINEMATIC_KEYS: Array[StringName] = [
 	&"MONO_C1_START",
@@ -16,7 +16,7 @@ const BOTTOM_CINEMATIC_KEYS: Array[StringName] = [
 ]
 
 @export var display_duration: float = 4.5
-@export var fade_duration: float = 0.26
+@export var fade_duration: float = 0.24
 
 var _current_key: StringName = &""
 var _fade_tween: Tween
@@ -33,15 +33,18 @@ var _use_penguin_callout: bool = false
 func _ready() -> void:
 	add_to_group(&"monologue_ui")
 	EventBus.monologue_requested.connect(_on_monologue_requested)
+	EventBus.fact_collected.connect(_on_fact_collected)
+	EventBus.chapter_completed.connect(_on_chapter_completed)
 	EventBus.language_changed.connect(_on_language_changed)
 	_panel.modulate.a = 0.0
 	_panel.visible = false
 	if _callout_panel != null:
+		_callout_panel.position = Vector2(36.0, 580.0)
 		_callout_panel.modulate.a = 0.0
 		_callout_panel.visible = false
 
 
-## Immediately hides any active monologue banner or callout bubble.
+## Immediately hides any active monologue banner or callout rectangle.
 func hide_immediately() -> void:
 	_is_displaying = false
 	if _fade_tween != null and _fade_tween.is_valid():
@@ -56,11 +59,17 @@ func hide_immediately() -> void:
 func _process(delta: float) -> void:
 	if not _is_displaying:
 		return
-	if _use_penguin_callout and _callout_panel != null and _callout_panel.visible:
-		_update_callout_position()
 	_hide_timer -= delta
 	if _hide_timer <= 0.0:
 		_hide_subtitle()
+
+
+func _on_fact_collected(_key: StringName) -> void:
+	hide_immediately()
+
+
+func _on_chapter_completed(_chapter_id: StringName) -> void:
+	hide_immediately()
 
 
 func _on_monologue_requested(key: StringName) -> void:
@@ -87,9 +96,9 @@ func _show_monologue(key: StringName) -> void:
 	_fade_tween = create_tween()
 	if _use_penguin_callout:
 		_panel.visible = false
+		_callout_panel.position = Vector2(36.0, 580.0)
 		_callout_panel.visible = true
-		_update_callout_position()
-		_callout_panel.scale = Vector2(0.88, 0.88)
+		_callout_panel.scale = Vector2(0.94, 0.94)
 		_fade_tween.set_parallel(true)
 		_fade_tween.tween_property(_callout_panel, "modulate:a", 1.0, fade_duration)
 		_fade_tween.tween_property(_callout_panel, "scale", Vector2.ONE, fade_duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
@@ -98,25 +107,6 @@ func _show_monologue(key: StringName) -> void:
 			_callout_panel.visible = false
 		_panel.visible = true
 		_fade_tween.tween_property(_panel, "modulate:a", 1.0, fade_duration)
-
-
-func _update_callout_position() -> void:
-	if _callout_panel == null:
-		return
-	var player: Node3D = get_tree().get_first_node_in_group(&"player") as Node3D
-	var cam: Camera3D = get_viewport().get_camera_3d()
-	if player == null or cam == null:
-		return
-	var facing: float = float(player.get("facing_direction"))
-	if is_zero_approx(facing):
-		facing = 1.0
-	var world_anchor: Vector3 = player.global_position + Vector3(facing * 1.8, 2.45, 0.0)
-	var screen_pos: Vector2 = cam.unproject_position(world_anchor)
-	var vp_size: Vector2 = get_viewport().get_visible_rect().size
-	var box_size: Vector2 = _callout_panel.size
-	var target_x: float = clampf(screen_pos.x - box_size.x * 0.5, 40.0, maxf(40.0, vp_size.x - box_size.x - 40.0))
-	var target_y: float = clampf(screen_pos.y - box_size.y, 110.0, maxf(110.0, vp_size.y - box_size.y - 260.0))
-	_callout_panel.position = Vector2(target_x, target_y)
 
 
 func _hide_subtitle() -> void:
