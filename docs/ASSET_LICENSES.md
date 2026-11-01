@@ -36,3 +36,5 @@ Every file under assets/ must be listed here by its path or by its folder path. 
 | Sort incorrect audio | project owner | synthesized in Python | CC0 original | assets/audio/sort_bad.wav | no |
 | UI click audio | project owner | synthesized in Python | CC0 original | assets/audio/ui_click.wav | no |
 | Calm music audio | project owner | synthesized in Python | CC0 original | assets/audio/calm_music.wav | no |
+| Game logo image | project owner | original artwork | CC0 original | assets/images/logo.png | no |
+| App icon 512 image | project owner | original artwork | CC0 original | assets/images/icon_512.png | no |

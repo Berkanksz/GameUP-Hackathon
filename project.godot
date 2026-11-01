@@ -10,9 +10,17 @@ config_version=5
 
 [application]
 
-config/name="Penguyu Kurtar"
+config/name="Higher Ground"
+config/description="A bilingual 2.5D climate awareness platformer adventure."
 run/main_scene="res://features/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://icon.png"
+config/macos_native_icon="res://icon.icns"
+config/windows_native_icon="res://icon.ico"
+boot_splash/image="res://icon.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=true
+boot_splash/bg_color=Color(0.12, 0.28, 0.42, 1)
 
 [autoload]
 

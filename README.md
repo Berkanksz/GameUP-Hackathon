@@ -1,6 +1,17 @@
-# Higher Ground
+<p align="center">
+  <img src="assets/images/logo.png" width="160" alt="Higher Ground Logo" />
+</p>
 
-[English](#english) | [Türkçe](#türkçe)
+<h1 align="center">Higher Ground</h1>
+
+<p align="center">
+  <b>Bilingual 2.5D Climate Awareness Adventure Platformer</b><br>
+  <i>İki Dilli 2.5D İklim Farkındalığı Macera Platform Oyunu</i>
+</p>
+
+<p align="center">
+  <a href="#english">English</a> • <a href="#türkçe">Türkçe</a>
+</p>
 
 ---
 
