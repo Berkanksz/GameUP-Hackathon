@@ -58,15 +58,21 @@ func get_volume(bus: StringName) -> float:
 func _load_settings() -> void:
 	var err: Error = _config.load(CONFIG_PATH)
 	if err == OK:
-		var saved_lang: String = str(_config.get_value(SECTION_GENERAL, KEY_LANGUAGE, DEFAULT_LANGUAGE))
+		var saved_lang: String = str(_config.get_value(SECTION_GENERAL, KEY_LANGUAGE, ""))
 		if saved_lang in SUPPORTED_LANGUAGES:
 			_language = saved_lang
+		elif saved_lang == "":
+			var sys_lang: String = OS.get_locale_language()
+			_language = sys_lang if sys_lang in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
 		if _config.has_section(SECTION_AUDIO):
 			for key: String in _config.get_section_keys(SECTION_AUDIO):
 				var bus_name: StringName = StringName(key)
 				var vol: float = clampf(float(_config.get_value(SECTION_AUDIO, key, 1.0)), 0.0, 1.0)
 				_volumes[bus_name] = vol
 				_apply_bus_volume(bus_name, vol)
+	else:
+		var sys_lang: String = OS.get_locale_language()
+		_language = sys_lang if sys_lang in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
 	TranslationServer.set_locale(_language)
 
 

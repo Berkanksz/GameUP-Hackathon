@@ -29,14 +29,14 @@ if not defined GODOT_CMD (
     echo.
     where curl >nul 2>nul
     if %ERRORLEVEL% equ 0 (
-        curl -L -o godot_win.zip "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip"
+        curl -L -o godot_win.zip "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_win64.exe.zip"
         if exist "godot_win.zip" (
             tar -xf godot_win.zip
             del /f /q godot_win.zip
             ren Godot*_win64.exe HigherGround.exe 2>nul
         )
     ) else (
-        powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_win64.exe.zip' -OutFile 'godot_win.zip'; Expand-Archive -Path 'godot_win.zip' -DestinationPath '.' -Force; Remove-Item 'godot_win.zip' -Force; Get-ChildItem -Filter 'Godot*.exe' | Rename-Item -NewName 'HigherGround.exe' -Force"
+        powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest -Uri 'https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_win64.exe.zip' -OutFile 'godot_win.zip'; Expand-Archive -Path 'godot_win.zip' -DestinationPath '.' -Force; Remove-Item 'godot_win.zip' -Force; Get-ChildItem -Filter 'Godot*.exe' | Rename-Item -NewName 'HigherGround.exe' -Force"
     )
     if exist "HigherGround.exe" set "GODOT_CMD=.\HigherGround.exe"
 )

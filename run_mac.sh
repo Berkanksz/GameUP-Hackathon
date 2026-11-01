@@ -26,12 +26,12 @@ if [ -z "$GODOT_BIN" ]; then
     echo "Downloading portable game runner, please wait..."
     echo ""
     if command -v curl &> /dev/null; then
-        curl -L -o godot_mac.zip "https://github.com/godotengine/godot/releases/download/4.3-stable/Godot_v4.3-stable_macos.universal.zip"
+        curl -L -o godot_mac.zip "https://github.com/godotengine/godot/releases/download/4.7.2-stable/Godot_v4.7.2-stable_macos.universal.zip"
         if [ -f "godot_mac.zip" ]; then
             unzip -q godot_mac.zip
             rm -f godot_mac.zip
-            if [ -d "Godot_v4.3-stable_macos.universal.app" ]; then
-                mv "Godot_v4.3-stable_macos.universal.app" "Godot.app"
+            if [ -d "Godot_v4.7.2-stable_macos.universal.app" ]; then
+                mv "Godot_v4.7.2-stable_macos.universal.app" "Godot.app"
             fi
             if [ -d "$DIR/Godot.app/Contents/MacOS/Godot" ]; then
                 GODOT_BIN="$DIR/Godot.app/Contents/MacOS/Godot"
