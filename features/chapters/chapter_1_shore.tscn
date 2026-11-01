@@ -294,21 +294,17 @@ key = &"MONO_C1_END"
 [node name="FactCards" type="Node3D" parent="."]
 
 [node name="FactCard1" parent="FactCards" instance=ExtResource("11_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.0, 1.35, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.0, 9.75, 0)
 fact_key = &"FACT_SEA_ICE"
 source_label = "BAS, 2023"
-
-[node name="FactCard2" parent="FactCards" instance=ExtResource("11_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 3.1, 0)
-fact_key = &"FACT_FOOD_SECURITY"
-source_label = "CCAMLR / FAO, 2024"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 
 [node name="ChickChoice" parent="ChoicePoints" instance=ExtResource("12_choice_point")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.2, 0.08, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.8, 0.25, 0)
 choice_id = &"chick"
 hope_reward = 15.0
+trigger_radius = 4.5
 
 [node name="Goals" type="Node3D" parent="."]
 

@@ -1,11 +1,18 @@
+# Godot engine artifacts
 .godot/
+.godot
 export/
 *.translation
-.agents/memory.jsonl
-*.blend1
-*.tmp
-.DS_Store
-.code-review-graph/
 *.uid
+
+# Agent and tool files
+.agents/memory.jsonl
+.code-review-graph/
 mcp_interaction_server.gd*
 
+# Temporary and system files
+*.blend1
+*.tmp
+*.log
+.DS_Store
+Thumbs.db

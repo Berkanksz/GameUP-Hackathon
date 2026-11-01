@@ -334,9 +334,7 @@ func _on_litter_sorted(_type: StringName, correct: bool) -> void:
 
 
 func _on_monologue_requested(_key: StringName) -> void:
-	_fact_showing = false
-	if _fact_popup != null:
-		_fact_popup.visible = false
+	pass
 
 
 func _on_fact_collected(key: StringName) -> void:
@@ -479,10 +477,10 @@ func _display_fact(key: StringName) -> void:
 	_fact_text_label.text = tr(key)
 	var source: String = FactCardScript.get_source(key)
 	_fact_source_label.text = "" if source.is_empty() else "%s: %s" % [tr("UI_FACT_SOURCE"), source]
-	_fact_popup.position = Vector2(36.0, 580.0)
+	_fact_popup.position = Vector2(1390.0, 560.0)
 	_fact_popup.visible = true
 	_fact_showing = true
-	_fact_timer = 5.0
+	_fact_timer = 8.5
 
 
 func _update_fact_popup(delta: float) -> void:

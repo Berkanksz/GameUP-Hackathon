@@ -58,11 +58,12 @@ Status marks: [ ] planned, [x] built.
 27. [x] TiltingBridge (Node3D): @export bridge_length: float, @export max_tilt_degrees: float, @export tilt_speed: float. See saw ice plank that tilts under player offset weight.
 28. [x] IceBoulder (Node3D): @export max_push_distance: float, @export push_speed: float, @export boulder_radius: float. Pushable snowball boulder for step puzzles.
 29. [x] MovingPlatform (Node3D): @export move_offset: Vector3, @export cycle_duration: float, @export platform_width: float. Oscillating ice floe platform that carries the player.
+30. [x] IntroStory (Control): intermediate screen after Main Menu explaining game mechanics, narrative goals, and climate/zero-waste awareness with a live 3D showcase penguin looking at camera and turning left and right every 3 seconds.
 
 ## Couplings the scanner cannot see
 (Fill as they appear. Also record in memory graph as scene_couples_to.)
 1. CameraRig finds the first node in group player when target is not assigned.
-2. Player flips child VisualRoot on the x scale according to facing direction and scales child PenguinModel for jump and land squash and stretch.
+2. Player smoothly rotates child VisualRoot on the y axis according to facing direction and scales child PenguinModel for jump and land squash and stretch.
 3. HeatComponent calls die on its parent node when heat reaches heat_max.
 4. HeatZone searches entering player body children for a HeatComponent node.
 5. Respawn finds the first node in group player when player is not assigned and searches group checkpoint by checkpoint_id.

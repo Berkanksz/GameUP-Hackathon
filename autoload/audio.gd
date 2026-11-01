@@ -22,6 +22,11 @@ const MUSIC_FILES: Dictionary = {
 	&"music": "res://assets/audio/calm_music.wav",
 }
 
+const SFX_VOLUME_OFFSET: Dictionary = {
+	&"snow_step": -12.0,
+	&"step": -12.0,
+}
+
 const AMBIENCE_FILES: Dictionary = {
 	&"wind": "res://assets/audio/wind_ambience.wav",
 	&"wind_ambience": "res://assets/audio/wind_ambience.wav",
@@ -44,9 +49,8 @@ func _ready() -> void:
 	if EventBus != null:
 		EventBus.chapter_started.connect(_on_chapter_started)
 		EventBus.game_ended.connect(_on_game_ended)
-	# Start background music and gentle wind on launch
+	# Start background lo-fi music; background noise/wind removed for clean chill atmosphere
 	play_music(&"calm")
-	play_ambience(&"wind")
 
 
 func _init_players() -> void:
@@ -65,13 +69,13 @@ func _init_players() -> void:
 	_music_player = AudioStreamPlayer.new()
 	_music_player.name = "MusicPlayer"
 	_music_player.bus = music_bus
-	_music_player.volume_db = -10.0
+	_music_player.volume_db = -1.0
 	add_child(_music_player)
 
 	_ambience_player = AudioStreamPlayer.new()
 	_ambience_player.name = "AmbiencePlayer"
 	_ambience_player.bus = amb_bus
-	_ambience_player.volume_db = -12.0
+	_ambience_player.volume_db = -80.0
 	add_child(_ambience_player)
 
 
@@ -104,8 +108,8 @@ func _configure_loop(stream: AudioStream) -> void:
 		wav.loop_end = int(wav.get_length() * wav.mix_rate)
 
 
-## Plays a sound effect registered under key.
-func play_sfx(key: StringName) -> void:
+## Plays a sound effect registered under key with optional volume offset.
+func play_sfx(key: StringName, volume_offset_db: float = 0.0) -> void:
 	if not _sfx_streams.has(key):
 		return
 	var stream: AudioStream = _sfx_streams[key] as AudioStream
@@ -122,6 +126,9 @@ func play_sfx(key: StringName) -> void:
 		player = _sfx_players[_sfx_cursor]
 		_sfx_cursor = (_sfx_cursor + 1) % _sfx_players.size()
 
+	var base_db: float = -8.0
+	var offset: float = float(SFX_VOLUME_OFFSET.get(key, 0.0)) + volume_offset_db
+	player.volume_db = base_db + offset
 	player.stream = stream
 	player.play()
 
@@ -145,17 +152,9 @@ func stop_music() -> void:
 		_music_player.stop()
 
 
-## Plays ambient background sound registered under key.
-func play_ambience(key: StringName = &"wind") -> void:
-	if not _ambience_streams.has(key):
-		return
-	var stream: AudioStream = _ambience_streams[key] as AudioStream
-	if stream == null:
-		return
-	if _ambience_player.stream == stream and _ambience_player.playing:
-		return
-	_ambience_player.stream = stream
-	_ambience_player.play()
+## Plays ambient background sound registered under key (disabled for clean chill lofi audio).
+func play_ambience(_key: StringName = &"wind") -> void:
+	return
 
 
 ## Stops ambience playback.
@@ -166,7 +165,6 @@ func stop_ambience() -> void:
 
 func _on_chapter_started(_chapter_id: StringName) -> void:
 	play_music(&"calm")
-	play_ambience(&"wind")
 
 
 func _on_game_ended(_ending_id: StringName) -> void:

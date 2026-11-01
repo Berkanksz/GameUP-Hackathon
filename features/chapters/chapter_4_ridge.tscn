@@ -131,18 +131,20 @@ size = Vector3(16, 7, 4)
 material = SubResource("Mat_ridge")
 
 [node name="SlideSwoopRamp1" parent="Geometry" instance=ExtResource("19_swoop_ramp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.5, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.4, 0.1, 0)
+launch_velocity = Vector2(11.8, 10.2)
+walk_boost_velocity = Vector2(10.5, 9.6)
 
 [node name="TowerPlateau" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.5, -0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44.5, -1.5, 0)
 use_collision = true
 size = Vector3(13, 7, 4)
 material = SubResource("Mat_ridge")
 
 [node name="ThermalVent1" parent="Geometry" instance=ExtResource("20_thermal_vent")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.8, 3.0, 0)
-updraft_speed = 11.2
-horizontal_nudge = 3.2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.8, 2.0, 0)
+updraft_speed = 14.8
+horizontal_nudge = 4.5
 
 [node name="GoalRidge" type="CSGBox3D" parent="Geometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70.0, 1.5, 0)
@@ -199,19 +201,14 @@ key = &"MONO_C4_END"
 [node name="FactCards" type="Node3D" parent="."]
 
 [node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 3.2, 0)
-fact_key = &"FACT_EDUCATION"
-source_label = "UNESCO / IPCC, 2024"
-
-[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.5, 4.2, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 58.5, 6.8, 0)
 fact_key = &"FACT_PERMAFROST"
 source_label = "NOAA / IPCC, 2024"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 
 [node name="TowerChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5, 3.02, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5, 2.02, 0)
 choice_id = &"tower"
 hope_reward = 15.0
 prompt_key = &"CHOICE_TOWER_PROMPT"

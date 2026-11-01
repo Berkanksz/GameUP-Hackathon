@@ -194,6 +194,7 @@ theme_override_constants/separation = 10
 
 [node name="TitleLabel" type="Label" parent="TextLayer/TextRoot/VBox"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.94, 0.58, 1)
 theme_override_colors/font_outline_color = Color(0.02, 0.1, 0.2, 1)

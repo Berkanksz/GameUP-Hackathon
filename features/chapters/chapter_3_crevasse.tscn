@@ -160,14 +160,9 @@ key = &"MONO_C3_END"
 [node name="FactCards" type="Node3D" parent="."]
 
 [node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.5, 7.2, 0)
 fact_key = &"FACT_GLACIER"
 source_label = "WMO / WGMS, 2024"
-
-[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.0, 3.5, 0)
-fact_key = &"FACT_OCEANS"
-source_label = "NOAA / IPCC, 2023"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 
@@ -181,7 +176,9 @@ option_b_key = &"CHOICE_BUOY_SKIP"
 option_a_id = &"free"
 option_b_id = &"skip"
 success_monologue_key = &"CHOICE_BUOY_SAVED"
-fact_key_a = &"FACT_FOOD_SECURITY"
+
+[node name="FloeBase" parent="ChoicePoints/BuoyChoice"]
+visible = false
 
 [node name="Goals" type="Node3D" parent="."]
 
@@ -211,3 +208,5 @@ bounds = Rect2(-16, -2, 78, 16)
 [node name="MonologueUI" parent="." instance=ExtResource("7_monologue_ui")]
 
 [node name="Hud" parent="." instance=ExtResource("5_hud")]
+
+[editable path="ChoicePoints/BuoyChoice"]

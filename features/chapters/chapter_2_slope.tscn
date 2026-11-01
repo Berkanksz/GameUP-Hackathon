@@ -159,7 +159,7 @@ transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 81.0, 4.0, -1.6)
 transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 86.5, 4.0, -1.6)
 
 [node name="CampSite" type="Node3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5, 4, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5, 4, 0)
 
 [node name="CampCairn" parent="Geometry/CampSite" instance=ExtResource("22_cairn")]
 transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 0, -0.6)
@@ -181,10 +181,6 @@ accepts = &"plastic"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0, 0, 0)
 accepts = &"glass"
 
-[node name="BinOrganic1" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.2, 0, 0)
-accepts = &"organic"
-
 [node name="BinPaper2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.5, 4, 0)
 accepts = &"paper"
@@ -196,10 +192,6 @@ accepts = &"plastic"
 [node name="BinGlass2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5, 4, 0)
 accepts = &"glass"
-
-[node name="BinOrganic2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.5, 4, 0)
-accepts = &"organic"
 
 [node name="Gates" type="Node3D" parent="."]
 
@@ -228,10 +220,9 @@ option_b_key = &"CHOICE_SEED_SKIP"
 option_a_id = &"plant"
 option_b_id = &"skip"
 success_monologue_key = &"MONO_C2_SEED"
-fact_key_a = &"FACT_FOOD_WASTE"
 
-[node name="CampBottleChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5, 4.02, 0)
+[node name="CampBottleChoice" parent="ChoicePoints" node_paths=PackedStringArray("target_prop") instance=ExtResource("10_choice_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5, 4.02, 0)
 choice_id = &"camp_bottle"
 hope_reward = 15.0
 prompt_key = &"CHOICE_BOTTLE_PROMPT"
@@ -240,7 +231,8 @@ option_b_key = &"CHOICE_BOTTLE_LEAVE"
 option_a_id = &"reusable"
 option_b_id = &"leave"
 success_monologue_key = &"MONO_BOTTLE_SAVED"
-fact_key_a = &"FACT_REUSABLE_BOTTLE"
+trigger_radius = 1.6
+target_prop = NodePath("../../Geometry/CampSite/CampBottle")
 
 [node name="FloeBase" parent="ChoicePoints/CampBottleChoice"]
 visible = false
@@ -258,29 +250,9 @@ key = &"MONO_C2_END"
 [node name="FactCards" type="Node3D" parent="."]
 
 [node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 1.15, 0)
-fact_key = &"FACT_PLASTIC"
-source_label = "UNEP, 2023"
-
-[node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.5, 3.15, 0)
-fact_key = &"FACT_CARBON"
-source_label = "UNEP / IPCC, 2024"
-
-[node name="FactCard3" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 5.15, 0)
 fact_key = &"FACT_ZERO_WASTE"
 source_label = "UN GA RES 77/161"
-
-[node name="FactCard4" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.5, 3.2, 0)
-fact_key = &"FACT_FOOD_WASTE"
-source_label = "UNEP / FAO, 2024"
-
-[node name="FactCard5" parent="FactCards" instance=ExtResource("9_fact_card")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5, 5.2, 0)
-fact_key = &"FACT_REUSABLE_BOTTLE"
-source_label = "UNEP Life Cycle Initiative, 2021"
 
 [node name="Goals" type="Node3D" parent="."]
 

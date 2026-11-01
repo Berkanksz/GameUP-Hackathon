@@ -375,10 +375,10 @@ horizontal_alignment = 1
 [node name="FactPopup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
-offset_left = 36.0
-offset_top = 580.0
-offset_right = 516.0
-offset_bottom = 740.0
+offset_left = 1390.0
+offset_top = 560.0
+offset_right = 1870.0
+offset_bottom = 720.0
 mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fact")
 

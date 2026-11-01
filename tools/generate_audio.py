@@ -301,103 +301,153 @@ def gen_ui_click(duration: float = 0.04) -> list:
     return samples
 
 
-def gen_calm_music(duration: float = 12.0) -> list:
+def gen_calm_music(duration: float = 16.0) -> list:
     total_frames = int(SAMPLE_RATE * duration)
-    # Stereo music track
     out = [0.0] * (total_frames * 2)
     
-    # Chord progression:
-    # 0s - 3s: Cmaj7 (C3, G3, B3, E4)
-    # 3s - 6s: Am9   (A2, E3, G3, C4, B4)
-    # 6s - 9s: Fmaj7 (F2, C3, A3, E4)
-    # 9s - 12s: Gsus4 -> G (G2, D3, G3, C4 -> B3)
-    
-    # Notes in Hz
-    def note_hz(name):
-        freqs = {
-            "F2": 87.31, "G2": 98.00, "A2": 110.00, "B2": 123.47,
-            "C3": 130.81, "D3": 146.83, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "B3": 246.94,
-            "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23, "G4": 392.00, "A4": 440.00, "B4": 493.88,
-            "C5": 523.25, "E5": 659.25, "G5": 783.99,
-        }
-        return freqs[name]
+    # Frequencies in Hz for warm, dreamy lo-fi chords
+    freqs = {
+        "F1": 43.65, "G1": 49.00, "A1": 55.00, "B1": 61.74,
+        "C2": 65.41, "D2": 73.42, "E2": 82.41, "F2": 87.31, "G2": 98.00, "A2": 110.00, "B2": 123.47,
+        "C3": 130.81, "D3": 146.83, "E3": 164.81, "F3": 174.61, "G3": 196.00, "A3": 220.00, "B3": 246.94,
+        "C4": 261.63, "D4": 293.66, "E4": 329.63, "F4": 349.23, "G4": 392.00, "A4": 440.00, "B4": 493.88,
+        "C5": 523.25, "D5": 587.33, "E5": 659.25, "G5": 783.99, "A5": 880.00, "B5": 987.77,
+    }
 
-    # Arpeggio events: (time, note, pan, duration)
-    events = [
-        # Bar 1: Cmaj7
-        (0.0, "C3", -0.2, 2.5),
-        (0.4, "G3", 0.1, 2.2),
-        (0.8, "B3", -0.1, 2.0),
-        (1.2, "E4", 0.2, 1.8),
-        (1.8, "G4", -0.1, 1.5),
-        (2.3, "E4", 0.1, 1.2),
+    # Warm Lo-Fi electric piano chords (Cmaj9 -> Am9 -> Fmaj7 -> G13)
+    epiano_events = [
+        # Bar 1: Cmaj9 (0.0s - 4.0s)
+        (0.0, "C3", -0.15, 3.8),
+        (0.04, "G3", 0.10, 3.7),
+        (0.08, "B3", -0.08, 3.6),
+        (0.12, "D4", 0.14, 3.5),
+        (0.16, "E4", 0.0, 3.4),
+        (1.5, "G3", -0.10, 2.0),
+        (2.0, "D4", 0.12, 1.8),
+        (2.8, "B3", -0.06, 1.2),
         
-        # Bar 2: Am9
-        (3.0, "A2", -0.2, 2.5),
-        (3.4, "E3", 0.1, 2.2),
-        (3.8, "G3", -0.1, 2.0),
-        (4.2, "C4", 0.2, 1.8),
-        (4.8, "B4", -0.1, 1.5),
-        (5.3, "G3", 0.1, 1.2),
+        # Bar 2: Am9 (4.0s - 8.0s)
+        (4.0, "A2", -0.15, 3.8),
+        (4.04, "E3", 0.10, 3.7),
+        (4.08, "G3", -0.08, 3.6),
+        (4.12, "B3", 0.14, 3.5),
+        (4.16, "C4", 0.0, 3.4),
+        (5.5, "E3", -0.10, 2.0),
+        (6.0, "C4", 0.12, 1.8),
+        (6.8, "G3", -0.06, 1.2),
         
-        # Bar 3: Fmaj7
-        (6.0, "F2", -0.2, 2.5),
-        (6.4, "C3", 0.1, 2.2),
-        (6.8, "A3", -0.1, 2.0),
-        (7.2, "E4", 0.2, 1.8),
-        (7.8, "C4", -0.1, 1.5),
-        (8.3, "A3", 0.1, 1.2),
+        # Bar 3: Fmaj7 (8.0s - 12.0s)
+        (8.0, "F2", -0.15, 3.8),
+        (8.04, "C3", 0.10, 3.7),
+        (8.08, "E3", -0.08, 3.6),
+        (8.12, "G3", 0.14, 3.5),
+        (8.16, "A3", 0.0, 3.4),
+        (9.5, "C3", -0.10, 2.0),
+        (10.0, "G3", 0.12, 1.8),
+        (10.8, "E3", -0.06, 1.2),
         
-        # Bar 4: G / Gsus4
-        (9.0, "G2", -0.2, 2.5),
-        (9.4, "D3", 0.1, 2.2),
-        (9.8, "G3", -0.1, 2.0),
-        (10.2, "C4", 0.2, 1.2),
-        (10.8, "B3", 0.1, 1.5),
-        (11.3, "D3", -0.1, 1.2),
+        # Bar 4: G13 / Gsus (12.0s - 16.0s)
+        (12.0, "G2", -0.15, 3.8),
+        (12.04, "D3", 0.10, 3.7),
+        (12.08, "F3", -0.08, 3.6),
+        (12.12, "A3", 0.14, 3.5),
+        (12.16, "B3", 0.0, 3.4),
+        (13.5, "D3", -0.10, 2.0),
+        (14.0, "A3", 0.12, 1.8),
+        (14.8, "F3", -0.06, 1.2),
     ]
 
-    for start_t, n_name, pan, note_dur in events:
-        freq = note_hz(n_name)
+    # Warm lo-fi Rhodes rendering
+    for start_t, n_name, pan, note_dur in epiano_events:
+        freq = freqs[n_name]
         start_frame = int(start_t * SAMPLE_RATE)
         event_frames = int(note_dur * SAMPLE_RATE)
-        
         pan_l = 0.5 * (1.0 - pan)
         pan_r = 0.5 * (1.0 + pan)
         
         for k in range(event_frames):
-            idx = start_frame + k
-            if idx >= total_frames:
-                # Wrap for loop seamlessness
-                idx = idx % total_frames
-                
+            idx = (start_frame + k) % total_frames
             t_note = k / SAMPLE_RATE
-            # Soft acoustic / Rhodes envelope: smooth 20ms attack, exponential decay
-            att = min(1.0, t_note / 0.02)
-            decay = math.exp(-t_note / (note_dur * 0.45))
+            att = min(1.0, t_note / 0.025)
+            decay = math.exp(-t_note / (note_dur * 0.52))
             env = att * decay
             
-            # Harmonic combination: fundamental + 2nd harmonic + 3rd harmonic
-            w = 2.0 * math.pi * freq * t_note
-            tone = math.sin(w) + 0.22 * math.sin(2.0 * w) + 0.08 * math.sin(3.0 * w)
-            
-            val = tone * env * 0.25
+            # Warm detuned dual-harmonic tone (Rhodes chill vibe)
+            w1 = 2.0 * math.pi * (freq * 0.9995) * t_note
+            w2 = 2.0 * math.pi * (freq * 1.0005) * t_note
+            tone = (math.sin(w1) + math.sin(w2)) * 0.5 + 0.18 * math.sin(2.0 * w1) + 0.04 * math.sin(3.0 * w1)
+            val = tone * env * 0.28
             out[idx * 2] += val * pan_l
             out[idx * 2 + 1] += val * pan_r
-            
-    # Crossfade loop boundary (1.0s)
-    xfade_len = int(SAMPLE_RATE * 1.0)
+
+    # Cozy sub-bass foundation
+    sub_bass = [
+        (0.0, "C2", 3.8),
+        (4.0, "A1", 3.8),
+        (8.0, "F1", 3.8),
+        (12.0, "G1", 3.8),
+    ]
+    for start_t, n_name, b_dur in sub_bass:
+        freq = freqs[n_name]
+        start_frame = int(start_t * SAMPLE_RATE)
+        event_frames = int(b_dur * SAMPLE_RATE)
+        for k in range(event_frames):
+            idx = (start_frame + k) % total_frames
+            t_note = k / SAMPLE_RATE
+            att = min(1.0, t_note / 0.03)
+            decay = math.exp(-t_note / (b_dur * 0.65))
+            w = 2.0 * math.pi * freq * t_note
+            val = (math.sin(w) + 0.10 * math.sin(2.0 * w)) * att * decay * 0.22
+            out[idx * 2] += val * 0.5
+            out[idx * 2 + 1] += val * 0.5
+
+    # Gentle, soothing celeste / bell drops over the chords
+    melody_events = [
+        (0.6, "G4", 0.18, 1.8),
+        (1.8, "E4", -0.12, 1.5),
+        (2.6, "D4", 0.10, 1.2),
+        (4.6, "B4", 0.16, 1.8),
+        (5.8, "G4", -0.14, 1.5),
+        (6.6, "E4", 0.12, 1.2),
+        (8.6, "A4", 0.15, 1.8),
+        (9.8, "E4", -0.10, 1.5),
+        (10.6, "C4", 0.12, 1.2),
+        (12.6, "D4", 0.14, 1.8),
+        (13.8, "B3", -0.12, 1.5),
+        (14.6, "D4", 0.08, 1.2),
+    ]
+    for start_t, n_name, pan, m_dur in melody_events:
+        freq = freqs[n_name]
+        start_frame = int(start_t * SAMPLE_RATE)
+        event_frames = int(m_dur * SAMPLE_RATE)
+        pan_l = 0.5 * (1.0 - pan)
+        pan_r = 0.5 * (1.0 + pan)
+        for k in range(event_frames):
+            idx = (start_frame + k) % total_frames
+            t_note = k / SAMPLE_RATE
+            att = min(1.0, t_note / 0.012)
+            decay = math.exp(-t_note / (m_dur * 0.42))
+            w = 2.0 * math.pi * freq * t_note
+            # Pure soothing chime tone
+            val = (math.sin(w) + 0.08 * math.sin(3.0 * w)) * att * decay * 0.14
+            out[idx * 2] += val * pan_l
+            out[idx * 2 + 1] += val * pan_r
+
+    # Clean, artifact-free seamless loop crossfade (1.2s)
+    xfade_len = int(SAMPLE_RATE * 1.2)
     for i in range(xfade_len):
         w = i / float(xfade_len)
-        head_idx_l = i * 2
-        head_idx_r = i * 2 + 1
-        tail_idx_l = (total_frames - xfade_len + i) * 2
-        tail_idx_r = (total_frames - xfade_len + i) * 2 + 1
+        head_l = i * 2
+        head_r = i * 2 + 1
+        tail_l = (total_frames - xfade_len + i) * 2
+        tail_r = (total_frames - xfade_len + i) * 2 + 1
         
-        blended_l = out[head_idx_l] * w + out[tail_idx_l] * (1.0 - w)
-        blended_r = out[head_idx_r] * w + out[tail_idx_r] * (1.0 - w)
-        out[head_idx_l] = blended_l
-        out[tail_idx_l] = blended_l
+        blended_l = out[head_l] * w + out[tail_l] * (1.0 - w)
+        blended_r = out[head_r] * w + out[tail_r] * (1.0 - w)
+        out[head_l] = blended_l
+        out[tail_l] = blended_l
+        out[head_r] = blended_r
+        out[tail_r] = blended_r
         
     return out
 
@@ -406,8 +456,7 @@ def main():
     target_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "audio")
     os.makedirs(target_dir, exist_ok=True)
     
-    write_wav(os.path.join(target_dir, "wind_ambience.wav"), gen_wind_ambience(6.0), channels=2, target_peak=0.07)
-    write_wav(os.path.join(target_dir, "snow_step.wav"), gen_snow_step(0.16), channels=1, target_peak=0.12)
+    write_wav(os.path.join(target_dir, "snow_step.wav"), gen_snow_step(0.16), channels=1, target_peak=0.035)
     write_wav(os.path.join(target_dir, "jump.wav"), gen_jump(0.22), channels=1, target_peak=0.15)
     write_wav(os.path.join(target_dir, "land.wav"), gen_land(0.18), channels=1, target_peak=0.14)
     write_wav(os.path.join(target_dir, "ice_crack.wav"), gen_ice_crack(0.32), channels=1, target_peak=0.16)
@@ -415,7 +464,8 @@ def main():
     write_wav(os.path.join(target_dir, "sort_ok.wav"), gen_sort_ok(0.35), channels=1, target_peak=0.15)
     write_wav(os.path.join(target_dir, "sort_bad.wav"), gen_sort_bad(0.35), channels=1, target_peak=0.14)
     write_wav(os.path.join(target_dir, "ui_click.wav"), gen_ui_click(0.04), channels=1, target_peak=0.12)
-    write_wav(os.path.join(target_dir, "calm_music.wav"), gen_calm_music(12.0), channels=2, target_peak=0.10)
+    write_wav(os.path.join(target_dir, "calm_music.wav"), gen_calm_music(16.0), channels=2, target_peak=0.28)
+    print("All audio assets successfully synthesized.")
     print("All audio assets successfully synthesized.")
 
 

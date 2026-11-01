@@ -23,6 +23,7 @@ const COLOR_GLASS: Color = Color(0.20, 0.75, 0.38, 1.0)
 @export var tuning: TuningData
 @export var fall_death_y: float = -2.2
 @export var slide_speed_multiplier: float = 1.45
+@export var turn_speed: float = 22.0
 
 var state: State = State.IDLE
 var facing_direction: float = 1.0
@@ -37,6 +38,8 @@ var _current_heat: float = 0.0
 var _was_on_floor: bool = true
 var _is_sliding_active: bool = false
 var _is_exit_walking: bool = false
+var _visual_yaw: float = 0.0
+var _squash_tween: Tween
 var _carry_visual: Node3D
 var _carry_paper: Node3D
 var _carry_plastic: Node3D
@@ -74,8 +77,7 @@ func _physics_process(delta: float) -> void:
 	if _is_exit_walking:
 		_is_sliding_active = false
 		facing_direction = 1.0
-		if _visual_root != null:
-			_visual_root.scale.x = 1.0
+		_update_visual_facing(delta)
 		velocity.x = move_toward(velocity.x, tuning.walk_speed * 1.18, tuning.walk_acceleration * delta)
 		_apply_gravity(delta)
 		move_and_slide()
@@ -90,6 +92,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if is_cinematic_locked:
 		_is_sliding_active = false
+		_update_visual_facing(delta)
 		velocity.x = move_toward(velocity.x, 0.0, 30.0 * delta)
 		_apply_gravity(delta)
 		move_and_slide()
@@ -102,6 +105,7 @@ func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
 	_handle_jump()
 	_handle_horizontal(delta)
+	_update_visual_facing(delta)
 	var push_x: float = _get_push_x()
 	velocity.x += push_x
 	move_and_slide()
@@ -145,8 +149,6 @@ func start_level_exit_walk() -> void:
 	is_pushing_object = false
 	_is_sliding_active = false
 	facing_direction = 1.0
-	if _visual_root != null:
-		_visual_root.scale.x = 1.0
 
 
 ## Locks or unlocks player movement and input during interactive cinematics.
@@ -173,8 +175,6 @@ func apply_launch_boost(vel_x: float, vel_y: float) -> void:
 	_jump_buffer_timer = 0.0
 	if not is_zero_approx(vel_x):
 		facing_direction = signf(vel_x)
-		if _visual_root != null:
-			_visual_root.scale.x = facing_direction
 	_animate_squash(Vector3(0.84, 1.22, 0.84))
 	Audio.play_sfx(&"jump")
 
@@ -187,6 +187,11 @@ func respawn_at(target_position: Vector3) -> void:
 	_jump_buffer_timer = 0.0
 	_is_exit_walking = false
 	is_pushing_object = false
+	facing_direction = 1.0
+	_visual_yaw = 0.0
+	if _visual_root != null:
+		_visual_root.scale = Vector3.ONE
+		_visual_root.rotation = Vector3.ZERO
 	if _penguin_model != null:
 		_penguin_model.rotation_degrees.x = 0.0
 		_penguin_model.position.y = 0.0
@@ -227,9 +232,20 @@ func _update_exertion_heat() -> void:
 func _animate_squash(target_scale: Vector3) -> void:
 	if _penguin_model == null:
 		return
-	var tween: Tween = create_tween()
-	tween.tween_property(_penguin_model, "scale", target_scale, 0.07)
-	tween.tween_property(_penguin_model, "scale", Vector3.ONE, 0.14)
+	if _squash_tween != null and _squash_tween.is_valid():
+		_squash_tween.kill()
+	_squash_tween = create_tween()
+	_squash_tween.tween_property(_penguin_model, "scale", target_scale, 0.07)
+	_squash_tween.tween_property(_penguin_model, "scale", Vector3.ONE, 0.14)
+
+
+func _update_visual_facing(delta: float) -> void:
+	if _visual_root == null:
+		return
+	_visual_root.scale = Vector3.ONE
+	var target_yaw: float = 0.0 if facing_direction >= 0.0 else -PI
+	_visual_yaw = move_toward(_visual_yaw, target_yaw, turn_speed * delta)
+	_visual_root.rotation.y = _visual_yaw
 
 
 func _setup_carry_visual() -> void:
@@ -337,8 +353,6 @@ func _handle_horizontal(delta: float) -> void:
 			speed_mult *= slide_speed_multiplier
 		velocity.x = move_toward(velocity.x, input_axis * tuning.walk_speed * speed_mult, accel * delta)
 		facing_direction = signf(input_axis)
-		if _visual_root != null:
-			_visual_root.scale.x = facing_direction
 	else:
 		var slide_fric: float = fric * 0.35 if _is_sliding_active else fric
 		velocity.x = move_toward(velocity.x, 0.0, slide_fric * delta)

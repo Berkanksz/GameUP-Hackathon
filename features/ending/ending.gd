@@ -82,14 +82,14 @@ func _play_penguin_action() -> void:
 		tween.tween_property(penguin_root, "position:x", 1.15, 1.1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		tween.tween_callback(func() -> void:
 			penguin_model.set_slide_amount(0.0)
-			penguin_root.scale.x = -1.0
+			penguin_root.rotation.y = PI
 		)
 	elif ending_id == &"MID":
 		# Pause at center, look back at the warm hut, then face the valley and hop gently
 		tween.tween_interval(0.45)
-		tween.tween_callback(func() -> void: penguin_root.scale.x = -1.0)
+		tween.tween_callback(func() -> void: penguin_root.rotation.y = PI)
 		tween.tween_interval(0.8)
-		tween.tween_callback(func() -> void: penguin_root.scale.x = 1.0)
+		tween.tween_callback(func() -> void: penguin_root.rotation.y = 0.0)
 		tween.tween_property(penguin_root, "position:y", 0.38, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 		tween.tween_property(penguin_root, "position:y", 0.0, 0.20).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	else:
@@ -124,7 +124,9 @@ func _apply_background() -> void:
 
 
 func _refresh_text() -> void:
-	_title_label.text = tr("END_%s_TITLE" % ending_id)
+	if _title_label != null:
+		_title_label.text = ""
+		_title_label.visible = false
 	_body_label.text = tr("END_%s_TEXT" % ending_id)
 	_call_label.text = tr("END_CALL")
 

@@ -1,6 +1,7 @@
 extends Control
 ## Animated 3D main menu screen with joyful ramp-sliding penguin, cheering background penguins, language switch, and volume control.
 
+const INTRO_STORY_PATH: String = "res://features/ui/intro_story.tscn"
 const FIRST_CHAPTER_PATH: String = "res://features/chapters/chapter_1_shore.tscn"
 const SLIDE_LOOP_DURATION: float = 3.2
 
@@ -96,7 +97,9 @@ func _refresh_text() -> void:
 func _on_play_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
 	GameState.reset()
-	if ResourceLoader.exists(FIRST_CHAPTER_PATH):
+	if ResourceLoader.exists(INTRO_STORY_PATH):
+		get_tree().change_scene_to_file(INTRO_STORY_PATH)
+	elif ResourceLoader.exists(FIRST_CHAPTER_PATH):
 		get_tree().change_scene_to_file(FIRST_CHAPTER_PATH)
 
 

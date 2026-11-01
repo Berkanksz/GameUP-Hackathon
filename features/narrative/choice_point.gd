@@ -12,6 +12,8 @@ extends Area3D
 @export var success_monologue_key: StringName = &"CHOICE_CHICK_SAVED"
 @export var fact_key_a: StringName = &""
 @export var fact_key_b: StringName = &""
+@export var trigger_radius: float = 2.4
+@export var target_prop: Node3D = null
 
 var _has_chosen: bool = false
 var _cinematic_running: bool = false
@@ -27,6 +29,8 @@ var _locked_player: Node3D = null
 @onready var _buoy_model: Node3D = get_node_or_null("%BuoyModel")
 @onready var _tower_model: Node3D = get_node_or_null("%TowerModel")
 @onready var _sprout_model: Node3D = get_node_or_null("%SproutModel")
+@onready var _viewing_scope_model: Node3D = get_node_or_null("%ViewingScopeModel")
+@onready var _scope_head: Node3D = get_node_or_null("%ScopeHead")
 @onready var _floe_base: Node3D = get_node_or_null("FloeBase")
 
 
@@ -35,6 +39,11 @@ func _ready() -> void:
 	collision_mask = 2
 	monitoring = true
 	monitorable = false
+	var col_node: CollisionShape3D = get_node_or_null("CollisionShape3D") as CollisionShape3D
+	if col_node != null and trigger_radius > 0.0:
+		var sphere := SphereShape3D.new()
+		sphere.radius = trigger_radius
+		col_node.shape = sphere
 	body_entered.connect(_on_body_entered)
 	_choice_layer.visible = false
 	_option_a_button.pressed.connect(_on_option_a_pressed)
@@ -50,21 +59,34 @@ func _ready() -> void:
 			_chick_model.visible = false
 		elif choice_id == &"seed" and _sprout_model != null:
 			_sprout_model.visible = true
+		if target_prop != null:
+			target_prop.visible = false
 	elif GameState.has_flag(flag_b):
 		_has_chosen = true
+		if target_prop != null and choice_id == &"camp_bottle":
+			target_prop.visible = false
 
 
 func _configure_visuals_for_type() -> void:
 	if _chick_model != null:
 		_chick_model.visible = (choice_id == &"chick")
 	if _floe_base != null:
-		_floe_base.visible = (choice_id == &"chick" or choice_id == &"buoy")
+		var show_floe: bool = (choice_id == &"chick")
+		_floe_base.visible = show_floe
+		var floe_body: StaticBody3D = _floe_base.get_node_or_null("FloeBody") as StaticBody3D
+		if floe_body != null:
+			floe_body.collision_layer = 1 if show_floe else 0
+			var col_shape: CollisionShape3D = floe_body.get_node_or_null("CollisionShape3D") as CollisionShape3D
+			if col_shape != null:
+				col_shape.disabled = not show_floe
 	if _seed_patch_model != null:
 		_seed_patch_model.visible = (choice_id == &"seed")
 	if _buoy_model != null:
 		_buoy_model.visible = (choice_id == &"buoy")
 	if _tower_model != null:
 		_tower_model.visible = (choice_id == &"tower")
+	if _viewing_scope_model != null:
+		_viewing_scope_model.visible = (choice_id == &"town_view")
 
 
 func _on_body_entered(body: Node3D) -> void:
@@ -90,6 +112,9 @@ func _start_interaction_cinematic(player_body: Node3D) -> void:
 	if choice_id == &"lamp":
 		focus_target = global_position + Vector3(-0.4, 0.85, 0.0)
 		target_fov = 15.5
+	elif choice_id == &"town_view":
+		focus_target = global_position + Vector3(0.2, 0.85, 0.0)
+		target_fov = 15.0
 	if cam_rig != null and cam_rig.has_method(&"focus_on"):
 		cam_rig.call(&"focus_on", focus_target, target_fov, 0.65)
 
@@ -117,6 +142,10 @@ func _start_interaction_cinematic(player_body: Node3D) -> void:
 		Audio.play_sfx(&"ice_crack")
 		cine.tween_property(_tower_model, "rotation_degrees:z", 10.0, 0.22)
 		cine.tween_property(_tower_model, "rotation_degrees:z", 6.0, 0.20)
+	elif choice_id == &"town_view" and _scope_head != null:
+		Audio.play_sfx(&"pickup")
+		cine.tween_property(_scope_head, "rotation_degrees:y", -24.0, 0.32).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		cine.tween_property(_scope_head, "rotation_degrees:y", -16.0, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	else:
 		Audio.play_sfx(&"pickup")
 		cine.tween_interval(0.45)
@@ -175,6 +204,11 @@ func _on_option_a_pressed() -> void:
 	else:
 		out_tween.tween_interval(0.35)
 
+	if target_prop != null:
+		out_tween.parallel().tween_property(target_prop, "position:y", target_prop.position.y + 0.6, 0.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+		out_tween.parallel().tween_property(target_prop, "scale", Vector3(0.01, 0.01, 0.01), 0.28)
+		out_tween.tween_callback(func() -> void: if is_instance_valid(target_prop): target_prop.visible = false)
+
 	out_tween.tween_callback(func() -> void:
 		_release_cinematic()
 		if not fact_key_a.is_empty():
@@ -190,6 +224,8 @@ func _on_option_b_pressed() -> void:
 	_has_chosen = true
 	_choice_layer.visible = false
 	Audio.play_sfx(&"ui_click")
+	if target_prop != null and choice_id == &"camp_bottle":
+		target_prop.visible = false
 	EventBus.choice_made.emit(choice_id, option_b_id)
 	_release_cinematic()
 	if not fact_key_b.is_empty():

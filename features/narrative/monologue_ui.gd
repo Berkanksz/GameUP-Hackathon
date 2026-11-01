@@ -15,7 +15,7 @@ const BOTTOM_CINEMATIC_KEYS: Array[StringName] = [
 	&"MONO_C5_START",
 ]
 
-@export var display_duration: float = 4.5
+@export var display_duration: float = 7.5
 @export var fade_duration: float = 0.24
 
 var _current_key: StringName = &""
@@ -39,7 +39,7 @@ func _ready() -> void:
 	_panel.modulate.a = 0.0
 	_panel.visible = false
 	if _callout_panel != null:
-		_callout_panel.position = Vector2(36.0, 580.0)
+		_callout_panel.position = Vector2(36.0, 560.0)
 		_callout_panel.modulate.a = 0.0
 		_callout_panel.visible = false
 
@@ -65,7 +65,7 @@ func _process(delta: float) -> void:
 
 
 func _on_fact_collected(_key: StringName) -> void:
-	hide_immediately()
+	pass
 
 
 func _on_chapter_completed(_chapter_id: StringName) -> void:
@@ -96,7 +96,7 @@ func _show_monologue(key: StringName) -> void:
 	_fade_tween = create_tween()
 	if _use_penguin_callout:
 		_panel.visible = false
-		_callout_panel.position = Vector2(36.0, 580.0)
+		_callout_panel.position = Vector2(36.0, 560.0)
 		_callout_panel.visible = true
 		_callout_panel.scale = Vector2(0.94, 0.94)
 		_fade_tween.set_parallel(true)

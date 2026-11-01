@@ -63,6 +63,55 @@ func _ready() -> void:
 		_foot_l_rest = _foot_l.position
 	if _foot_r != null:
 		_foot_r_rest = _foot_r.position
+	_setup_face_features()
+
+
+func _setup_face_features() -> void:
+	var parent_node: Node3D = _body if _body != null else (_glb if _glb != null else self)
+	if parent_node == null or parent_node.has_node("FaceFeatures"):
+		return
+	var face: Node3D = Node3D.new()
+	face.name = "FaceFeatures"
+	parent_node.add_child(face)
+
+	var eye_mat := StandardMaterial3D.new()
+	eye_mat.albedo_color = Color(0.05, 0.07, 0.10, 1.0)
+	eye_mat.roughness = 0.08
+	eye_mat.metallic = 0.05
+
+	var sparkle_mat := StandardMaterial3D.new()
+	sparkle_mat.albedo_color = Color(1.0, 1.0, 1.0, 1.0)
+	sparkle_mat.emission_enabled = true
+	sparkle_mat.emission = Color(1.0, 1.0, 1.0, 1.0)
+	sparkle_mat.emission_energy_multiplier = 1.0
+	sparkle_mat.roughness = 0.0
+
+	var eye_mesh := SphereMesh.new()
+	eye_mesh.radius = 0.048
+	eye_mesh.height = 0.096
+	eye_mesh.radial_segments = 16
+	eye_mesh.rings = 10
+
+	var sparkle_mesh := SphereMesh.new()
+	sparkle_mesh.radius = 0.016
+	sparkle_mesh.height = 0.032
+	sparkle_mesh.radial_segments = 10
+	sparkle_mesh.rings = 6
+
+	for side in [-1.0, 1.0]:
+		var eye := MeshInstance3D.new()
+		eye.name = "Eye_%s" % ("L" if side < 0 else "R")
+		eye.mesh = eye_mesh
+		eye.material_override = eye_mat
+		eye.position = Vector3(0.245, 1.22, side * 0.125)
+		face.add_child(eye)
+
+		var sp := MeshInstance3D.new()
+		sp.name = "Sparkle_%s" % ("L" if side < 0 else "R")
+		sp.mesh = sparkle_mesh
+		sp.material_override = sparkle_mat
+		sp.position = Vector3(0.272, 1.242, side * 0.115)
+		face.add_child(sp)
 
 
 func _process(delta: float) -> void:

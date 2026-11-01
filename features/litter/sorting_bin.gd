@@ -97,8 +97,8 @@ func _refresh_text() -> void:
 			_sign_label.text = "▲ %s" % tr("UI_BIN_PLASTIC")
 			_sign_label.modulate = COLOR_PLASTIC.lightened(0.2)
 		elif accepts == &"organic":
-			_sign_label.text = "◆ %s" % tr("UI_BIN_ORGANIC")
-			_sign_label.modulate = COLOR_ORGANIC.lightened(0.3)
+			_sign_label.text = ""
+			_sign_label.visible = false
 		else:
 			_sign_label.text = "● %s" % tr("UI_BIN_GLASS")
 			_sign_label.modulate = COLOR_GLASS.lightened(0.25)
