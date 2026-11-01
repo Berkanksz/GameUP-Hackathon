@@ -35,15 +35,16 @@ Players guide a brave emperor penguin whose colony is threatened by record Antar
 
 - **Engine Version:** Godot Engine 4.x (compatible with Godot 4.3+ and 4.7+).
 
-#### Option 1: One-Click Launchers
+#### Option 1: One-Click Launchers (Zero Install Required)
+- **Windows:**
+  Double-click `run_windows.bat` in the project folder.
+  *(If Godot is not installed, it automatically downloads the portable runner and launches the game).*
 - **macOS / Linux:**
   Open Terminal in the game directory and run:
   ```bash
   ./run_mac.sh
   ```
-  *(Automatically detects Godot in PATH or `/Applications/Godot.app`)*
-- **Windows:**
-  Double-click `run_windows.bat` in the project folder.
+  *(Automatically detects Godot or downloads the portable runner on demand).*
 
 #### Option 2: Running via Godot Editor
 1. Download Godot Engine 4 from [godotengine.org](https://godotengine.org/download/).
@@ -85,15 +86,16 @@ Antarktika'da deniz buzlarının erimesiyle kolonisi tehlikeye giren bir imparat
 
 - **Godot Sürümü:** Godot Engine 4.x (Godot 4.3+ ve 4.7+ ile tam uyumludur).
 
-#### 1. Yöntem: Tek Tıkla Başlatıcılar
+#### 1. Yöntem: Tek Tıkla Başlatıcılar (Kurulum Gerektirmez)
+- **Windows:**
+  Klasör içerisindeki `run_windows.bat` dosyasına çift tıklayın.
+  *(Bilgisayarınızda Godot kurulu değilse, taşınabilir oyun motorunu otomatik olarak indirip oyunu hemen başlatır).*
 - **macOS / Linux:**
   Terminali bu klasörde açıp şu komutu çalıştırın:
   ```bash
   ./run_mac.sh
   ```
-  *(Sistemdeki veya `/Applications/Godot.app` altındaki Godot'yu otomatik bulur)*
-- **Windows:**
-  Klasör içerisindeki `run_windows.bat` dosyasına çift tıklayın.
+  *(Sistemdeki Godot'yu kullanır veya taşınabilir sürümü otomatik indirir).*
 
 #### 2. Yöntem: Godot Editörü ile Açma
 1. [godotengine.org](https://godotengine.org/download/) adresinden Godot Engine 4'ü indirin.
