@@ -2,7 +2,6 @@
 .godot/
 .godot
 export/
-*.translation
 *.uid
 
 # Agent and developer tool files

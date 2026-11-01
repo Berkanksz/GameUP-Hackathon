@@ -24,7 +24,6 @@ boot_splash/bg_color=Color(0.12, 0.28, 0.42, 1)
 
 [autoload]
 
-McpInteractionServer="*res://mcp_interaction_server.gd"
 EventBus="*res://autoload/event_bus.gd"
 GameState="*res://autoload/game_state.gd"
 Settings="*res://autoload/settings.gd"

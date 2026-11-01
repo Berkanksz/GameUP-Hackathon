@@ -5,27 +5,33 @@ echo Higher Ground: Iklim Yolculugu / Climate Journey
 echo ========================================================
 echo.
 
+set "GODOT_CMD="
 where godot >nul 2>nul
-if %ERRORLEVEL% equ 0 (
-    godot --path .
-    exit /b 0
+if %ERRORLEVEL% equ 0 set "GODOT_CMD=godot"
+
+if not defined GODOT_CMD (
+    where godot4 >nul 2>nul
+    if %ERRORLEVEL% equ 0 set "GODOT_CMD=godot4"
 )
 
-where godot4 >nul 2>nul
-if %ERRORLEVEL% equ 0 (
-    godot4 --path .
-    exit /b 0
+if not defined GODOT_CMD (
+    if exist "godot.exe" set "GODOT_CMD=.\godot.exe"
 )
 
-if exist "godot.exe" (
-    .\godot.exe --path .
-    exit /b 0
+if not defined GODOT_CMD (
+    echo [HATA / ERROR] Godot 4 executable was not found.
+    echo Please install Godot 4: https://godotengine.org/download/windows/
+    echo Or open Godot 4 and import 'project.godot' from this folder.
+    echo.
+    pause
+    exit /b 1
 )
 
-echo [INFO] Godot 4 executable was not automatically found in PATH.
-echo To play on Windows:
-echo 1. Download Godot 4 (standard version) from https://godotengine.org/download/windows/
-echo 2. Open Godot, click 'Import', and select 'project.godot' from this folder.
-echo 3. Click 'Run' (or press F5).
-echo.
-pause
+:: Ilk calistirmada varliklarin ice aktarilmasi (First-time asset import)
+if not exist ".godot\imported" (
+    echo Ilk calistirma hazirligi yapiliyor (varliklar ice aktariliyor)...
+    %GODOT_CMD% --headless --editor --quit --path .
+)
+
+:: Oyunu baslat
+%GODOT_CMD% --path .

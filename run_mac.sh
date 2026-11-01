@@ -1,21 +1,34 @@
 #!/bin/bash
 # Higher Ground - macOS / Linux Launcher
 
+DIR="$(cd "$(dirname "$0")" && pwd)"
+
 echo "========================================================"
 echo "Higher Ground: Iklim Yolculugu / Climate Journey"
 echo "========================================================"
 echo ""
 
+GODOT_BIN=""
 if command -v godot &> /dev/null; then
-    exec godot --path "$(dirname "$0")"
+    GODOT_BIN="godot"
 elif [ -d "/Applications/Godot.app" ]; then
-    exec /Applications/Godot.app/Contents/MacOS/Godot --path "$(dirname "$0")"
+    GODOT_BIN="/Applications/Godot.app/Contents/MacOS/Godot"
 elif [ -d "$HOME/Applications/Godot.app" ]; then
-    exec "$HOME/Applications/Godot.app/Contents/MacOS/Godot" --path "$(dirname "$0")"
-else
-    echo "[INFO] Godot 4 was not found in PATH or Applications."
-    echo "To play on macOS:"
-    echo "1. Download Godot 4 from https://godotengine.org/download/macos/"
-    echo "2. Open Godot, click 'Import', select 'project.godot' from this folder."
-    echo "3. Click 'Run' (or press F5)."
+    GODOT_BIN="$HOME/Applications/Godot.app/Contents/MacOS/Godot"
 fi
+
+if [ -z "$GODOT_BIN" ]; then
+    echo "[HATA / ERROR] Godot 4 bulunamadi."
+    echo "Lutfen Godot 4 indirin: https://godotengine.org/download/"
+    echo "Ardindan Godot ile 'project.godot' dosyasini acabilirsiniz."
+    exit 1
+fi
+
+# İlk çalıştırmada varlıkların taranması ve içe aktarılması (First-time asset import)
+if [ ! -d "$DIR/.godot/imported" ]; then
+    echo "Ilk calistirma hazirligi yapiliyor (varliklar ice aktariliyor)..."
+    "$GODOT_BIN" --headless --editor --quit --path "$DIR"
+fi
+
+# Oyunu baslat
+exec "$GODOT_BIN" --path "$DIR"
