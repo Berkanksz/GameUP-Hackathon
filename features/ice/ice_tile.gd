@@ -44,21 +44,14 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if state == State.INTACT:
-		if _is_player_stepping():
-			_start_melting()
+	if state != State.MELTING:
+		set_physics_process(false)
 		return
-	if state == State.MELTING:
-		var mult: float = sun_multiplier if _is_in_sun() else 1.0
-		_timer -= delta * mult
-		_update_melting_visual()
-		if _timer <= 0.0:
-			_break_tile()
-		return
-	if state == State.BROKEN:
-		_timer -= delta
-		if _timer <= 0.0:
-			_restore()
+	var mult: float = sun_multiplier if _is_in_sun() else 1.0
+	_timer -= delta * mult
+	_update_melting_visual()
+	if _timer <= 0.0:
+		_break_tile()
 
 
 func _on_step_body_entered(body: Node3D) -> void:
@@ -79,18 +72,10 @@ func _is_in_sun() -> bool:
 	return false
 
 
-func _is_player_stepping() -> bool:
-	if _step_detector == null:
-		return false
-	for body: Node3D in _step_detector.get_overlapping_bodies():
-		if body != null and body.is_in_group(&"player"):
-			return true
-	return false
-
-
 func _start_melting() -> void:
 	state = State.MELTING
 	_timer = maxf(0.05, melt_time)
+	set_physics_process(true)
 	Audio.play_sfx(&"ice_crack")
 	if _drip_particles != null:
 		_drip_particles.emitting = true
@@ -110,7 +95,7 @@ func _update_melting_visual() -> void:
 
 func _break_tile() -> void:
 	state = State.BROKEN
-	_timer = maxf(0.05, respawn_time)
+	set_physics_process(false)
 	if _collision_shape != null:
 		_collision_shape.set_deferred(&"disabled", true)
 	if _drip_particles != null:
@@ -121,11 +106,19 @@ func _break_tile() -> void:
 	elif _visual_box != null:
 		_visual_box.visible = false
 		_visual_box.position = _visual_base_pos
+	var timer: SceneTreeTimer = get_tree().create_timer(respawn_time)
+	timer.timeout.connect(_on_respawn_timeout)
+
+
+func _on_respawn_timeout() -> void:
+	if state == State.BROKEN:
+		_restore()
 
 
 func _restore() -> void:
 	state = State.INTACT
 	_timer = 0.0
+	set_physics_process(false)
 	if _collision_shape != null:
 		_collision_shape.set_deferred(&"disabled", false)
 	if _drip_particles != null:

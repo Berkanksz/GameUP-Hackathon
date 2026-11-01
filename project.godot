@@ -74,7 +74,13 @@ locale/translations=PackedStringArray("res://translations/strings.en.translation
 3d_physics/layer_3="zones"
 3d_physics/layer_4="interactables"
 
+[physics]
+
+common/physics_interpolation=true
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+lights_and_shadows/directional_shadow/size=2048
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=1

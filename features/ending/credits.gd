@@ -10,6 +10,7 @@ const CREDIT_KEYS: Array[String] = [
 	"UI_CREDITS_ENGINE",
 	"UI_CREDITS_ART",
 	"UI_CREDITS_FACTS",
+	"UI_CREDITS_INSPIRATION",
 ]
 
 @export var roll_time: float = 12.0

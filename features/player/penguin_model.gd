@@ -37,6 +37,7 @@ var _toon_mats: Dictionary = {}
 var _foot_l: Node3D
 var _foot_r: Node3D
 var _body: Node3D
+var _glb: Node3D
 var _foot_l_rest: Vector3 = Vector3.ZERO
 var _foot_r_rest: Vector3 = Vector3.ZERO
 var _walk_amount: float = 0.0
@@ -54,6 +55,7 @@ func _ready() -> void:
 	_outline_mat.set_shader_parameter(&"outline_color", outline_color)
 	_outline_mat.set_shader_parameter(&"thickness", outline_width)
 	_apply_materials_recursive(self)
+	_glb = get_node_or_null("PenguinGlb") as Node3D
 	_foot_l = find_child(FOOT_L_NAME, true, false) as Node3D
 	_foot_r = find_child(FOOT_R_NAME, true, false) as Node3D
 	_body = find_child(BODY_NAME, true, false) as Node3D
@@ -95,9 +97,10 @@ func _apply_walk_pose() -> void:
 	var active_walk: float = maxf(_walk_amount, _push_amount)
 	var walk_weight: float = active_walk * (1.0 - _slide_amount)
 	var push_weight: float = _push_amount * (1.0 - _slide_amount)
-	rotation.z = slide_pitch * _slide_amount + push_pitch * push_weight
-	position.y = slide_lift_y * _slide_amount - 0.05 * push_weight
-	position.x = slide_offset_x * _slide_amount + push_offset_x * push_weight
+	var target_node: Node3D = _glb if _glb != null else self
+	target_node.rotation.z = slide_pitch * _slide_amount + push_pitch * push_weight
+	target_node.position.y = slide_lift_y * _slide_amount - 0.05 * push_weight
+	target_node.position.x = slide_offset_x * _slide_amount + push_offset_x * push_weight
 	var stride_mult: float = 1.0 + 0.35 * push_weight
 	if _foot_l != null:
 		_foot_l.position = _foot_l_rest + Vector3(0.0, maxf(wave, 0.0) * foot_lift * stride_mult * walk_weight, 0.0)

@@ -671,51 +671,136 @@ def build_recycling_bins():
 
 
 def build_litter_gate():
-    """Realistic multi-item coastal waste & debris mound blocking the pass (litter_gate.glb)."""
+    """Realistic multi-item coastal waste & industrial debris mound blocking the pass (litter_gate.glb)."""
     clear_scene()
-    mat_sludge = make_mat("mat_debris_base", "3E4C59", 0.88)
-    mat_wood = make_mat("mat_debris_wood", "5D4037", 0.85)
-    mat_paper = make_mat("mat_debris_paper", "2980B9", 0.65)
-    mat_plastic = make_mat("mat_debris_plastic", "F39C12", 0.30)
-    mat_glass = make_mat("mat_debris_glass", "27AE60", 0.20)
-    mat_rust = make_mat("mat_debris_rust", "A04000", 0.75, 0.35)
+    mat_dirt = make_mat("mat_debris_dirt", "2E353F", 0.92)
+    mat_snow = make_mat("mat_debris_snow", "D8E7F5", 0.75)
+    mat_rust = make_mat("mat_debris_rust", "943C22", 0.65, 0.4)
+    mat_blue = make_mat("mat_debris_blue_barrel", "1B4F72", 0.45)
+    mat_wood = make_mat("mat_debris_wood", "6E4E33", 0.88)
+    mat_cardboard = make_mat("mat_debris_cardboard", "C59B68", 0.82)
+    mat_tire = make_mat("mat_debris_tire", "1C2024", 0.95)
+    mat_plastic_orange = make_mat("mat_debris_orange_jug", "E67E22", 0.32)
+    mat_plastic_cyan = make_mat("mat_debris_plastic_cyan", "2980B9", 0.28)
+    mat_glass_green = make_mat("mat_debris_glass_green", "1E8449", 0.15)
+    mat_can = make_mat("mat_debris_can", "B2BABB", 0.35, 0.75)
+    mat_rope = make_mat("mat_debris_rope", "F1C40F", 0.70)
 
-    # Compacted snow/debris mound core
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=2, radius=1.25, location=(0.0, 0.0, 0.85))
-    core = bpy.context.active_object
-    core.scale = (0.95, 1.15, 0.85)
-    core.data.materials.append(mat_sludge)
+    # 1. Base frozen embankment (flattened dome, wide and stable)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=1.35, depth=0.35, location=(0.0, 0.0, 0.17))
+    base = bpy.context.active_object
+    base.scale = (1.1, 1.3, 1.0)
+    base.data.materials.append(mat_dirt)
 
-    # Rusted barrel wedged in pile
-    bpy.ops.mesh.primitive_cylinder_add(vertices=14, radius=0.42, depth=1.05, location=(0.15, 0.12, 1.35))
-    barrel = bpy.context.active_object
-    barrel.rotation_euler = (math.radians(28), math.radians(-22), 0.0)
-    barrel.data.materials.append(mat_rust)
+    # Snow patches clinging to the base
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, 0.45, 0.28))
+    snow1 = bpy.context.active_object
+    snow1.scale = (0.75, 0.65, 0.22)
+    snow1.rotation_euler = (0.1, 0.2, -0.3)
+    snow1.data.materials.append(mat_snow)
 
-    # Tangled driftwood beams
-    for pos, rot in [((-0.35, -0.25, 1.15), (0.4, 0.5, 0.2)), ((0.30, -0.30, 1.65), (-0.3, -0.4, 0.5))]:
-        bpy.ops.mesh.primitive_cube_add(size=1.0, location=pos)
-        beam = bpy.context.active_object
-        beam.scale = (0.22, 1.45, 0.18)
-        beam.rotation_euler = rot
-        beam.data.materials.append(mat_wood)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.65, -0.35, 0.22))
+    snow2 = bpy.context.active_object
+    snow2.scale = (0.68, 0.72, 0.18)
+    snow2.rotation_euler = (-0.15, 0.1, 0.4)
+    snow2.data.materials.append(mat_snow)
 
-    # Visible recyclable items embedded in the mound
-    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.55, -0.35, 0.75))
-    cbox = bpy.context.active_object
-    cbox.scale = (0.48, 0.42, 0.48)
-    cbox.rotation_euler = (0.2, -0.3, 0.4)
-    cbox.data.materials.append(mat_paper)
+    # 2. Weathered Rusty Oil Drum (tilted on its side)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.38, depth=0.92, location=(0.35, 0.12, 0.58))
+    drum_rust = bpy.context.active_object
+    drum_rust.rotation_euler = (math.radians(35), math.radians(-18), math.radians(25))
+    drum_rust.data.materials.append(mat_rust)
 
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.22, depth=0.62, location=(-0.38, 0.32, 1.15))
-    pbot = bpy.context.active_object
-    pbot.rotation_euler = (0.5, 0.2, -0.3)
-    pbot.data.materials.append(mat_plastic)
+    # Drum ribs / reinforcing rings
+    for ring_z in [-0.22, 0.22]:
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.39, minor_radius=0.03, major_segments=16, minor_segments=8, location=(0.35, 0.12, 0.58))
+        ring = bpy.context.active_object
+        ring.rotation_euler = (math.radians(35), math.radians(-18), math.radians(25))
+        ring.data.materials.append(mat_rust)
 
-    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.20, depth=0.65, location=(0.25, -0.42, 0.95))
+    # 3. Industrial Blue Plastic Drum (standing upright but listing)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=16, radius=0.35, depth=0.88, location=(-0.32, 0.25, 0.58))
+    drum_blue = bpy.context.active_object
+    drum_blue.rotation_euler = (math.radians(8), math.radians(-14), math.radians(10))
+    drum_blue.data.materials.append(mat_blue)
+
+    # 4. Discarded Worn Rubber Tire (leaning against the blue drum and ground)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.36, minor_radius=0.12, major_segments=18, minor_segments=10, location=(-0.58, -0.28, 0.38))
+    tire = bpy.context.active_object
+    tire.rotation_euler = (math.radians(65), math.radians(20), math.radians(-35))
+    tire.data.materials.append(mat_tire)
+
+    # 5. Broken Wooden Shipping Pallet (slanted in the center of the mound)
+    pallet_loc = (-0.02, -0.28, 0.56)
+    pallet_rot = (math.radians(-38), math.radians(15), math.radians(-8))
+
+    # Pallet stringers (3 support beams)
+    for ox in [-0.35, 0.0, 0.35]:
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(pallet_loc[0] + ox * 0.85, pallet_loc[1], pallet_loc[2]))
+        st = bpy.context.active_object
+        st.scale = (0.08, 0.88, 0.08)
+        st.rotation_euler = pallet_rot
+        st.data.materials.append(mat_wood)
+
+    # Pallet top deck slats (4 boards)
+    for oy in [-0.32, -0.10, 0.12, 0.34]:
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=(pallet_loc[0], pallet_loc[1] + oy * 0.65, pallet_loc[2] + 0.06 - oy * 0.35))
+        board = bpy.context.active_object
+        board.scale = (0.82, 0.11, 0.035)
+        board.rotation_euler = pallet_rot
+        board.data.materials.append(mat_wood)
+
+    # 6. Crushed Corrugated Cardboard Box (tucked against the side)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.62, 0.08, 0.82))
+    box = bpy.context.active_object
+    box.scale = (0.44, 0.38, 0.32)
+    box.rotation_euler = (math.radians(22), math.radians(-28), math.radians(15))
+    box.data.materials.append(mat_cardboard)
+
+    # Second flattened box
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(-0.35, -0.55, 0.32))
+    box2 = bpy.context.active_object
+    box2.scale = (0.52, 0.36, 0.08)
+    box2.rotation_euler = (math.radians(15), math.radians(35), math.radians(-10))
+    box2.data.materials.append(mat_cardboard)
+
+    # 7. Plastic Hazard Oil / Detergent Jug
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.18, -0.42, 0.85))
+    jug = bpy.context.active_object
+    jug.scale = (0.24, 0.18, 0.32)
+    jug.rotation_euler = (math.radians(18), math.radians(12), math.radians(-25))
+    jug.data.materials.append(mat_plastic_orange)
+
+    # Jug handle
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.08, minor_radius=0.025, location=(0.14, -0.42, 0.96))
+    handle = bpy.context.active_object
+    handle.rotation_euler = (math.radians(90), 0.0, math.radians(-25))
+    handle.data.materials.append(mat_plastic_orange)
+
+    # 8. Discarded Plastic Bottle (cyan)
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.10, depth=0.34, location=(-0.15, -0.52, 0.44))
+    bot = bpy.context.active_object
+    bot.rotation_euler = (math.radians(72), math.radians(10), math.radians(45))
+    bot.data.materials.append(mat_plastic_cyan)
+
+    # 9. Emerald Green Glass Wine/Soda Bottle
+    bpy.ops.mesh.primitive_cylinder_add(vertices=12, radius=0.11, depth=0.38, location=(0.48, -0.32, 0.42))
     gbot = bpy.context.active_object
-    gbot.rotation_euler = (-0.4, 0.3, 0.2)
-    gbot.data.materials.append(mat_glass)
+    gbot.rotation_euler = (math.radians(68), math.radians(-25), math.radians(60))
+    gbot.data.materials.append(mat_glass_green)
+
+    # 10. Crushed Aluminum Soda Cans
+    for can_loc in [(0.52, -0.15, 0.32), (-0.42, -0.48, 0.28)]:
+        bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=0.08, depth=0.14, location=can_loc)
+        can = bpy.context.active_object
+        can.rotation_euler = (math.radians(45), math.radians(30), math.radians(10))
+        can.data.materials.append(mat_can)
+
+    # 11. Coiled Yellow Marine Fishing Rope
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.24, minor_radius=0.045, major_segments=16, minor_segments=8, location=(0.08, -0.12, 0.88))
+    rope = bpy.context.active_object
+    rope.rotation_euler = (math.radians(30), math.radians(-25), math.radians(15))
+    rope.data.materials.append(mat_rope)
 
     finalize_and_export("litter_gate", "litter_gate.blend", "litter/litter_gate.glb")
 

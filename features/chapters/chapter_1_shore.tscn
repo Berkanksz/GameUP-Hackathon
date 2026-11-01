@@ -56,6 +56,11 @@ transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0
 light_color = Color(0.92, 0.95, 1, 1)
 light_energy = 0.76
 shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 1.2
+directional_shadow_mode = 0
+directional_shadow_max_distance = 45.0
+directional_shadow_pancake_size = 15.0
 
 [node name="SnowParticles" parent="." instance=ExtResource("15_snow_particles")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 10, 0)
@@ -263,7 +268,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -28.5, 1.8, 0)
 key = &"TUT_JUMP"
 
 [node name="TriggerStart" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.0, 1.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.0, 1.0, 0)
 key = &"MONO_C1_START"
 
 [node name="TriggerIce" parent="Narrative" instance=ExtResource("10_narrative_trigger")]
@@ -296,7 +301,7 @@ source_label = "BAS, 2023"
 [node name="FactCard2" parent="FactCards" instance=ExtResource("11_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36.0, 3.1, 0)
 fact_key = &"FACT_FOOD_SECURITY"
-source_label = "FAO / Nature, 2023"
+source_label = "CCAMLR / FAO, 2024"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 

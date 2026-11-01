@@ -30,7 +30,7 @@ func _ready() -> void:
 	snap_to_target()
 
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if _frozen_for_exit:
 		return
 	if _cinematic_focus_active:

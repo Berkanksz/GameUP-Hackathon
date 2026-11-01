@@ -35,7 +35,7 @@ UI_BIN_GLASS,Glass,Cam
 UI_THANKS,Thanks for playing,Oynadığın için teşekkürler
 UI_CHAPTER_COMPLETE,Chapter Complete,Bölüm Tamamlandı
 UI_CONTINUE,Continue,Devam Et
-MONO_C1_START,Like that lone penguin in the documentary... I walked away toward the mountains. But running away solves nothing. We have to learn and return.,Tıpkı o belgeseldeki yalnız penguen gibi... Koloniyi arkamda bırakıp dağlara doğru tek başıma yürüyordum. Ama kaçmak çare değil. Öğrenip geri dönmeliyiz.
+MONO_C1_START,"Like that nihilist penguin in the documentary... He was the first to sense the vanishing sea ice and march toward the mountains alone. Now I walk his path; not to escape, but to learn and protect our living planet.","Tıpkı o belgeseldeki nihilist penguen gibi... Deniz buzunun tükeneceğini ilk o hissetmiş ve dağlara doğru tek başına yola çıkmıştı. Şimdi ben de onun izindeyim; ama kaçmak için değil, öğrenip gezegenimizi korumak için."
 MONO_C1_ICE,The ice used to be more confident.,Buz eskiden daha kendinden emindi.
 MONO_C1_MELT,Melting is just the ice changing its mind.,"Erimek, buzun fikrini değiştirmesinden ibaret."
 MONO_C1_WARM,It is warm. That should not be a complaint here.,Hava sıcak. Burada bu bir şikâyet konusu olmamalı.
@@ -75,7 +75,7 @@ END_LOW_TEXT,No place is far enough. It keeps walking anyway.,Hiçbir yer yeteri
 END_MID_TITLE,Looked Back,Geriye Baktı
 END_MID_TEXT,"The colony looks small from here. So does the problem, if we start now.",Koloni buradan küçük görünüyor. Şimdi başlarsak sorun da öyle.
 END_HIGH_TITLE,Went Back Down,Aşağı İndi
-END_HIGH_TEXT,Someone has to tell the others the ice is not joking.,Birinin diğerlerine buzun şaka yapmadığını söylemesi lazım.
+END_HIGH_TEXT,"Someone has to tell the others the ice is not joking. Maybe that penguin was not running away. Maybe it was looking for a better view of the problem.","Birinin diğerlerine buzun şaka yapmadığını söylemesi lazım. Belki o penguen kaçmıyordu. Belki sorunu daha iyi görebileceği bir yer arıyordu."
 END_CALL,Climate action starts where you stand.,İklim eylemi bulunduğun yerde başlar.
 END_COP31,"COP31 Türkiye, Antalya, 9 to 20 November 2026","COP31 Türkiye, Antalya, 9 ile 20 Kasım 2026"
 UI_CREDITS,Credits,Emeği Geçenler
@@ -85,10 +85,12 @@ UI_CREDITS_DESIGN,Design and Programming,Tasarım ve Programlama
 UI_CREDITS_ENGINE,Built with Godot Engine and Blender,Godot Engine ve Blender ile yapıldı
 UI_CREDITS_ART,Original 3D Art and Shaders,Özgün 3B Model ve Gölgelendiriciler
 UI_CREDITS_FACTS,"Data sources: UN, UNEP, IEA, EEA","Veri kaynakları: BM, UNEP, IEA, EEA"
+UI_CREDITS_INSPIRATION,"Inspired by the lonely penguin the internet never forgot.","İnternetin unutmadığı yalnız penguenden esinlenildi."
 MONO_C3_WIND,The wind wants me back down. Not yet.,Rüzgâr geri inmemi istiyor. Henüz değil.
 MONO_C3_LAMP,A small light in the cold. It changes something.,Soğukta küçük bir ışık. Bir şeyleri değiştiriyor.
 MONO_C3_CREVASSE,Deep cracks in the ancient glacier. Even the mountain is splitting.,Kadim buzulda derin çatlaklar. Dağ bile ikiye ayrılıyor.
 MONO_C3_END,Through the canyon. The summit ridge is just ahead.,Kanyondan geçtim. Zirve sırtı hemen ileride.
+MONO_NOD_1,"Somewhere, another penguin once walked toward the mountains alone. Everyone remembers. Nobody asked why.","Bir yerlerde, bir penguen de bir zamanlar dağlara tek başına yürümüştü. Herkes hatırlıyor. Kimse nedenini sormadı."
 MONO_C4_START,Storm clouds at eye level. Better keep low when the gusts hit.,Fırtına bulutları göz hizasında. Rüzgâr vurduğunda eğilip kaymak en iyisi.
 MONO_C4_END,One last climb to the research station.,Araştırma istasyonuna son bir tırmanış kaldı.
 MONO_C5_START,There is the summit station. Almost at the top of the world.,İşte zirve istasyonu. Neredeyse dünyanın tepesindeyim.
@@ -100,15 +102,15 @@ CHOICE_TOWER_PROMPT,Heavy ice has tilted the automated weather relay dish off co
 CHOICE_TOWER_ALIGN,Align the dish,Anteni düzelt
 CHOICE_TOWER_SKIP,Keep climbing,Tırmanmaya devam et
 CHOICE_TOWER_SAVED,The relay dish locked onto the satellite with a steady chime.,Röle anteni sabit bir sinyal sesiyle uyduya kilitlendi.
-FACT_GLACIER,"Mountain glaciers worldwide lost more ice between 2021 and 2024 than in any other four year period on record.","Dünya genelindeki dağ buzulları, 2021 ile 2024 arasında kayıtlardaki diğer tüm dört yıllık dönemlerden daha fazla buz kaybetti."
-FACT_PERMAFROST,"Early warning weather stations help polar researchers track ice sheet stability and extreme storms in real time.","Erken uyarı hava istasyonları, kutup araştırmacılarının buz tabakası dengesini ve aşırı fırtınaları anlık izlemesini sağlar."
+FACT_GLACIER,"According to WMO and WGMS, glaciers experienced the largest three year mass loss on record between 2022 and 2024.","WMO ve WGMS verilerine göre buzullar, 2022 ile 2024 arasında kayıtlardaki en büyük üç yıllık kütle kaybını yaşadı."
+FACT_PERMAFROST,"Northern permafrost stores an estimated 1,400 to 1,600 billion tonnes of organic carbon, releasing greenhouse gases as it thaws.","Kuzey permafrostu yaklaşık 1.400 ile 1.600 milyar ton organik karbon barındırır; çözüldükçe sera gazları salar."
 MONO_LITTER_PILE_INTRO,"What is all this trash doing on the glacier? It completely blocked the trail. I need to pull each item from the pile and sort it into the right bin.","Buzulun ortasında bu çöp yığınının ne işi var? Yolu tamamen kapatmışlar. Yığındaki atıkları tek tek alıp doğru geri dönüşüm kutularına atmalıyım."
 MONO_HEAT_WARNING,"The direct sun is heating my feathers rapidly! I need to keep moving toward the cold shadows ahead.","Doğrudan güneş tüylerimi hızla ısıtıyor! Karşıdaki serin gölgelere doğru hızla ilerlemeliyim."
 UI_HEAT_ALERT,HEAT WARNING,ISI UYARISI
 UI_OVERHEAT_TITLE,Hyperthermia Alert,Aşırı Sıcaklık Uyarısı
 UI_OVERHEAT_DESC,"Emperor penguins endure minus 50 degrees but cannot sweat. Unshaded heat rapidly causes fatal exhaustion. Keep to shadows and cold air!","İmparator penguenler eksi 50 dereceye dayanıklıdır fakat ter bezleri bulunmaz. Doğrudan güneşte aşırı ısı hızla bitkinliğe yol açar. Gölgelerde ve serin havada ilerle!"
-FACT_FOOD_SECURITY,"Melting sea ice disrupts polar krill algae habitats, threatening the entire Antarctic marine food web and global food security.","Deniz buzlarının erimesi kril alg yaşam alanlarını yok ederek tüm kutup deniz besin zincirini ve küresel gıda güvenliğini tehdit eder."
-FACT_CARBON,"Tracking carbon footprints and choosing conscious consumption directly slow polar ice sheet melting.","Karbon ayak izini takip etmek ve bilinçli tüketimi seçmek, kutup buzullarının erimesini doğrudan yavaşlatır."
-FACT_RESILIENT_CITIES,"Climate resilient settlements use nature-based coastal buffers and storm warning networks to withstand extreme climate impacts.","İklim dirençli yerleşimler, aşırı iklim etkilerine dayanmak için doğa temelli kıyı tamponları ve fırtına uyarı ağları kullanır."
-FACT_OCEANS,"Oceans absorb more than 90 percent of the excess heat trapped by greenhouse gases, driving marine heatwaves and glacier melt.","Okyanuslar, sera gazlarının hapsettiği fazla ısının yüzde 90'ından fazlasını emer; deniz sıcak dalgalarını ve buzul erimesini tetikler."
-FACT_EDUCATION,"Climate education and data literacy empower communities to take informed, effective action for a sustainable future.","İklim eğitimi ve veri okuryazarlığı, toplulukların sürdürülebilir bir gelecek için bilinçli ve etkili adımlar atmasını sağlar."
+FACT_FOOD_SECURITY,"Antarctic krill depend on winter sea ice for algae. Declining ice threatens the polar marine food web supporting penguins and seals.","Antarktika krilleri beslenmek için kış deniz buzuna bağımlıdır. Buz kaybı; penguenleri, fokları ve balinaları besleyen kutup denizel besin ağını tehdit eder."
+FACT_CARBON,"Lowering carbon footprints through conscious consumption reduces greenhouse gas emissions, helping mitigate global warming and ice loss.","Bilinçli tüketimle karbon ayak izini düşürmek sera gazı salımını azaltır; küresel ısınmayı ve buz kaybını hafifletmeye katkı sağlar."
+FACT_RESILIENT_CITIES,"According to IPCC and UNDRR, nature based coastal buffers and early warning networks help protect settlements from sea level rise and storms.","IPCC ve UNDRR verilerine göre doğa temelli kıyı tamponları ve erken uyarı ağları, yerleşimleri deniz seviyesi artışına ve fırtınalara karşı korur."
+FACT_OCEANS,"According to NOAA and IPCC, oceans absorb more than 90 percent of the excess heat trapped by greenhouse gases, driving ocean warming and marine heatwaves.","NOAA ve IPCC verilerine göre okyanuslar, sera gazlarının hapsettiği fazla ısının yüzde 90'ından fazlasını emer; deniz sıcak dalgalarını tetikler."
+FACT_EDUCATION,"According to UNESCO and IPCC, climate education and climate literacy empower communities to take effective adaptation and mitigation action.","UNESCO ve IPCC verilerine göre iklim eğitimi ve iklim okuryazarlığı, toplulukların iklim uyumu ve eylemi için bilinçli adımlar atmasını sağlar."

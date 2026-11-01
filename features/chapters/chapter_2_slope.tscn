@@ -51,6 +51,11 @@ transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0
 light_color = Color(0.98, 0.88, 0.74, 1)
 light_energy = 0.76
 shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 1.2
+directional_shadow_mode = 0
+directional_shadow_max_distance = 45.0
+directional_shadow_pancake_size = 15.0
 
 [node name="SnowParticles" parent="." instance=ExtResource("16_snow_particles")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32, 10, 0)
@@ -96,9 +101,9 @@ size = Vector3(1, 14, 4)
 material = SubResource("StandardMaterial3D_rock")
 
 [node name="StartSlope" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -4.0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -4.0, 0)
 use_collision = true
-size = Vector3(40, 8, 4)
+size = Vector3(38, 8, 4)
 material = SubResource("StandardMaterial3D_slope")
 
 [node name="Shelf1" type="CSGBox3D" parent="Geometry"]
@@ -113,9 +118,9 @@ updraft_speed = 9.5
 horizontal_nudge = 2.0
 
 [node name="StepMid1" type="CSGBox3D" parent="Geometry"]
-transform = Transform3D(0.968912, -0.247404, 0, 0.247404, 0.968912, 0, 0, 0, 1, 23.5, 0.6, 0)
+transform = Transform3D(0.968912, -0.247404, 0, 0.247404, 0.968912, 0, 0, 0, 1, 24.2, 0.78, 0)
 use_collision = true
-size = Vector3(6.5, 1.2, 4)
+size = Vector3(7.0, 1.2, 4)
 material = SubResource("StandardMaterial3D_slope")
 
 [node name="MidGround" type="CSGBox3D" parent="Geometry"]
@@ -225,7 +230,7 @@ source_label = "UNEP, 2023"
 [node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30.5, 3.15, 0)
 fact_key = &"FACT_CARBON"
-source_label = "UNEP, 2024"
+source_label = "UNEP / IPCC, 2024"
 
 [node name="FactCard3" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 5.15, 0)

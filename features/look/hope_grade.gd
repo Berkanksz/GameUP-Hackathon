@@ -28,8 +28,6 @@ func _setup_environment() -> void:
 		return
 	if world_environment.environment == null:
 		world_environment.environment = Environment.new()
-	var env: Environment = world_environment.environment
-	env.adjustment_enabled = true
 
 
 func _on_hope_changed(new_hope: float) -> void:
@@ -41,11 +39,9 @@ func _apply_hope(hope_val: float, animate: bool) -> void:
 		return
 	var env: Environment = world_environment.environment
 	var t: float = clampf(hope_val / 100.0, 0.0, 1.0)
-	var target_sat: float = lerpf(LOW_SATURATION, HIGH_SATURATION, t)
 	var target_ambient: Color = LOW_HOPE_COLOR.lerp(HIGH_HOPE_COLOR, t)
 	
 	if not animate:
-		env.adjustment_saturation = target_sat
 		env.ambient_light_color = target_ambient
 		if directional_light != null:
 			directional_light.light_color = target_ambient
@@ -54,7 +50,6 @@ func _apply_hope(hope_val: float, animate: bool) -> void:
 	if _tween != null and _tween.is_valid():
 		_tween.kill()
 	_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	_tween.tween_property(env, "adjustment_saturation", target_sat, 1.2)
 	_tween.tween_property(env, "ambient_light_color", target_ambient, 1.2)
 	if directional_light != null:
 		_tween.tween_property(directional_light, "light_color", target_ambient, 1.2)

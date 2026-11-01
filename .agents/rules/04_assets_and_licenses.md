@@ -7,6 +7,6 @@ Order of preference for every asset:
 Rules:
 1. Allowed licenses: CC0, public domain, OFL, MIT, CC BY. Never use NC, ND, GPL, unknown, or unverifiable licenses. If the license cannot be confirmed on the source page, do not use it.
 2. Log every asset in docs/ASSET_LICENSES.md the moment it is added: name, author, source URL, license, path in project. Created in Blender counts too (author: the user, license: CC0).
-3. Forbidden: ripped game assets, copyrighted characters, brand logos (including COP31, UNDP, HP, ICPSD logos), the original viral penguin footage, stills, audio, narration, or any quote from it. The penguin is an original design.
+3. Forbidden: ripped game assets, copyrighted characters, brand logos (including COP31, UNDP, HP, ICPSD logos). For the viral penguin: original video footage, audio, dialogue, quotes, and screenshots are forbidden, but an unnamed original literary and visual nod is permitted. The penguin in game is an original design.
 4. Do not use AI generated images or audio as final assets.
 5. Details and Blender pipeline: skill blender_to_godot.

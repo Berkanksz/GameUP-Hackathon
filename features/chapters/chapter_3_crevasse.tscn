@@ -53,6 +53,11 @@ transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0
 light_color = Color(0.78, 0.92, 1, 1)
 light_energy = 0.74
 shadow_enabled = true
+shadow_bias = 0.05
+shadow_normal_bias = 1.2
+directional_shadow_mode = 0
+directional_shadow_max_distance = 45.0
+directional_shadow_pancake_size = 15.0
 
 [node name="SnowParticles" parent="." instance=ExtResource("13_snow_particles")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 10, 0)
@@ -157,12 +162,12 @@ key = &"MONO_C3_END"
 [node name="FactCard1" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 2.7, 0)
 fact_key = &"FACT_GLACIER"
-source_label = "WMO, 2024"
+source_label = "WMO / WGMS, 2024"
 
 [node name="FactCard2" parent="FactCards" instance=ExtResource("9_fact_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.0, 3.5, 0)
 fact_key = &"FACT_OCEANS"
-source_label = "WMO, 2024"
+source_label = "NOAA / IPCC, 2023"
 
 [node name="ChoicePoints" type="Node3D" parent="."]
 
