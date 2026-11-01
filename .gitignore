@@ -5,10 +5,17 @@ export/
 *.translation
 *.uid
 
-# Agent and tool files
-.agents/memory.jsonl
+# Agent and developer tool files
+.agents/
+AGENTS.md
 .code-review-graph/
 mcp_interaction_server.gd*
+*.template.json
+tools/blender_addon/
+tools/gen_graph.py
+docs/GRAPH.md
+docs/PROJECT_MAP.md
+docs/TASKS.md
 
 # Temporary and system files
 *.blend1
