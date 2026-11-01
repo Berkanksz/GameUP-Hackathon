@@ -15,7 +15,7 @@ Players guide a brave emperor penguin whose colony is threatened by record Antar
 |---|---|
 | Move Left / Right | `A` / `D` or `Left` / `Right Arrow` |
 | Jump | `Space` or `W` or `Up Arrow` |
-| Belly Slide | `S` or `Down Arrow` |
+| Belly Slide | `Shift` |
 | Interact / Collect / Sort | `E` |
 | Pause / Menu | `Esc` |
 | Switch Language | `L` (Toggles English / Türkçe) |
@@ -65,7 +65,7 @@ Antarktika'da deniz buzlarının erimesiyle kolonisi tehlikeye giren bir imparat
 |---|---|
 | Sola / Sağa Hareket | `A` / `D` veya `Sol` / `Sağ Ok` |
 | Zıplama | `Boşluk (Space)` veya `W` veya `Yukarı Ok` |
-| Göbekte Kayma | `S` veya `Aşağı Ok` |
+| Göbekte Kayma | `Shift` |
 | Etkileşim / Toplama / Ayrıştırma | `E` |
 | Duraklat / Menü | `Esc` |
 | Dil Değiştir | `L` (Türkçe / İngilizce) |
