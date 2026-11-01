@@ -5,18 +5,19 @@ extends CanvasLayer
 const MAIN_MENU_PATH: String = "res://features/ui/main_menu.tscn"
 const CREDIT_KEYS: Array[String] = [
 	"UI_TITLE",
-	"UI_CREDITS_EVENT",
-	"UI_CREDITS_DESIGN",
+	"UI_CREDITS_AUTHOR",
 	"UI_CREDITS_ENGINE",
-	"UI_CREDITS_ART",
+	"UI_CREDITS_MODELS",
+	"UI_CREDITS_AUDIO",
+	"UI_CREDITS_FONT",
 	"UI_CREDITS_FACTS",
 	"UI_CREDITS_INSPIRATION",
 ]
 
-@export var roll_time: float = 12.0
-@export var thanks_time: float = 3.5
+@export var roll_time: float = 11.0
+@export var thanks_time: float = 3.2
 @export var fade_time: float = 0.8
-@export var line_font_size: int = 26
+@export var line_font_size: int = 22
 
 var _leaving: bool = false
 
@@ -37,6 +38,8 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
 	if event.is_action_pressed(&"ui_cancel"):
 		get_viewport().set_input_as_handled()
 		_return_to_menu()
@@ -44,12 +47,30 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_game_ended(_ending_id: StringName) -> void:
 	visible = true
+	_thanks_label.modulate.a = 0.0
+	_roll_box.modulate.a = 0.0
 	await get_tree().process_frame
-	_roll_box.position.y = _roll_area.size.y
+	await get_tree().process_frame
+
+	var box_height: float = _roll_box.size.y
+	var area_height: float = _roll_area.size.y
 	var tween: Tween = create_tween()
-	tween.tween_property(_roll_box, "position:y", -_roll_box.size.y, roll_time)
+
+	if box_height <= area_height - 60.0:
+		_roll_box.position.y = (area_height - box_height) * 0.5
+		tween.tween_property(_roll_box, "modulate:a", 1.0, fade_time)
+		tween.tween_interval(roll_time)
+		tween.tween_property(_roll_box, "modulate:a", 0.0, fade_time)
+	else:
+		_roll_box.modulate.a = 1.0
+		_roll_box.position.y = area_height
+		var overflow_distance: float = box_height + area_height
+		var scroll_duration: float = maxf(roll_time, overflow_distance / 45.0)
+		tween.tween_property(_roll_box, "position:y", -box_height, scroll_duration)
+
 	tween.tween_property(_thanks_label, "modulate:a", 1.0, fade_time)
 	tween.tween_interval(thanks_time)
+	tween.tween_property(_thanks_label, "modulate:a", 0.0, fade_time)
 	tween.tween_callback(_return_to_menu)
 
 
@@ -58,8 +79,15 @@ func _build_lines() -> void:
 		var label := Label.new()
 		label.name = key
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		label.add_theme_font_size_override(&"font_size", line_font_size)
+		if key == "UI_TITLE":
+			label.add_theme_font_size_override(&"font_size", line_font_size + 4)
+			label.add_theme_color_override(&"font_color", Color(1.0, 0.94, 0.65, 1.0))
+		elif key == "UI_CREDITS_AUTHOR":
+			label.add_theme_font_size_override(&"font_size", line_font_size + 2)
+			label.add_theme_color_override(&"font_color", Color(0.92, 0.98, 1.0, 1.0))
+		else:
+			label.add_theme_font_size_override(&"font_size", line_font_size)
+			label.add_theme_color_override(&"font_color", Color(0.88, 0.94, 0.98, 0.95))
 		_roll_box.add_child(label)
 
 
@@ -83,3 +111,9 @@ func _return_to_menu() -> void:
 
 func _on_language_changed(_code: String) -> void:
 	_refresh_text()
+	await get_tree().process_frame
+	if visible and _roll_box != null and _roll_area != null:
+		var box_height: float = _roll_box.size.y
+		var area_height: float = _roll_area.size.y
+		if box_height <= area_height - 60.0:
+			_roll_box.position.y = (area_height - box_height) * 0.5

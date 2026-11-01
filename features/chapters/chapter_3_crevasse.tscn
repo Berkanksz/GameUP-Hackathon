@@ -181,6 +181,7 @@ option_b_key = &"CHOICE_BUOY_SKIP"
 option_a_id = &"free"
 option_b_id = &"skip"
 success_monologue_key = &"CHOICE_BUOY_SAVED"
+fact_key_a = &"FACT_FOOD_SECURITY"
 
 [node name="Goals" type="Node3D" parent="."]
 

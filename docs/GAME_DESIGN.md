@@ -72,7 +72,7 @@ Focus areas covered:
 3. At the top: an old research hut and, in the distance, a road and a town. Nothing is far.
 4. Lamp choice, then a slow camera pull back and the ending text for the current hope tier.
 5. Info card: renewable energy growth.
-6. End card: "Climate action starts where you stand." followed by the END_COP31 line (plain text, no logos).
+6. End card: "Climate action starts where you stand." (END_CALL, plain text).
 
 ## 6. Endings (same scene, different text, grade, and music layer)
 1. LOW, Walked Away: it keeps walking. Bittersweet.

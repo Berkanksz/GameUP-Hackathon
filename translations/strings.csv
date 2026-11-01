@@ -32,6 +32,7 @@ TUT_BOULDER,Walk into the giant snowball and push it into the ice wall to break 
 UI_BIN_PAPER,Paper,Kağıt
 UI_BIN_PLASTIC,Plastic,Plastik
 UI_BIN_GLASS,Glass,Cam
+UI_BIN_ORGANIC,Organic,Organik
 UI_THANKS,Thanks for playing,Oynadığın için teşekkürler
 UI_CHAPTER_COMPLETE,Chapter Complete,Bölüm Tamamlandı
 UI_CONTINUE,Continue,Devam Et
@@ -77,14 +78,14 @@ END_MID_TEXT,"The colony looks small from here. So does the problem, if we start
 END_HIGH_TITLE,Went Back Down,Aşağı İndi
 END_HIGH_TEXT,"Someone has to tell the others the ice is not joking. Maybe that penguin was not running away. Maybe it was looking for a better view of the problem.","Birinin diğerlerine buzun şaka yapmadığını söylemesi lazım. Belki o penguen kaçmıyordu. Belki sorunu daha iyi görebileceği bir yer arıyordu."
 END_CALL,Climate action starts where you stand.,İklim eylemi bulunduğun yerde başlar.
-END_COP31,"COP31 Türkiye, Antalya, 9 to 20 November 2026","COP31 Türkiye, Antalya, 9 ile 20 Kasım 2026"
 UI_CREDITS,Credits,Emeği Geçenler
 UI_SKIP,Skip,Geç
-UI_CREDITS_EVENT,GameUP Türkiye Hackathon 2026,GameUP Türkiye Hackathon 2026
-UI_CREDITS_DESIGN,Design and Programming,Tasarım ve Programlama
-UI_CREDITS_ENGINE,Built with Godot Engine and Blender,Godot Engine ve Blender ile yapıldı
-UI_CREDITS_ART,Original 3D Art and Shaders,Özgün 3B Model ve Gölgelendiriciler
-UI_CREDITS_FACTS,"Data sources: UN, UNEP, IEA, EEA","Veri kaynakları: BM, UNEP, IEA, EEA"
+UI_CREDITS_AUTHOR,Created by Berkan Öksüz,Berkan Öksüz tarafından yapıldı
+UI_CREDITS_ENGINE,Engine and tools: Built with Godot Engine and Blender,Motor ve araçlar: Godot Engine ve Blender ile yapıldı
+UI_CREDITS_MODELS,3D models: Created originally in Blender,3B modeller: Blender ile özgün üretildi
+UI_CREDITS_AUDIO,Music and sound effects: Synthesized in Python (CC0),Müzik ve ses efektleri: Python ile sentezlendi (CC0)
+UI_CREDITS_FONT,Font: System and Godot built in fonts (OFL),Yazı tipi: Sistem ve Godot dahili yazı tipleri (OFL)
+UI_CREDITS_FACTS,"Data sources: UN, UNEP, IPCC, NOAA, WMO, IEA, UNESCO, UNDRR, FAO","Veri kaynakları: BM, UNEP, IPCC, NOAA, WMO, IEA, UNESCO, UNDRR, FAO"
 UI_CREDITS_INSPIRATION,"Inspired by the lonely penguin the internet never forgot.","İnternetin unutmadığı yalnız penguenden esinlenildi."
 MONO_C3_WIND,The wind wants me back down. Not yet.,Rüzgâr geri inmemi istiyor. Henüz değil.
 MONO_C3_LAMP,A small light in the cold. It changes something.,Soğukta küçük bir ışık. Bir şeyleri değiştiriyor.
@@ -114,3 +115,15 @@ FACT_CARBON,"Lowering carbon footprints through conscious consumption reduces gr
 FACT_RESILIENT_CITIES,"According to IPCC and UNDRR, nature based coastal buffers and early warning networks help protect settlements from sea level rise and storms.","IPCC ve UNDRR verilerine göre doğa temelli kıyı tamponları ve erken uyarı ağları, yerleşimleri deniz seviyesi artışına ve fırtınalara karşı korur."
 FACT_OCEANS,"According to NOAA and IPCC, oceans absorb more than 90 percent of the excess heat trapped by greenhouse gases, driving ocean warming and marine heatwaves.","NOAA ve IPCC verilerine göre okyanuslar, sera gazlarının hapsettiği fazla ısının yüzde 90'ından fazlasını emer; deniz sıcak dalgalarını tetikler."
 FACT_EDUCATION,"According to UNESCO and IPCC, climate education and climate literacy empower communities to take effective adaptation and mitigation action.","UNESCO ve IPCC verilerine göre iklim eğitimi ve iklim okuryazarlığı, toplulukların iklim uyumu ve eylemi için bilinçli adımlar atmasını sağlar."
+CHOICE_BOTTLE_PROMPT,"An abandoned camp site has a durable thermos bottle next to discarded single use bottles.","Terk edilmiş bir kamp alanında atılmış tek kullanımlık şişelerin yanında dayanıklı bir termos duruyor."
+CHOICE_BOTTLE_REUSABLE,Take the reusable bottle,Yeniden kullanılabilir matarayı al
+CHOICE_BOTTLE_LEAVE,Leave the bottles,Şişeleri bırak
+MONO_BOTTLE_SAVED,"Carrying a reusable bottle prevents hundreds of plastic bottles from polluting the snow.","Yeniden kullanılabilir matara taşımak yüzlerce plastik şişenin karları kirletmesini önler."
+FACT_REUSABLE_BOTTLE,"According to UNEP life cycle studies, switching to a reusable bottle and using it repeatedly substantially cuts greenhouse gas emissions compared to single use plastic.","UNEP yaşam döngüsü çalışmalarına göre yeniden kullanılabilir matara tercih edip düzenli kullanmak, tek kullanımlık plastiğe kıyasla sera gazı salımını belirgin biçimde azaltır."
+CHOICE_VIEW_PROMPT,"From this high overlook, you can observe the distant coastal settlement through the viewing glass.","Bu yüksek seyir noktasından, uzaktaki kıyı yerleşimini dürbünle gözlemleyebilirsin."
+CHOICE_VIEW_CANOPY,Observe urban green canopy,Kentsel yeşil gölgelikleri incele
+CHOICE_VIEW_WARNING,Check early warning systems,Erken uyarı sistemlerini kontrol et
+MONO_VIEW_SAVED,"Resilient settlements protect both human communities and vulnerable nature below.","Dirençli yerleşimler hem insan topluluklarını hem de aşağıdaki kırılgan doğayı korur."
+FACT_URBAN_COOLING,"According to EPA and IPCC findings, urban trees and green canopy can lower local summer air temperatures by 1 to 5 degrees Celsius through shading and evapotranspiration.","EPA ve IPCC bulgularına göre kent ağaçları ve yeşil gölgelikler, gölgeleme ve terleme yoluyla yerel yaz hava sıcaklığını 1 ile 5 derece düşürebilir."
+FACT_EARLY_WARNING,"According to WMO and UNDRR, comprehensive early warning systems reduce disaster mortality by up to six times and significantly lower economic losses.","WMO ve UNDRR verilerine göre kapsamlı erken uyarı sistemleri afet kaynaklı can kayıplarını altı kata kadar azaltır ve maddi hasarları sınırlar."
+FACT_FOOD_WASTE,"According to UNEP and FAO reports, food loss and waste generates 8 to 10 percent of global greenhouse gas emissions.","UNEP ve FAO raporlarına göre gıda kaybı ve israfı küresel sera gazı salımlarının yüzde 8 ile 10 kadarını oluşturur."

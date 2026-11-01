@@ -258,7 +258,33 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.0, 16.2, 0)
 fact_key = &"FACT_RESILIENT_CITIES"
 source_label = "IPCC / UNDRR, 2023"
 
+[node name="FactCard3" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.5, 17.2, 0)
+fact_key = &"FACT_URBAN_COOLING"
+source_label = "EPA / IPCC, 2024"
+
+[node name="FactCard4" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.5, 17.2, 0)
+fact_key = &"FACT_EARLY_WARNING"
+source_label = "WMO / UNDRR, 2024"
+
 [node name="ChoicePoints" type="Node3D" parent="."]
+
+[node name="ViewpointChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.5, 16.02, 0)
+choice_id = &"town_view"
+hope_reward = 15.0
+prompt_key = &"CHOICE_VIEW_PROMPT"
+option_a_key = &"CHOICE_VIEW_CANOPY"
+option_b_key = &"CHOICE_VIEW_WARNING"
+option_a_id = &"canopy"
+option_b_id = &"warning"
+success_monologue_key = &"MONO_VIEW_SAVED"
+fact_key_a = &"FACT_URBAN_COOLING"
+fact_key_b = &"FACT_EARLY_WARNING"
+
+[node name="FloeBase" parent="ChoicePoints/ViewpointChoice"]
+visible = false
 
 [node name="LampChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.8, 16.05, 0)
@@ -301,4 +327,5 @@ bounds = Rect2(-16, 0, 60, 20)
 
 [node name="Hud" parent="." instance=ExtResource("5_hud")]
 
+[editable path="ChoicePoints/ViewpointChoice"]
 [editable path="ChoicePoints/LampChoice"]

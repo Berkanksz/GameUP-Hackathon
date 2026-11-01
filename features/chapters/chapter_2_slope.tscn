@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="PackedScene" path="res://features/player/player.tscn" id="1_player"]
 [ext_resource type="PackedScene" path="res://features/camera/camera_rig.tscn" id="2_camera"]
@@ -19,6 +19,8 @@
 [ext_resource type="PackedScene" path="res://assets/models/environment/pine_tree.glb" id="19_pine_tree"]
 [ext_resource type="PackedScene" path="res://features/mechanics/tilting_bridge.tscn" id="20_tilting_bridge"]
 [ext_resource type="PackedScene" path="res://features/mechanics/thermal_vent.tscn" id="21_thermal_vent"]
+[ext_resource type="PackedScene" path="res://assets/models/checkpoint/cairn.glb" id="22_cairn"]
+[ext_resource type="PackedScene" path="res://assets/models/litter/litter_bottle.glb" id="23_bottle"]
 
 [sub_resource type="Environment" id="Environment_ch2"]
 background_mode = 1
@@ -156,6 +158,15 @@ transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 81.0, 4.0, -1.6)
 [node name="PineTree4" parent="Geometry" instance=ExtResource("19_pine_tree")]
 transform = Transform3D(1.55, 0, 0, 0, 1.55, 0, 0, 0, 1.55, 86.5, 4.0, -1.6)
 
+[node name="CampSite" type="Node3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5, 4, 0)
+
+[node name="CampCairn" parent="Geometry/CampSite" instance=ExtResource("22_cairn")]
+transform = Transform3D(0.85, 0, 0, 0, 0.85, 0, 0, 0, 0.85, 0, 0, -0.6)
+
+[node name="CampBottle" parent="Geometry/CampSite" instance=ExtResource("23_bottle")]
+transform = Transform3D(0.7, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0.35, 0.1, 0)
+
 [node name="SortingStations" type="Node3D" parent="."]
 
 [node name="BinPaper1" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
@@ -170,6 +181,10 @@ accepts = &"plastic"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.0, 0, 0)
 accepts = &"glass"
 
+[node name="BinOrganic1" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.2, 0, 0)
+accepts = &"organic"
+
 [node name="BinPaper2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 56.5, 4, 0)
 accepts = &"paper"
@@ -181,6 +196,10 @@ accepts = &"plastic"
 [node name="BinGlass2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.5, 4, 0)
 accepts = &"glass"
+
+[node name="BinOrganic2" parent="SortingStations" instance=ExtResource("13_sorting_bin")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65.5, 4, 0)
+accepts = &"organic"
 
 [node name="Gates" type="Node3D" parent="."]
 
@@ -209,6 +228,22 @@ option_b_key = &"CHOICE_SEED_SKIP"
 option_a_id = &"plant"
 option_b_id = &"skip"
 success_monologue_key = &"MONO_C2_SEED"
+fact_key_a = &"FACT_FOOD_WASTE"
+
+[node name="CampBottleChoice" parent="ChoicePoints" instance=ExtResource("10_choice_point")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 52.5, 4.02, 0)
+choice_id = &"camp_bottle"
+hope_reward = 15.0
+prompt_key = &"CHOICE_BOTTLE_PROMPT"
+option_a_key = &"CHOICE_BOTTLE_REUSABLE"
+option_b_key = &"CHOICE_BOTTLE_LEAVE"
+option_a_id = &"reusable"
+option_b_id = &"leave"
+success_monologue_key = &"MONO_BOTTLE_SAVED"
+fact_key_a = &"FACT_REUSABLE_BOTTLE"
+
+[node name="FloeBase" parent="ChoicePoints/CampBottleChoice"]
+visible = false
 
 [node name="Narrative" type="Node3D" parent="."]
 
@@ -236,6 +271,16 @@ source_label = "UNEP / IPCC, 2024"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 5.15, 0)
 fact_key = &"FACT_ZERO_WASTE"
 source_label = "UN GA RES 77/161"
+
+[node name="FactCard4" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.5, 3.2, 0)
+fact_key = &"FACT_FOOD_WASTE"
+source_label = "UNEP / FAO, 2024"
+
+[node name="FactCard5" parent="FactCards" instance=ExtResource("9_fact_card")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 53.5, 5.2, 0)
+fact_key = &"FACT_REUSABLE_BOTTLE"
+source_label = "UNEP Life Cycle Initiative, 2021"
 
 [node name="Goals" type="Node3D" parent="."]
 
@@ -265,3 +310,5 @@ bounds = Rect2(-16, -2, 92, 16)
 [node name="MonologueUI" parent="." instance=ExtResource("7_monologue_ui")]
 
 [node name="Hud" parent="." instance=ExtResource("5_hud")]
+
+[editable path="ChoicePoints/CampBottleChoice"]

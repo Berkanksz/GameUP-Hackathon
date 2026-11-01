@@ -5,6 +5,7 @@ extends Area3D
 const COLOR_PAPER: Color = Color(0.18, 0.52, 0.88, 1.0)
 const COLOR_PLASTIC: Color = Color(0.95, 0.78, 0.15, 1.0)
 const COLOR_GLASS: Color = Color(0.20, 0.75, 0.38, 1.0)
+const COLOR_ORGANIC: Color = Color(0.55, 0.35, 0.18, 1.0)
 
 @export var accepts: StringName = &"paper"
 
@@ -73,6 +74,8 @@ func _apply_bin_visual() -> void:
 		_bin_material.albedo_color = COLOR_PAPER
 	elif accepts == &"plastic":
 		_bin_material.albedo_color = COLOR_PLASTIC
+	elif accepts == &"organic":
+		_bin_material.albedo_color = COLOR_ORGANIC
 	else:
 		_bin_material.albedo_color = COLOR_GLASS
 	if _bin_body != null:
@@ -82,7 +85,7 @@ func _apply_bin_visual() -> void:
 	if _plastic_badge != null:
 		_plastic_badge.visible = (accepts == &"plastic")
 	if _glass_badge != null:
-		_glass_badge.visible = (accepts == &"glass")
+		_glass_badge.visible = (accepts == &"glass" or accepts == &"organic")
 
 
 func _refresh_text() -> void:
@@ -93,6 +96,9 @@ func _refresh_text() -> void:
 		elif accepts == &"plastic":
 			_sign_label.text = "▲ %s" % tr("UI_BIN_PLASTIC")
 			_sign_label.modulate = COLOR_PLASTIC.lightened(0.2)
+		elif accepts == &"organic":
+			_sign_label.text = "◆ %s" % tr("UI_BIN_ORGANIC")
+			_sign_label.modulate = COLOR_ORGANIC.lightened(0.3)
 		else:
 			_sign_label.text = "● %s" % tr("UI_BIN_GLASS")
 			_sign_label.modulate = COLOR_GLASS.lightened(0.25)

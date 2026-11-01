@@ -81,7 +81,7 @@ chapter_completed (autoload/event_bus.gd) | features/chapters/chapter_goal.gd | 
 chapter_started (autoload/event_bus.gd) | features/ui/hud.gd | autoload/audio.gd
 checkpoint_reached (autoload/event_bus.gd) | features/checkpoint/checkpoint.gd | features/checkpoint/checkpoint.gd,features/checkpoint/respawn.gd
 choice_made (autoload/event_bus.gd) | features/narrative/choice_point.gd | autoload/game_state.gd,features/chapters/chapter_goal.gd,features/chapters/hut_lamp.gd
-fact_collected (autoload/event_bus.gd) | features/narrative/fact_card.gd | autoload/game_state.gd,features/narrative/monologue_ui.gd,features/ui/hud.gd
+fact_collected (autoload/event_bus.gd) | features/narrative/choice_point.gd,features/narrative/fact_card.gd | autoload/game_state.gd,features/narrative/monologue_ui.gd,features/ui/hud.gd
 game_ended (autoload/event_bus.gd) | features/ending/ending.gd | autoload/audio.gd,features/ending/credits.gd
 gate_opened (autoload/event_bus.gd) | features/litter/litter_gate.gd | NO_LISTENER
 heat_changed (autoload/event_bus.gd) | features/heat/heat_component.gd,features/player/player.gd | features/player/player.gd,features/ui/hud.gd

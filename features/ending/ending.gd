@@ -28,7 +28,6 @@ var ending_id: StringName = &"LOW"
 @onready var _body_label: Label = %BodyLabel
 @onready var _call_root: Control = %CallRoot
 @onready var _call_label: Label = %CallLabel
-@onready var _cop_label: Label = %CopLabel
 @onready var _chick_companion: Node3D = get_node_or_null("%ChickCompanion")
 @onready var _sprout_companion: Node3D = get_node_or_null("%SproutCompanion")
 @onready var _beacon_light: OmniLight3D = get_node_or_null("%BeaconLight")
@@ -128,7 +127,6 @@ func _refresh_text() -> void:
 	_title_label.text = tr("END_%s_TITLE" % ending_id)
 	_body_label.text = tr("END_%s_TEXT" % ending_id)
 	_call_label.text = tr("END_CALL")
-	_cop_label.text = tr("END_COP31")
 
 
 func _on_language_changed(_code: String) -> void:

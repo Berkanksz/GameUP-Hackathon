@@ -10,6 +10,8 @@ extends Area3D
 @export var option_a_id: StringName = &"help"
 @export var option_b_id: StringName = &"skip"
 @export var success_monologue_key: StringName = &"CHOICE_CHICK_SAVED"
+@export var fact_key_a: StringName = &""
+@export var fact_key_b: StringName = &""
 
 var _has_chosen: bool = false
 var _cinematic_running: bool = false
@@ -175,6 +177,8 @@ func _on_option_a_pressed() -> void:
 
 	out_tween.tween_callback(func() -> void:
 		_release_cinematic()
+		if not fact_key_a.is_empty():
+			EventBus.fact_collected.emit(fact_key_a)
 		if not success_monologue_key.is_empty():
 			EventBus.monologue_requested.emit(success_monologue_key)
 	)
@@ -188,6 +192,8 @@ func _on_option_b_pressed() -> void:
 	Audio.play_sfx(&"ui_click")
 	EventBus.choice_made.emit(choice_id, option_b_id)
 	_release_cinematic()
+	if not fact_key_b.is_empty():
+		EventBus.fact_collected.emit(fact_key_b)
 
 
 func _on_language_changed(_code: String) -> void:
